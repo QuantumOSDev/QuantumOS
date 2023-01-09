@@ -8,6 +8,7 @@ ASFLAGS='-f elf'
 
 BUILDDIR='build'
 KERNELDIR='kernel'
+DRIVERSDIR='drivers'
 BOOTDIR='boot'
 
 function __setup
@@ -18,6 +19,8 @@ function __setup
 function __build_c
 {
     $CC $CFLAGS $KERNELDIR/kernel.c -o $BUILDDIR/kernel.c.o
+    $CC $CFLAGS $DRIVERSDIR/vga/vga.c -o $BUILDDIR/vga.c.o
+    $CC $CFLAGS $DRIVERSDIR/pio/pio.c -o $BUILDDIR/pio.c.o
 }
 
 function __build_s
@@ -27,7 +30,7 @@ function __build_s
 
 function __link_k
 {
-    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o
+    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/vga.c.o $BUILDDIR/pio.c.o
 }
 
 function __gen_iso
@@ -45,3 +48,4 @@ __build_c
 __build_s
 __link_k
 __gen_iso
+
