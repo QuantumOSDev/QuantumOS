@@ -11,6 +11,8 @@
 
 #include <stdarg.h>
 
+KERNEL_MEMORY_MAP __kernel_memory_map;
+
 void quantum_info(char* header, char* format, ...) 
 {
 #if defined(DEBUG)
