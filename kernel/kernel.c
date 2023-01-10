@@ -7,15 +7,15 @@
 #include <print.h>
 #include <init.h>
 
-void quantum_kernel_init(unsigned long mbinfo_ptr) 
+void quantum_kernel_init(unsigned long magic, unsigned long addr) {
 {
-    quantum_vesa_init(mbinfo_ptr);
+    quantum_vesa_init(addr);
+    quantum_pmm_init(addr);
     quantum_print_init();
     quantum_gdt_init();
     quantum_isr_init();
     quantum_memory_init();
     quantum_keyboard_init();
-    quantum_mouse_init();
 
     printf("QuantumOS has boot up!\n");
 
