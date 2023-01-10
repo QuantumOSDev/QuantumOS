@@ -7,7 +7,7 @@
 #include <print.h>
 #include <init.h>
 
-void quantum_kernel_init(unsigned long magic, unsigned long addr) {
+void quantum_kernel_init(unsigned long magic, unsigned long addr)
 {
     quantum_vesa_init(addr);
     quantum_pmm_init(addr);
