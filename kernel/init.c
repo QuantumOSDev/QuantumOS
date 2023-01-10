@@ -1,5 +1,6 @@
 #include <init.h>
 #include <print.h>
+#include <multiboot.h>
 
 #include <quantum/kernel.h>
 
