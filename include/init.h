@@ -10,5 +10,7 @@ void quantum_isr_init(void);
 void quantum_memory_init(void);
 
 void quantum_keyboard_init(void);
+
+void quantum_pmm_init(unsigned long __addr);
  
 #endif
