@@ -51,3 +51,17 @@ void quantum_keyboard_init(void)
 {
     keyboard_enable();
 }
+
+void quantum_pmm_init(unsigned long __addr)
+{
+    multiboot_info_t *__mboot = (multiboot_info_t *) __addr;
+
+    if (quantum_get_kernel_mmap(&__kernel_memory_map, __mboot) < 0)
+    {
+        /* Error */
+        return;
+    }
+
+    pmm_initialize(__kernel_memory_map.__available.__start, __kernel_memory_map.__available.__size);
+    pmm_initialize_region(__kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
+}
