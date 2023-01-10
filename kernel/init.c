@@ -16,6 +16,57 @@
 
 KERNEL_MEMORY_MAP __kernel_memory_map;
 
+static inline int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot)
+{
+    unsigned int i;
+
+    if (__map == NULL) return -1;
+    
+    __map->__kernel.__kernel_start = (unsigned int)&__kernel_section_start;
+    __map->__kernel.__kernel_end = (unsigned int)&__kernel_section_end;
+    __map->__kernel.__kernel_len = ((unsigned int)&__kernel_section_end - (unsigned int)&__kernel_section_start);
+
+    __map->__kernel.__text_start = (unsigned int)&__kernel_text_section_start;
+    __map->__kernel.__text_end = (unsigned int)&__kernel_text_section_end;
+    __map->__kernel.__text_len = ((unsigned int)&__kernel_text_section_end - (unsigned int)&__kernel_text_section_start);
+
+    __map->__kernel.__data_start = (unsigned int)&__kernel_data_section_start;
+    __map->__kernel.__data_end = (unsigned int)&__kernel_data_section_end;
+    __map->__kernel.__data_len = ((unsigned int)&__kernel_data_section_end - (unsigned int)&__kernel_data_section_start);
+
+    __map->__kernel.__rodata_start = (unsigned int)&__kernel_rodata_section_start;
+    __map->__kernel.__rodata_end = (unsigned int)&__kernel_rodata_section_end;
+    __map->__kernel.__rodata_len = ((unsigned int)&__kernel_rodata_section_end - (unsigned int)&__kernel_rodata_section_start);
+
+    __map->__kernel.__bss_start = (unsigned int)&__kernel_bss_section_start;
+    __map->__kernel.__bss_end = (unsigned int)&__kernel_bss_section_end;
+    __map->__kernel.__bss_len = ((unsigned int)&__kernel_bss_section_end - (unsigned int)&__kernel_bss_section_start);
+
+    __map->__system.__total_memory = __mboot->mem_lower + __mboot->mem_upper;
+
+    for (i = 0; i < __mboot->mmap_length; i += sizeof(multiboot_memory_map_t))
+    {
+        multiboot_memory_map_t *__mmap = (multiboot_memory_map_t *) (__mboot->mmap_addr + i);
+
+        if (__mmap->type != MULTIBOOT_MEMORY_AVAILABLE)
+        {
+            continue;
+        }
+
+        if (__mmap->addr == __map->__kernel.__kernel_end)
+        {
+            __map->__available.__start = __map->__kernel.__kernel_end + 1024 * 1024;
+            __map->__available.__end   = __mmap->addr + __mmap->len;
+
+            __map->__available.__size = __map->__available.__end - __map->__available.__start;
+
+            return 0;
+        }
+    }
+
+    return -1;
+}
+
 void quantum_info(char* header, char* format, ...) 
 {
 #if defined(DEBUG)
