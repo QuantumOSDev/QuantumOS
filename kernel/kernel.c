@@ -3,6 +3,8 @@
 #include <drivers/vga.h>
 #include <drivers/keyboard.h>
 
+#include <core/stdlib.h>
+
 #include <sys/idt.h>
 #include <sys/isr.h>
 #include <sys/kgdt.h>
@@ -45,9 +47,12 @@ void quantum_kernel_init(void)
     quantum_memory_init();
     quantum_keyboard_init();
 
-    char c = keyboard_getchar();
+    char *__result = keyboard_getchar_until('\n');
 
-    vga_putchar(c, 0x07);
+    for (int i = 0; i < kstrlen(__result); i++)
+    {
+        vga_putchar(__result[i], 0x07);
+    }
 
     return;
 }
