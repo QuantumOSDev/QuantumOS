@@ -1,6 +1,8 @@
 #include <sys/pmm.h>
 #include <sys/memory.h>
 
+__pmm_mem_info_t __pmm_mem_info;
+
 void pmm_mmap_set(int __address)
 {
     __pmm_mem_info.__map_array[__address / PMM_BIT_SIZE] |= (1 << (__address % PMM_BIT_SIZE));
@@ -16,6 +18,29 @@ char pmm_mmap_get(int __address)
     return __pmm_mem_info.__map_array[__address / PMM_BIT_SIZE] & (1 << (__address % PMM_BIT_SIZE));
 }
 
+int pmm_first_free(void)
+{
+    unsigned int i, j;
+
+    for (i = 0; i < __pmm_mem_info.__maxblocks; i++)
+    {
+        if (__pmm_mem_info.__map_array[i] != 0xffffffff)
+        {
+            for (j = 0; j < PMM_BIT_SIZE; j++)
+            {
+                int __bit = 1 << j;
+
+                if (!(__pmm_mem_info.__map_array[i] & __bit))
+                {
+                    return i * PMM_BIT_SIZE + j;
+                }
+            }
+        }
+    }
+
+    return -1;
+}
+
 int pmm_next_free(int __size)
 {
     unsigned int i, j, k;
@@ -26,6 +51,11 @@ int pmm_next_free(int __size)
     if (__size == 0)
     {
         return -1;
+    }
+
+    if (__size == 1)
+    {
+        return pmm_first_free();
     }
 
     for (i = 0; i < __pmm_mem_info.__maxblocks; i++)
