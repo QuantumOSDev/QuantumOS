@@ -1,11 +1,7 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-typedef enum
-{
-    FALSE,
-    TRUE
-} BOOL;
+#include <core/stdlib.h>
 
 typedef struct __kmem_memory_block
 {

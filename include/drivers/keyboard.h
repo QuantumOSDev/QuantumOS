@@ -10,6 +10,9 @@
 
 #define KEYBOARD_READY          1
 
+#define KEYBOARD_BACKSPACE_SC   0x0E
+#define KEYBOARD_TAB_SC         0x0F
+#define KEYBOARD_ENTER_SC       0x1C
 #define KEYBOARD_CAPS_LOCK_SC   0x3A
 #define KEYBOARD_LSHIFT_SC      0x2A
 #define KEYBOARD_RSHIFT_SC      0x36
@@ -22,10 +25,11 @@ static char keyboard_map[128] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '-', 0, 0, 0, '+', 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0
 };
+char keyboard_getchar();
+char *keyboard_getchar_until(char __c);
+
+char keyboard_getsc();
 
 void keyboard_enable();
-
-char keyboard_getchar();
-char keyboard_getsc();
 
 #endif

@@ -1,14 +1,12 @@
 #include <drivers/keyboard.h>
 
+#include <core/stdlib.h>
+
+#include <sys/memory.h>
+
 #include <sys/pio.h>
 #include <sys/idt.h>
 #include <sys/isr.h>
-
-typedef enum
-{
-    FALSE,
-    TRUE,
-} BOOL;
 
 static BOOL __keyboard_shift_pressed = FALSE;
 static BOOL __keyboard_caps_lock     = FALSE;
@@ -90,6 +88,24 @@ char keyboard_getchar()
     return __result;
 }
 
+char *keyboard_getchar_until(char __c)
+{
+    char *__result = kmalloc(sizeof(*__result));
+
+    char __input = keyboard_getchar();
+
+    while (__input != __c)
+    {
+        __result = krealloc(__result, (kstrlen(__result) + 1));
+
+        kstrcat(__result, (char[]) {__input, 0});
+
+        __input = keyboard_getchar();
+    }
+
+    return __result;
+}
+
 static void keyboard_handler(registers_t *__regs)
 {
     int scancode;
@@ -116,6 +132,27 @@ static void keyboard_handler(registers_t *__regs)
                 {
                     __keyboard_caps_lock = FALSE;
                 }
+
+                break;
+            }
+
+            case KEYBOARD_ENTER_SC:
+            {
+                __keyboard_current_char = '\n';
+
+                break;
+            }
+
+            case KEYBOARD_TAB_SC:
+            {
+                __keyboard_current_char = '\t';
+
+                break;
+            }
+
+            case KEYBOARD_BACKSPACE_SC:
+            {
+                __keyboard_current_char = '\b';
 
                 break;
             }

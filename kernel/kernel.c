@@ -6,6 +6,8 @@
 #include <drivers/vesa.h>
 #include <drivers/keyboard.h>
 
+#include <core/stdlib.h>
+
 #include <sys/idt.h>
 #include <sys/isr.h>
 #include <sys/kgdt.h>
@@ -46,8 +48,12 @@ void quantum_kernel_init(unsigned long mbinfo_ptr) {
     printf("Hello, World\nformating\n\tworks\n");
     printf("Num: %d, Str: %s, Hex: 0x%x, Octal: 0o%o", 255, "Hello!", 255, 255);
 
-    // char c = keyboard_getchar();
-    // vga_putchar(c, 0x07);
+    char *__result = keyboard_getchar_until('\n');
+
+    for (int i = 0; i < kstrlen(__result); i++)
+    {
+        vga_putchar(__result[i], 0x07);
+    }
 
     return;
 }
