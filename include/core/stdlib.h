@@ -7,8 +7,6 @@ typedef enum
     TRUE,
 } BOOL;
 
-#define NULL (void *) 0
-
 int kstrlen(const char *__data);
 
 void kstrcat(char *__dest, const char *__src);
