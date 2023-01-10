@@ -20,12 +20,11 @@ typedef struct __pmm_mem_info
     unsigned int *__map_array;
 } __pmm_mem_info_t;
 
-static __pmm_mem_info_t __pmm_mem_info;
-
 void pmm_mmap_set(int __address);
 void pmm_mmap_unset(int __address);
 char pmm_mmap_get(int __address);
 
+int pmm_first_free(void);
 int pmm_next_free(int __size);
 
 void pmm_initialize(__pmm_physical_address __bitmap, unsigned int __memsize);
