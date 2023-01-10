@@ -16,14 +16,6 @@ typedef struct __kmem_memory_block
     void *__address;
 } __attribute__((packed)) MEMORY_BLOCK;
 
-static void *__kmem_global_start = (void *) 0;
-static void *__kmem_global_end   = (void *) 0;
-
-static unsigned long __kmem_global_total_size = 0;
-static unsigned long __kmem_global_used_size  = 0;
-
-static MEMORY_BLOCK *__kmem_global_head = (void *) 0;
-
 BOOL kmem_is_free(MEMORY_BLOCK *__block);
 
 MEMORY_BLOCK *kmem_get_worst_fit(int __size);
