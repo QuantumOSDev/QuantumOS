@@ -52,7 +52,7 @@ void quantum_kernel_init(unsigned long mbinfo_ptr) {
 
     for (int i = 0; i < kstrlen(__result); i++)
     {
-        vga_putchar(__result[i], 0x07);
+        putc(__result[i]);
     }
 
     return;

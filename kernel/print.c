@@ -34,7 +34,7 @@ void insert_tab() {
 }
 
 void insert_newline() {
-    global_print_vec_x = 5;
+    global_print_vec_x = 0;
     global_print_vec_y += 22;
 
     if (global_print_vec_y >= 720) global_print_vec_y = 0;

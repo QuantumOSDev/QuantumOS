@@ -74,7 +74,7 @@ void draw_line(int start_x, int start_y, int end_x, int end_y, int r, int g, int
 }
 
 void draw_character(char c, int x, int y, int fg_r, int fg_g, int fg_b, int bg_r, int bg_g, int bg_b) {
-    unsigned char* font_char = &font_data[c * ((ISO_CHAR_HEIGHT * ISO_CHAR_WIDTH) / 8)];
+    unsigned char* font_char = &font_data[c * 16];
 
     for(int i = 0; i < 16; ++i){
         for(int j = 0; j < 8; ++j){
