@@ -1,6 +1,8 @@
 #include <init.h>
 #include <print.h>
 
+#include <quantum/kernel.h>
+
 #include <drivers/keyboard.h>
 
 #include <sys/idt.h>
