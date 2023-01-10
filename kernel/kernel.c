@@ -45,15 +45,5 @@ void quantum_kernel_init(unsigned long mbinfo_ptr) {
     quantum_memory_init();
     quantum_keyboard_init();
 
-    printf("Hello, World\nformating\n\tworks\n");
-    printf("Num: %d, Str: %s, Hex: 0x%x, Octal: 0o%o", 255, "Hello!", 255, 255);
-
-    char *__result = keyboard_getchar_until('\n');
-
-    for (int i = 0; i < kstrlen(__result); i++)
-    {
-        putc(__result[i]);
-    }
-
     return;
 }

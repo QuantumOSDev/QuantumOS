@@ -44,7 +44,7 @@ void putc(char c) {
     if (c == '\n' || c == '\r') insert_newline();
     else if (c == '\t') insert_tab();
     else {
-        draw_character(
+        vesa_draw_char(
             c, 
             global_print_vec_x, global_print_vec_y, 
             global_print_fg_r, global_print_fg_g, global_print_fg_b, 
