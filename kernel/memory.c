@@ -1,9 +1,17 @@
 #include <sys/memory.h>
 
+void *__kmem_global_start = (void *) 0;
+void *__kmem_global_end   = (void *) 0;
+
+unsigned long __kmem_global_total_size = 0;
+unsigned long __kmem_global_used_size  = 0;
+
+MEMORY_BLOCK *__kmem_global_head = (void *) 0;
+
 void kmem_initialize(void *__start, void *__end)
 {
     quantum_info(" KMem   ", "Initialzing kernel memory");
-    if (__start > __end)
+    if (__kmem_global_start > __kmem_global_end)
     {
         return;
     }
@@ -31,7 +39,7 @@ void *kbrk(int __size)
 
     __address = (__kmem_global_start + __kmem_global_used_size + __size + sizeof(void *));
 
-    __kmem_global_used_size = (__kmem_global_used_size + __size + sizeof(void *));
+    __kmem_global_used_size += __size + sizeof(void *);
 
     return __address;
 }
@@ -90,7 +98,7 @@ MEMORY_BLOCK *kmem_new_block(int __size)
     __new_block->__metainfo.__is_free = FALSE;
     __new_block->__metainfo.__size = __size;
 
-    __new_block->__address = kbrk(__new_block->__metainfo.__size);
+    __new_block->__address = kbrk(__size);
     __new_block->__next = (void *)0;
 
     /* Link the new block to the global linked list of blocks */
@@ -116,10 +124,12 @@ void *kmalloc(int __size)
 
     if (__kmem_global_head == (void *)0)
     {
+        __kmem_global_head = (MEMORY_BLOCK *) kbrk(sizeof(MEMORY_BLOCK));
+
         __kmem_global_head->__metainfo.__is_free = FALSE;
         __kmem_global_head->__metainfo.__size = __size;
 
-        __kmem_global_head->__address = kbrk(__kmem_global_head->__metainfo.__size);
+        __kmem_global_head->__address = kbrk(__size);
         __kmem_global_head->__next = (void *)0;
 
         return __kmem_global_head->__address;
@@ -188,7 +198,7 @@ void *krealloc(void *__address, int __nsize)
         {
             MEMORY_BLOCK *__resized_block = kmem_new_block(__nsize);
 
-            if ((int)__block->__metainfo.__size > __nsize)
+            if ((int) __block->__metainfo.__size > __nsize)
             {
                 kmemcpy(__resized_block->__address, __address, __nsize);
             }
@@ -212,14 +222,14 @@ void *krealloc(void *__address, int __nsize)
 
 void *kmemcpy(void *__dest, const void *__src, unsigned int __n)
 {
-    char *__pointer = __dest;
-    char *__result  = __dest;
+    char *__result = __dest;
+    char *__ptr    = __dest;
 
-    const char *__pointer_semi = __src;
+    const char *__qtr = __src;
 
     while (__n--)
     {
-        *__pointer++ = *__pointer_semi++;
+        *__ptr++ = *__qtr++;
     }
 
     return __result;

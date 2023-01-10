@@ -90,14 +90,12 @@ char keyboard_getchar()
 
 char *keyboard_getchar_until(char __c)
 {
-    char *__result = kmalloc(sizeof(*__result));
+    char *__result = kcalloc(1, sizeof(char *));
 
     char __input = keyboard_getchar();
 
     while (__input != __c)
     {
-        __result = krealloc(__result, (kstrlen(__result) + 1));
-
         kstrcat(__result, (char[]) {__input, 0});
 
         __input = keyboard_getchar();
@@ -116,7 +114,29 @@ static void keyboard_handler(registers_t *__regs)
 
     if (scancode & KEYBOARD_KEY_UP)
     {
-        /* Do nothing because it's a key release */
+        /* Only valid for shifts */
+
+        switch (scancode)
+        {
+            case KEYBOARD_LSHIFT_SC:
+            {
+                __keyboard_shift_pressed = FALSE;
+
+                break;
+            }
+
+            case KEYBOARD_RSHIFT_SC:
+            {
+                __keyboard_shift_pressed = FALSE;
+
+                break;
+            }
+
+            default:
+            {
+                break;
+            }
+        }
     }
     else
     {
