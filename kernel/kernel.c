@@ -1,49 +1,21 @@
 #include <quantum/kernel.h>
+#include <drivers/vesa.h>
 
 #include <multiboot.h>
 #include <print.h>
+#include <init.h>
 
-#include <drivers/vesa.h>
-#include <drivers/keyboard.h>
-
-#include <core/stdlib.h>
-
-#include <sys/idt.h>
-#include <sys/isr.h>
-#include <sys/kgdt.h>
-#include <sys/pmm.h>
-#include <sys/memory.h>
-
-static inline void quantum_gdt_init(void)
+void quantum_kernel_init(unsigned long mbinfo_ptr) 
 {
-    kgdt_enable();
-}
-
-static inline void quantum_isr_init(void)
-{
-    isr_enable();
-}
-
-static inline void quantum_memory_init(void)
-{
-    void *__start = pmm_allocate_blocks(20);
-    void *__end   = __start + (pmm_next_free(1) * PMM_BLOCK_SIZE);
-
-    kmem_initialize(__start, __end);
-}
-
-static inline void quantum_keyboard_init(void)
-{
-    keyboard_enable();
-}
-
-void quantum_kernel_init(unsigned long mbinfo_ptr) {
     quantum_vesa_init(mbinfo_ptr);
     quantum_print_init();
     quantum_gdt_init();
     quantum_isr_init();
     quantum_memory_init();
     quantum_keyboard_init();
+
+    printf("QuantumOS has boot up!\n");
+    asm("int $0x10");
 
     return;
 }

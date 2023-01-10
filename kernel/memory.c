@@ -2,6 +2,7 @@
 
 void kmem_initialize(void *__start, void *__end)
 {
+    quantum_info(" KMem   ", "Initialzing kernel memory");
     if (__start > __end)
     {
         return;

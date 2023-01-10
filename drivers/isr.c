@@ -4,6 +4,9 @@
 #include <sys/idt.h>
 #include <sys/isr.h>
 
+#include <print.h>
+#include <init.h>
+
 isr_t __interrupt_handlers[256];
 
 char *__isr_exceptions[] = {
@@ -45,6 +48,7 @@ char *__isr_exceptions[] = {
 };
 
 int isr_enable() {
+    quantum_info(" ISR    ", "Initializing interrupt service routines");
     set_idt_gate(0, (unsigned int) isr0);
     set_idt_gate(1, (unsigned int) isr1);
     set_idt_gate(2, (unsigned int) isr2);
@@ -77,6 +81,7 @@ int isr_enable() {
     set_idt_gate(29, (unsigned int) isr29);
     set_idt_gate(30, (unsigned int) isr30);
     set_idt_gate(31, (unsigned int) isr31);
+    quantum_info(" ISR    ", "Gates from 0 to 31 has been set");
 
     // Remap the PIC
     pio_outb(0x20, 0x11);
@@ -107,6 +112,7 @@ int isr_enable() {
     set_idt_gate(45, (unsigned int)irq13);
     set_idt_gate(46, (unsigned int)irq14);
     set_idt_gate(47, (unsigned int)irq15);
+    quantum_info(" ISR    ", "Installed IRQs and Remaped PIC");
 
     load_idt(); // Load with ASM
 
@@ -124,9 +130,11 @@ void isr_handler(registers_t *__regs)
 {
     if (__regs->int_no < 32)
     {
-        /* Exception occurred */
-
-        return;
+        print_set_color(222, 0, 0);
+        printf("PANIC");
+        print_set_color(255, 255, 255);
+        printf(": Interrupt error \"%s\" (0x%x)\n", __isr_exceptions[__regs->int_no], __regs->int_no);
+        for (;;) asm("hlt");
     }
 
     if (__interrupt_handlers[__regs->int_no] != (void *) 0)

@@ -1,6 +1,7 @@
 #include <drivers/vesa.h>
 
 #include <multiboot.h>
+#include <init.h>
 #include <font.h>
 
 unsigned long global_addr;
@@ -14,9 +15,9 @@ void vesa_put_pixel(int x, int y, int r, int g, int b) {
     unsigned char* framebuffer = (unsigned char*)mbinfo->framebuffer_addr;
     unsigned offset = x * 4 + y * mbinfo->framebuffer_pitch;
 
-    framebuffer[offset    ] = r;
+    framebuffer[offset    ] = b;
     framebuffer[offset + 1] = g;
-    framebuffer[offset + 2] = b;
+    framebuffer[offset + 2] = r;
 }
 
 void vesa_draw_rect(int x, int y, int w, int h, int r, int g, int b) {

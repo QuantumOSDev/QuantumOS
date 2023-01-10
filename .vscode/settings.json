@@ -6,6 +6,11 @@
         "multiboot.h": "c",
         "stdarg.h": "c",
         "print.h": "c",
-        "memory.h": "c"
+        "memory.h": "c",
+        "stdlib.h": "c",
+        "init.h": "c",
+        "kernel.h": "c",
+        "keyboard.h": "c",
+        "exception": "c"
     }
 }
