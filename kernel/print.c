@@ -4,6 +4,7 @@
 #include <drivers/vesa.h>
 #include <sys/memory.h>
 #include <stdarg.h>
+#include <init.h>
 
 int global_print_vec_x;
 int global_print_vec_y;

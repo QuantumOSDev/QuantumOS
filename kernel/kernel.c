@@ -1,5 +1,7 @@
 #include <quantum/kernel.h>
+
 #include <drivers/vesa.h>
+#include <drivers/mouse.h>
 
 #include <multiboot.h>
 #include <print.h>
@@ -13,9 +15,13 @@ void quantum_kernel_init(unsigned long mbinfo_ptr)
     quantum_isr_init();
     quantum_memory_init();
     quantum_keyboard_init();
+    quantum_mouse_init();
 
     printf("QuantumOS has boot up!\n");
-    asm("int $0x10");
+
+    for (;;) {
+        vesa_draw_circle(get_mouse_x(), get_mouse_y(), 4, 255, 0, 0);
+    }
 
     return;
 }

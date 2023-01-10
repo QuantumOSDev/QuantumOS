@@ -7,6 +7,7 @@
 #include <sys/pio.h>
 #include <sys/idt.h>
 #include <sys/isr.h>
+#include <init.h>
 
 static BOOL __keyboard_shift_pressed = FALSE;
 static BOOL __keyboard_caps_lock     = FALSE;

@@ -1,5 +1,7 @@
 #include <sys/memory.h>
 
+#include <init.h>
+
 void *__kmem_global_start = (void *) 0;
 void *__kmem_global_end   = (void *) 0;
 
