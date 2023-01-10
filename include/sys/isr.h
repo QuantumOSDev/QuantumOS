@@ -1,6 +1,8 @@
 #ifndef ISR_H
 #define ISR_H
 
+#define IRQ_BASE 0x20
+
 /* ISRs reserved for CPU exceptions */
 extern void isr0();
 extern void isr1();
@@ -89,6 +91,6 @@ typedef void (*isr_t)(registers_t *);
 int isr_enable(void);
 void isr_handler(registers_t *__regs);
 
-void register_interrupt_handler(unsigned char __index, isr_t __handler);
+void isr_register_interrupt_handler(unsigned char __index, isr_t __handler);
 
 #endif

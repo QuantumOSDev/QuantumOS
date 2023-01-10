@@ -115,7 +115,7 @@ int isr_enable() {
     return 0;
 }
 
-void register_interrupt_handler(unsigned char __index, isr_t __handler)
+void isr_register_interrupt_handler(unsigned char __index, isr_t __handler)
 {
     __interrupt_handlers[__index] = __handler;
 }

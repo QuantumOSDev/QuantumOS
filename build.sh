@@ -25,6 +25,7 @@ function __build_c
     $CC $CFLAGS $DRIVERSDIR/isr.c -o $BUILDDIR/isr.c.o
     $CC $CFLAGS $DRIVERSDIR/idt.c -o $BUILDDIR/idt.c.o
     $CC $CFLAGS $DRIVERSDIR/kgdt.c -o $BUILDDIR/kgdt.c.o
+    $CC $CFLAGS $DRIVERSDIR/keyboard.c -o $BUILDDIR/keyboard.c.o
     
     $CC $CFLAGS $KERNELDIR/memory.c -o $BUILDDIR/memory.c.o
     $CC $CFLAGS $KERNELDIR/pmm.c -o $BUILDDIR/pmm.c.o
@@ -39,7 +40,7 @@ function __build_s
 
 function __link_k
 {
-    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/vga.c.o $BUILDDIR/pio.c.o $BUILDDIR/isr.c.o $BUILDDIR/idt.c.o $BUILDDIR/kgdt.c.o $BUILDDIR/interrupts.asm.o $BUILDDIR/gdt.asm.o $BUILDDIR/pmm.c.o $BUILDDIR/memory.c.o
+    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/vga.c.o $BUILDDIR/pio.c.o $BUILDDIR/isr.c.o $BUILDDIR/idt.c.o $BUILDDIR/kgdt.c.o $BUILDDIR/interrupts.asm.o $BUILDDIR/gdt.asm.o $BUILDDIR/pmm.c.o $BUILDDIR/memory.c.o $BUILDDIR/keyboard.c.o
 }
 
 function __gen_iso

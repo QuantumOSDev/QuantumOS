@@ -1,6 +1,7 @@
 #include <quantum/kernel.h>
 
 #include <drivers/vga.h>
+#include <drivers/keyboard.h>
 
 #include <sys/idt.h>
 #include <sys/isr.h>
@@ -31,12 +32,22 @@ static inline void quantum_memory_init(void)
     kmem_initialize(__start, __end);
 }
 
+static inline void quantum_keyboard_init(void)
+{
+    keyboard_enable();
+}
+
 void quantum_kernel_init(void)
 {
     quantum_vga_init();
     quantum_gdt_init();
     quantum_isr_init();
     quantum_memory_init();
+    quantum_keyboard_init();
+
+    char c = keyboard_getchar();
+
+    vga_putchar(c, 0x07);
 
     return;
 }
