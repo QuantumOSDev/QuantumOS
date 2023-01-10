@@ -18,11 +18,11 @@ struct GDTDescriptor
 	unsigned char __base_high;
 } __attribute__((packed));
 
-void __mgdt_init_descriptor(int __index, unsigned int __baddr, unsigned int __limit, unsigned char __abyte, unsigned char __flags);
+void kgdt_init_descriptor(int __index, unsigned int __baddr, unsigned int __limit, unsigned char __abyte, unsigned char __flags);
 
-int __mgdt_enable();
+int kgdt_enable();
 
-void __mgdt_load_gdt(struct GDT gdt);
-void __mgdt_load_registers();
+void kgdt_load_gdt(struct GDT gdt);
+void kgdt_load_registers();
 
 #endif

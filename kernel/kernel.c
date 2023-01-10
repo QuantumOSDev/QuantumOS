@@ -1,11 +1,28 @@
-#include "../include/kernel.h"
+#include <quantum/kernel.h>
 
-#include "../drivers/vga/vga.h"
+#include <drivers/vga.h>
 
-void __quantum_kernel_init(void)
+#include <sys/idt.h>
+#include <sys/isr.h>
+#include <sys/kgdt.h>
+
+void quantum_kernel_init(void)
 {
-    __vga_clear();
-    __vga_putchar('h', 0x07);
+    vga_clear();
+    
+    const char *__str = "Hello, World!\n";
+
+    int i = 0;
+
+    while (__str[i])
+    {
+        vga_putchar(__str[i], 0x07);
+
+        i++;
+    }
+
+    kgdt_enable();
+    isr_enable();
 
     return;
 }

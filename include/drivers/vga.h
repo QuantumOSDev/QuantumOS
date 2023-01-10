@@ -29,16 +29,16 @@ static char *VGA_POINTER = (char*)0xb8000;
 
 static int VGA_CURSOR = 0;
 
-void __vga_set_cursor(int __offset);
+void vga_set_cursor(int __offset);
 
-int __vga_get_cursor(void);
+int vga_get_cursor(void);
 
-void __vga_newline(void);
-void __vga_tab(void);
+void vga_newline(void);
+void vga_tab(void);
 
-void __vga_putchar(char __c, unsigned short __cl);
+void vga_putchar(char __c, unsigned short __cl);
 
-void __vga_clear(void);
-void __vga_backspace(void);
+void vga_clear(void);
+void vga_backspace(void);
 
 #endif

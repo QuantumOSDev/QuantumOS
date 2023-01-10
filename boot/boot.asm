@@ -23,7 +23,7 @@ global _start
 
 ; Extern kernel initialization function
 
-extern __quantum_kernel_init
+extern quantum_kernel_init
 
 ; Definition of _start function
 
@@ -38,7 +38,7 @@ _start:
 
     ; Call kernel initialization
 
-    call __quantum_kernel_init
+    call quantum_kernel_init
 
     ; If the kernel returns control to here we loop forever
 

@@ -1,21 +1,21 @@
-#include "pio.h"
+#include <sys/pio.h>
 
-void __pio_outb(unsigned short __port, unsigned char __data)
+void pio_outb(unsigned short __port, unsigned char __data)
 {
     asm volatile ("outb %1, %0" :: "dN"(__port), "a"(__data));   
 }
 
-void __pio_outs(unsigned short __port, unsigned short __data)
+void pio_outs(unsigned short __port, unsigned short __data)
 {
     asm volatile ("outw %1, %0" :: "dN" (__port), "a" (__data));
 }
 
-void __pio_outl(unsigned short __port, unsigned int __data)
+void pio_outl(unsigned short __port, unsigned int __data)
 {
     asm volatile ("outl %%eax, %%dx" :: "dN" (__port), "a" (__data));
 }
 
-unsigned char __pio_inb(unsigned short __port)
+unsigned char pio_inb(unsigned short __port)
 {
     unsigned char __result;
 
@@ -24,7 +24,7 @@ unsigned char __pio_inb(unsigned short __port)
     return __result;
 }
 
-unsigned short __pio_ins(unsigned short __port)
+unsigned short pio_ins(unsigned short __port)
 {
     unsigned short __result;
 
@@ -33,7 +33,7 @@ unsigned short __pio_ins(unsigned short __port)
     return __result;
 }
 
-unsigned int __pio_inl(unsigned short __port)
+unsigned int pio_inl(unsigned short __port)
 {
     unsigned int __result;
 
@@ -42,7 +42,7 @@ unsigned int __pio_inl(unsigned short __port)
     return __result;
 }
 
-void __pio_sleep(void)
+void pio_sleep(void)
 {
-    __pio_outb(0x80, 0);
+    pio_outb(0x80, 0);
 }
