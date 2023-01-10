@@ -1,56 +1,47 @@
-; Setup multiboot variables
-
-__MULTIBOOT_HEADER equ 0x1BADB002
-__MULTIBOOT_FLAGS  equ 0x00
-__MULTIBOOT_CHECK  equ -(__MULTIBOOT_HEADER + __MULTIBOOT_FLAGS)
-
-; We run in 32-bit mode for now
+; Now we are running in 32-bits
 
 [bits 32]
+; Setup multiboot variables
+MULTIBOOT_HEADER equ 0x1BADB002
+MULTIBOOT_FLAGS  equ 0x04
+MULTIBOOT_CHECK  equ -(MULTIBOOT_HEADER + MULTIBOOT_FLAGS)
 
 ; Align and allocate the MULTIBOOT header
-
 section .text
     align 4
 
-    dd __MULTIBOOT_HEADER
-    dd __MULTIBOOT_FLAGS
-    dd __MULTIBOOT_CHECK
+    dd MULTIBOOT_HEADER
+    dd MULTIBOOT_FLAGS
+    dd MULTIBOOT_CHECK
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 1280 ; width
+    dd 720  ; height
+    dd 32   ; pitch
 
 ; Linker (_start) entry point
-
 global _start
 
 ; Extern kernel initialization function
-
 extern quantum_kernel_init
 
 ; Definition of _start function
-
 _start:
-    ; Disable interrupts
+    cli                            ; Disable interrupts
 
-    cli
+    mov esp, quantum_stack_pointer ; Allocate stack space
+    mov eax, 0x2BADB002            ; Set eax to bootloader magic
 
-    ; Allocate stack space
+    push eax                       ; Pass bootloader magic
+    push ebx                       ; Pass multiboot structure pointer
 
-    mov esp, __quantum_stack_pointer
-
-    ; Call kernel initialization
-
-    call quantum_kernel_init
-
-    ; If the kernel returns control to here we loop forever
-
-    jmp $
-
-    ; Halt the CPU
-
-    hlt
-
-; Reserve (1MB for uninitialized stack space)
+    call quantum_kernel_init       ; Call c function 
+    hlt                            ; Halt the CPU
 
 section .bss
     resb 104856
-
-    __quantum_stack_pointer:
+    quantum_stack_pointer:

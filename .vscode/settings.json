@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "idt.h": "c",
-        "pmm.h": "c"
+        "pmm.h": "c",
+        "vesa.h": "c",
+        "multiboot.h": "c",
+        "stdarg.h": "c",
+        "print.h": "c",
+        "memory.h": "c"
     }
 }
