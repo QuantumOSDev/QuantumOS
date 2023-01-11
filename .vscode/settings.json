@@ -4,6 +4,7 @@
         "memory.h": "c",
         "multiboot.h": "c",
         "kmode.h": "c",
-        "print.h": "c"
+        "print.h": "c",
+        "init.h": "c"
     }
 }

@@ -257,6 +257,6 @@ static void keyboard_handler(registers_t *__regs)
 
 void keyboard_enable()
 {
-    quantum_info("Keyboard", "Initializing keyboard drivers");
+    quantum_info(0, "Keyboard", "Initializing keyboard drivers");
     isr_register_interrupt_handler(IRQ_BASE + 1, keyboard_handler);
 }

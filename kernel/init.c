@@ -17,14 +17,15 @@
 
 #include <fs/vfs.h>
 
-KERNEL_MEMORY_MAP __kernel_memory_map;
-
 static inline int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot)
 {
     unsigned int i;
 
-    if (__map == NULL) return -1;
-    
+    if (__map == NULL)
+    {
+        return -1;
+    }
+
     __map->__kernel.__kernel_start = (unsigned int)&__kernel_section_start;
     __map->__kernel.__kernel_end = (unsigned int)&__kernel_section_end;
     __map->__kernel.__kernel_len = ((unsigned int)&__kernel_section_end - (unsigned int)&__kernel_section_start);
@@ -49,17 +50,17 @@ static inline int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_in
 
     for (i = 0; i < __mboot->mmap_length; i += sizeof(multiboot_memory_map_t))
     {
-        multiboot_memory_map_t *__mmap = (multiboot_memory_map_t *) (__mboot->mmap_addr + i);
+        multiboot_memory_map_t *__mmap = (multiboot_memory_map_t *)(__mboot->mmap_addr + i);
 
         if (__mmap->type != MULTIBOOT_MEMORY_AVAILABLE)
         {
             continue;
         }
 
-        if (__mmap->addr == __map->__kernel.__kernel_end)
+        if (__mmap->addr == __map->__kernel.__text_start)
         {
             __map->__available.__start = __map->__kernel.__kernel_end + 1024 * 1024;
-            __map->__available.__end   = __mmap->addr + __mmap->len;
+            __map->__available.__end = __mboot->mmap_addr + __mmap->len;
 
             __map->__available.__size = __map->__available.__end - __map->__available.__start;
 
@@ -70,11 +71,17 @@ static inline int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_in
     return -1;
 }
 
-void quantum_info(char* header, char* format, ...) 
+void quantum_info(int __status, char *header, char *format, ...)
 {
-#if defined(DEBUG)
     printf("[");
-    print_set_color(0, 255, 0);
+    if (__status == 0)
+    {
+        print_set_color(0, 255, 0);
+    }
+    else
+    {
+        print_set_color(255, 0, 0);
+    }
     printf("%s", header);
     print_set_color(255, 255, 255);
     printf("] ");
@@ -85,15 +92,14 @@ void quantum_info(char* header, char* format, ...)
     va_end(arg);
 
     insert_newline();
-#endif
 }
 
-void quantum_gdt_init(void) 
+void quantum_gdt_init(void)
 {
     kgdt_enable();
 }
 
-void quantum_isr_init(void)  
+void quantum_isr_init(void)
 {
     isr_enable();
 }
@@ -101,7 +107,9 @@ void quantum_isr_init(void)
 void quantum_memory_init(void)
 {
     void *__start = pmm_allocate_blocks(20);
-    void *__end   = __start + (pmm_next_free(1) * PMM_BLOCK_SIZE);
+    void *__end = __start + (pmm_next_free(1) * PMM_BLOCK_SIZE);
+
+    quantum_info(0, " PMM\t", "Successfully allocated 20 blocks! START: 0x%x END: 0x%x", __start, __end);
 
     kmem_initialize(__start, __end);
 }
@@ -113,21 +121,32 @@ void quantum_keyboard_init(void)
 
 void quantum_pmm_init(unsigned long __addr)
 {
-    multiboot_info_t *__mboot = (multiboot_info_t *) __addr;
+    KERNEL_MEMORY_MAP __kernel_memory_map;
 
-    if (quantum_get_kernel_mmap(&__kernel_memory_map, __mboot) < 0)
+    multiboot_info_t *__mboot = (multiboot_info_t *)__addr;
+
+    int __status = quantum_get_kernel_mmap(&__kernel_memory_map, __mboot);
+
+    if (__status != 0)
     {
         /* Error */
+
+        quantum_info(1, " PMM\t", "Failed to initialize PMM!");
+
         return;
     }
 
     pmm_initialize(__kernel_memory_map.__available.__start, __kernel_memory_map.__available.__size);
     pmm_initialize_region(__kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
+
+    quantum_info(0, " PMM\t", "Initialized PMM from address: 0x%x to 0x%x", __kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
 }
 
 void quantum_vfs_init(void)
 {
     vfs_initialize(__VFS_RW);
+
+    quantum_info(0, " VFS\t", "Initialized VFS!");
 }
 
 void quantum_migrate_to_kernel_mode(void)

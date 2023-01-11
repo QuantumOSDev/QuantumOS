@@ -1,7 +1,9 @@
 #ifndef INIT_H
 #define INIT_H
 
-void quantum_info(char* header, char* format, ...);
+#define DEBUG
+
+void quantum_info(int __status, char* header, char* format, ...);
 
 void quantum_gdt_init(void);
 

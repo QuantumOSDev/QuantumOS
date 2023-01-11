@@ -1,5 +1,7 @@
-#include <sys/pmm.h>
+#include <quantum/init.h>
+
 #include <sys/memory.h>
+#include <sys/pmm.h>
 
 __pmm_mem_info_t __pmm_mem_info;
 

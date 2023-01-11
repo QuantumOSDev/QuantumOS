@@ -15,7 +15,7 @@ static struct GDTDescriptor __gdt_descriptors[SEGMENT_DESCRIPTOR_COUNT];
 
 void kgdt_init_descriptor(int __index, unsigned int __baddr, unsigned int __limit, unsigned char __abyte, unsigned char __flags)
 {
-    quantum_info(" GDT    ", "Initializing %d descriptor", __index);
+    quantum_info(0, " GDT    ", "Initializing %d descriptor", __index);
 	__gdt_descriptors[__index].__base_low 			= __baddr & 0xFFFF;
 	__gdt_descriptors[__index].__base_middle 		= (__baddr >> 16) & 0xFF;
 	__gdt_descriptors[__index].__base_high 			= (__baddr >> 24) & 0xFF;
@@ -29,7 +29,7 @@ void kgdt_init_descriptor(int __index, unsigned int __baddr, unsigned int __limi
 
 int kgdt_enable()
 {
-    quantum_info(" GDT    ", "Enabling GDT");
+    quantum_info(0, " GDT    ", "Enabling GDT");
 	/* TODO: Add some kind of error handling here */
 	__gdt_descriptors[0].__base_low 		= 0;
 	__gdt_descriptors[0].__base_middle 		= 0;

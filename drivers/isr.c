@@ -49,7 +49,7 @@ char *__isr_exceptions[] = {
 };
 
 int isr_enable() {
-    quantum_info(" ISR    ", "Initializing interrupt service routines");
+    quantum_info(0, " ISR    ", "Initializing interrupt service routines");
     set_idt_gate(0, (unsigned int) isr0);
     set_idt_gate(1, (unsigned int) isr1);
     set_idt_gate(2, (unsigned int) isr2);
@@ -82,7 +82,7 @@ int isr_enable() {
     set_idt_gate(29, (unsigned int) isr29);
     set_idt_gate(30, (unsigned int) isr30);
     set_idt_gate(31, (unsigned int) isr31);
-    quantum_info(" ISR    ", "Gates from 0 to 31 has been set");
+    quantum_info(0, " ISR    ", "Gates from 0 to 31 has been set");
 
     // Remap the PIC
     pio_outb(0x20, 0x11);
@@ -113,7 +113,7 @@ int isr_enable() {
     set_idt_gate(45, (unsigned int)irq13);
     set_idt_gate(46, (unsigned int)irq14);
     set_idt_gate(47, (unsigned int)irq15);
-    quantum_info(" ISR    ", "Installed IRQs and Remaped PIC");
+    quantum_info(0, " ISR    ", "Installed IRQs and Remapped PIC");
 
     load_idt(); // Load with ASM
 

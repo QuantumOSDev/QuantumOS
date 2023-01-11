@@ -12,7 +12,7 @@ MEMORY_BLOCK *__kmem_global_head = (void *) 0;
 
 void kmem_initialize(void *__start, void *__end)
 {
-    quantum_info(" KMem   ", "Initialzing kernel memory");
+    quantum_info(0, " KMem   ", "Initialzing kernel memory");
     if (__kmem_global_start > __kmem_global_end)
     {
         return;
