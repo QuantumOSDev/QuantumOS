@@ -97,7 +97,6 @@ global isr28
 global isr29
 global isr30
 global isr31
-global isr128
 
 ; 0: Divide By Zero Exception
 isr0:

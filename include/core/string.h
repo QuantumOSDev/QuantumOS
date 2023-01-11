@@ -19,7 +19,7 @@ void append_str(char* str, char c);
 
 char* strcpy(char* dest, const char* src);
 
-char* strtok(char* str, const char* delim);
+char* strtok(char* str, char* delim);
 
 char* strpbrk(const char* str, const char* accept);
 

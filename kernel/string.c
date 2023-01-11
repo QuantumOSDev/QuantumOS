@@ -1,4 +1,5 @@
 #include <core/string.h>
+#include <core/print.h>
 
 #include <sys/memory.h>
 
@@ -55,24 +56,67 @@ char* strcpy(char* dest, const char* src) {
     return dest;
 }
 
-char* strtok(char* str, const char* delim) {
-    static char* last;
-    if (str != NULL) 
-        last = str;
-    if (last == NULL)
-        return NULL;
-    
-    char* delim_pos = strpbrk(last, delim);
-    if (delim_pos == NULL) {
-        char* ret = last;
-        last = NULL;
-        return ret;
+unsigned int is_delim(char c, char *delim)
+{
+    while (*delim != '\0')
+    {
+        if (c == *delim)
+            return 1;
+        
+        delim++;
     }
 
-    *delim_pos = '\0';
-    char* ret = last;
-    last = delim_pos + 1;
-    return ret;
+    return 0;
+}
+
+char* strtok(char* str, char* delim) {
+    static char *last;
+
+    if (!str)
+        str = last;
+    
+    if (!str)
+        return NULL;
+
+    while (1)
+    {
+        if (is_delim(*str, delim))
+        {
+            str++;
+
+            continue;
+        }
+
+        if (*str == '\0')
+        {
+            return NULL;
+        }
+
+        break;
+    }
+
+    char *ret = str;
+
+    while (1)
+    {
+        if (*str == '\0')
+        {
+            last = str;
+
+            return ret;
+        }
+
+        if (is_delim(*str, delim))
+        {
+            *str = '\0';
+
+            last = str + 1;
+
+            return ret;
+        }
+
+        str++;
+    }
 }
 
 char* strpbrk(const char* str, const char* accept) {

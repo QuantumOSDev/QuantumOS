@@ -3,7 +3,7 @@
 #include <sys/memory.h>
 #include <sys/pmm.h>
 
-__pmm_mem_info_t __pmm_mem_info;
+static __pmm_mem_info_t __pmm_mem_info;
 
 void pmm_mmap_set(int __address)
 {
@@ -43,7 +43,7 @@ int pmm_first_free(void)
     return -1;
 }
 
-int pmm_next_free(int __size)
+int pmm_next_free(unsigned int __size)
 {
     unsigned int i, j, k;
     unsigned int free = 0;
@@ -99,7 +99,7 @@ void pmm_initialize(__pmm_physical_address __bitmap, unsigned int __memsize)
     __pmm_mem_info.__maxblocks  = (__memsize / PMM_BLOCK_SIZE);
     __pmm_mem_info.__usedblocks = __pmm_mem_info.__maxblocks;
 
-    kmemset(__pmm_mem_info.__map_array, 0xff, (__pmm_mem_info.__maxblocks * sizeof(unsigned int)));
+    kmemset((unsigned char *) __pmm_mem_info.__map_array, 0xff, (__pmm_mem_info.__maxblocks * sizeof(unsigned int)));
 
     __pmm_mem_info.__mapend = (unsigned int) &__pmm_mem_info.__map_array[__pmm_mem_info.__maxblocks];
 }
@@ -129,7 +129,7 @@ void pmm_uninitialize_region(__pmm_physical_address __base, unsigned int __regio
 
         __pmm_mem_info.__usedblocks++;
 
-        __blocks++;
+        __blocks--;
     }
 }
 
@@ -147,23 +147,7 @@ void *pmm_allocate_block(void)
     int i;
     int j;
     
-    int frame = -1;
-
-    for (i = 0; i < __pmm_mem_info.__maxblocks; i++)
-    {
-        if (__pmm_mem_info.__map_array[i] != 0xffffffff)
-        {
-            for (j = 0; j < PMM_BIT_SIZE; j++)
-            {
-                int __bit = 1 << j;
-
-                if (!(__pmm_mem_info.__map_array[i] & __bit))
-                {
-                    frame = i * PMM_BIT_SIZE + j;
-                }
-            }
-        }
-    }
+    int frame = pmm_first_free();
 
     /* If no block was found then something went wrong. Return NULL */
     

@@ -8,6 +8,7 @@
 #include <drivers/acpi.h>
 
 #include <sys/syscalls.h>
+#include <sys/memory.h>
 
 #include <core/stdlib.h>
 #include <core/string.h>
@@ -28,13 +29,12 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
 
     printf("QuantumOS has boot up!\n");
 
-// /* DISABLE MOUSE DRIVERS FOR NOW
-    // for (;;) {
-    //     vesa_draw_circle(get_mouse_x(), get_mouse_y(), 4, 255, 0, 0);
-    // }
-// */
+/* DISABLE MOUSE DRIVERS FOR NOW
+    for (;;) {
+        vesa_draw_circle(get_mouse_x(), get_mouse_y(), 4, 255, 0, 0);
+    }
+*/
 
-// /* DISABLE SHELL FOR NOW 
     printf("Press any key to continue booting into userspace!\nHit 'k' to enter kernel-mode...\n");
 
     char __boot_mode = keyboard_getchar();
@@ -49,15 +49,10 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     {
         printf("\nBooting into userspace mode...\n");
     }
-// */
 
-    char* hello = "Hello, World syscalls!";
-    int length = strlen(hello);
-    __SET_REGISTER__("eax", 4);
-    __SET_REGISTER__("ebx", 1);
-    __SET_REGISTER__("ecx", (int)hello);
-    __SET_REGISTER__("edx", length);
-    // asm("int $0x80");
-    
+    for (int i = 0; i < 25; i++) {
+        printf("LOL\n");
+    }
+
     return;
 }

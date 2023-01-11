@@ -4,6 +4,13 @@
 
 #include <quantum/init.h>
 
+/*
+
+Syscalls don't work because when i try to interrupt at 0x80
+it there pop out an isr error (0x13) General protection fault
+
+*/
+
 const syscall_func_t SYSCALLS[MAX_SYSCALLS] = {
     NULL, // 0
     NULL, // 1

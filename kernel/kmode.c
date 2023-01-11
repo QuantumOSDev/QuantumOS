@@ -13,6 +13,10 @@ void kmode_initialize(void)
         printf(KMODE_PROMPT);
 
         char *__command = keyboard_getchar_until('\n');
+        if (!__command)
+        {
+            printf("err!\n");
+        }
         char *__basecmd = strtok(__command, " ");
 
         printf("\n");
@@ -21,7 +25,7 @@ void kmode_initialize(void)
         {
             if (strcmp(__basecmd, "help") == 0)
             {
-                printf("Help commands!\n");
+                printf("Help page:\nreboot:\tReboot the system.\nhelp:\tDisplay this help window.\n");
             }
             else if (strcmp(__basecmd, "reboot") == 0)
             {

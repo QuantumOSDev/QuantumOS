@@ -2,6 +2,8 @@
 
 #include <sys/memory.h>
 
+#include <core/print.h>
+
 void *__kmem_global_start = (void *) 0;
 void *__kmem_global_end   = (void *) 0;
 
@@ -21,7 +23,7 @@ void kmem_initialize(void *__start, void *__end)
     __kmem_global_start = __start;
     __kmem_global_end = __end;
 
-    __kmem_global_total_size = (__start - __end);
+    __kmem_global_total_size = (__end - __start);
     __kmem_global_used_size = 0;
 }
 

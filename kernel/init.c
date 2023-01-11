@@ -48,19 +48,19 @@ static inline int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_in
 
     __map->__system.__total_memory = __mboot->mem_lower + __mboot->mem_upper;
 
-    for (i = 0; i < __mboot->mmap_length; i += sizeof(multiboot_memory_map_t))
+    for (i = 0; i < __mboot->mmap_length; i += sizeof(__multiboot_memory_map))
     {
-        multiboot_memory_map_t *__mmap = (multiboot_memory_map_t *)(__mboot->mmap_addr + i);
+        __multiboot_memory_map *__mmap = (__multiboot_memory_map *)(__mboot->mmap_addr + i);
 
-        if (__mmap->type != MULTIBOOT_MEMORY_AVAILABLE)
+        if (__mmap->__type != MULTIBOOT_MEMORY_AVAILABLE)
         {
             continue;
         }
 
-        if (__mmap->addr == __map->__kernel.__text_start)
+        if (__mmap->__addr_low == __map->__kernel.__text_start)
         {
             __map->__available.__start = __map->__kernel.__kernel_end + 1024 * 1024;
-            __map->__available.__end = __mboot->mmap_addr + __mmap->len;
+            __map->__available.__end = __mmap->__addr_low + __mmap->__len_low;
 
             __map->__available.__size = __map->__available.__end - __map->__available.__start;
 
@@ -117,6 +117,25 @@ void quantum_memory_init(void)
 void quantum_keyboard_init(void)
 {
     keyboard_enable();
+}
+
+void display_kernel_memory_map(KERNEL_MEMORY_MAP *kmap) {
+    printf("kernel:\n");
+    printf("  kernel-start: 0x%x, kernel-end: 0x%x, TOTAL: %d bytes\n",
+           kmap->__kernel.__kernel_start, kmap->__kernel.__kernel_end, kmap->__kernel.__kernel_len);
+    printf("  text-start: 0x%x, text-end: 0x%x, TOTAL: %d bytes\n",
+           kmap->__kernel.__text_start, kmap->__kernel.__text_end, kmap->__kernel.__text_len);
+    printf("  data-start: 0x%x, data-end: 0x%x, TOTAL: %d bytes\n",
+           kmap->__kernel.__data_start, kmap->__kernel.__data_end, kmap->__kernel.__data_len);
+    printf("  rodata-start: 0x%x, rodata-end: 0x%x, TOTAL: %d\n",
+           kmap->__kernel.__rodata_start, kmap->__kernel.__rodata_end, kmap->__kernel.__rodata_len);
+    printf("  bss-start: 0x%x, bss-end: 0x%x, TOTAL: %d\n",
+           kmap->__kernel.__bss_start, kmap->__kernel.__bss_end, kmap->__kernel.__bss_len);
+
+    printf("total_memory: %d KB\n", kmap->__system.__total_memory);
+    printf("available:\n");
+    printf("  start_addr: 0x%x\n  end addr: 0x%x\n  size: %d\n",
+           kmap->__available.__start, kmap->__available.__end, kmap->__available.__size);
 }
 
 void quantum_pmm_init(unsigned long __addr)

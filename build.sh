@@ -47,11 +47,12 @@ function __build_s
     $AS $ASFLAGS $BOOTDIR/boot.asm -o $BUILDDIR/boot.asm.o
     $AS $ASFLAGS $KERNELDIR/sys/gdt.asm -o $BUILDDIR/gdt.asm.o
     $AS $ASFLAGS $KERNELDIR/sys/interrupts.asm -o $BUILDDIR/interrupts.asm.o
+    $AS $ASFLAGS $KERNELDIR/sys/lol.asm -o $BUILDDIR/lol.asm.o
 }
 
 function __link_k
 {
-    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/vga.c.o $BUILDDIR/string.c.o $BUILDDIR/print.c.o $BUILDDIR/vesa.c.o  $BUILDDIR/pio.c.o $BUILDDIR/isr.c.o $BUILDDIR/idt.c.o $BUILDDIR/syscalls.c.o $BUILDDIR/kgdt.c.o $BUILDDIR/interrupts.asm.o $BUILDDIR/gdt.asm.o $BUILDDIR/pmm.c.o $BUILDDIR/init.c.o $BUILDDIR/memory.c.o $BUILDDIR/keyboard.c.o $BUILDDIR/mouse.c.o $BUILDDIR/stdlib.c.o $BUILDDIR/acpi.c.o $BUILDDIR/kpanic.c.o $BUILDDIR/vfs.c.o $BUILDDIR/kmode.c.o
+    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/lol.asm.o $BUILDDIR/vga.c.o $BUILDDIR/string.c.o $BUILDDIR/print.c.o $BUILDDIR/vesa.c.o  $BUILDDIR/pio.c.o $BUILDDIR/isr.c.o $BUILDDIR/idt.c.o $BUILDDIR/syscalls.c.o $BUILDDIR/kgdt.c.o $BUILDDIR/interrupts.asm.o $BUILDDIR/gdt.asm.o $BUILDDIR/pmm.c.o $BUILDDIR/init.c.o $BUILDDIR/memory.c.o $BUILDDIR/keyboard.c.o $BUILDDIR/mouse.c.o $BUILDDIR/stdlib.c.o $BUILDDIR/acpi.c.o $BUILDDIR/kpanic.c.o $BUILDDIR/vfs.c.o $BUILDDIR/kmode.c.o
 }
 
 function __gen_iso

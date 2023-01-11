@@ -51,8 +51,10 @@ void insert_newline()
     global_print_vec_x = 2;
     global_print_vec_y += 22;
 
-    if (global_print_vec_y >= 720)
+    if (global_print_vec_y >= 720) {
+        vesa_clear();
         global_print_vec_y = 0;
+    }
 }
 
 void insert_backspace()
