@@ -155,8 +155,6 @@ void quantum_pmm_init(unsigned long __addr)
         return;
     }
 
-    display_kernel_memory_map(&__kernel_memory_map);    
-
     pmm_initialize(__kernel_memory_map.__available.__start, __kernel_memory_map.__available.__size);
     pmm_initialize_region(__kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
 
