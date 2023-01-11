@@ -2,6 +2,7 @@
 
 #include <drivers/vesa.h>
 #include <drivers/mouse.h>
+#include <drivers/acpi.h>
 
 #include <multiboot.h>
 #include <print.h>
