@@ -2,16 +2,16 @@
 #define KERNEL_H
 
 // symbols from linker.ld for section addresses
-extern unsigned int __kernel_section_start;
-extern unsigned int __kernel_section_end;
-extern unsigned int __kernel_text_section_start;
-extern unsigned int __kernel_text_section_end;
-extern unsigned int __kernel_data_section_start;
-extern unsigned int __kernel_data_section_end;
-extern unsigned int __kernel_rodata_section_start;
-extern unsigned int __kernel_rodata_section_end;
-extern unsigned int __kernel_bss_section_start;
-extern unsigned int __kernel_bss_section_end;
+extern unsigned char __kernel_section_start;
+extern unsigned char __kernel_section_end;
+extern unsigned char __kernel_text_section_start;
+extern unsigned char __kernel_text_section_end;
+extern unsigned char __kernel_data_section_start;
+extern unsigned char __kernel_data_section_end;
+extern unsigned char __kernel_rodata_section_start;
+extern unsigned char __kernel_rodata_section_end;
+extern unsigned char __kernel_bss_section_start;
+extern unsigned char __kernel_bss_section_end;
 
 typedef struct
 {
@@ -45,12 +45,10 @@ typedef struct
 
     struct
     {
-        unsigned int __start;
-        unsigned int __end;
-        unsigned int __size;
+        unsigned long __start;
+        unsigned long __end;
+        unsigned long __size;
     } __available;
 } KERNEL_MEMORY_MAP;
-
-extern KERNEL_MEMORY_MAP __kernel_memory_map;
 
 #endif

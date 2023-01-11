@@ -13,6 +13,10 @@ void kmode_initialize(void)
         printf(KMODE_PROMPT);
 
         char *__command = keyboard_getchar_until('\n');
+        if (!__command)
+        {
+            printf("err!\n");
+        }
         char *__basecmd = strtok(__command, " ");
 
         printf("\n");

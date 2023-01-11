@@ -7,6 +7,8 @@
 #include <drivers/vesa.h>
 #include <drivers/acpi.h>
 
+#include <sys/memory.h>
+
 #include <core/print.h>
 
 void quantum_kernel_init(unsigned long magic, unsigned long addr)
@@ -27,7 +29,6 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
         vesa_draw_circle(get_mouse_x(), get_mouse_y(), 4, 255, 0, 0);
     }
 */
-
     printf("Press any key to continue booting into userspace!\nHit 'k' to enter kernel-mode...\n");
 
     char __boot_mode = keyboard_getchar();

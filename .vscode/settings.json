@@ -5,6 +5,11 @@
         "multiboot.h": "c",
         "kmode.h": "c",
         "print.h": "c",
-        "init.h": "c"
+        "init.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c",
+        "mouse.h": "c"
     }
 }

@@ -25,7 +25,7 @@ void pmm_mmap_unset(int __address);
 char pmm_mmap_get(int __address);
 
 int pmm_first_free(void);
-int pmm_next_free(int __size);
+int pmm_next_free(unsigned int __size);
 
 void pmm_initialize(__pmm_physical_address __bitmap, unsigned int __memsize);
 void pmm_initialize_region(__pmm_physical_address __base, unsigned int __region_size);
