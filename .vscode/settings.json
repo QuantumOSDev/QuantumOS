@@ -5,6 +5,11 @@
         "multiboot.h": "c",
         "kmode.h": "c",
         "print.h": "c",
-        "init.h": "c"
+        "init.h": "c",
+        "stdlib.h": "c",
+        "syscalls.h": "c",
+        "syscall.h": "c",
+        "string.h": "c",
+        "isr.h": "c"
     }
 }

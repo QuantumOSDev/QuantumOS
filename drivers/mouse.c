@@ -73,7 +73,7 @@ void mouse_handler(registers_t* regs) {
 }
 
 void quantum_mouse_init() {
-    quantum_info(0, "Mouse", "Initializing mouse drivers");
+    quantum_info(0, " Mouse  ", "Initializing mouse drivers");
     mouse_x = 640;
     mouse_y = 360;
 
@@ -82,7 +82,7 @@ void quantum_mouse_init() {
  
     pio_outb(0x60, 0xF2);
     unsigned char status = mouse_read();
-    quantum_info(0, "Mouse", "detected mouse with id 0x%x", status);
+    quantum_info(0, " Mouse  ", "detected mouse with id 0x%x", status);
 
     mouse_wait(1);
     pio_outb(0x64, 0x20);

@@ -4,6 +4,8 @@
 #include <drivers/vesa.h>
 #include <drivers/font.h>
 
+#include <sys/memory.h>
+
 unsigned long global_addr;
 
 void quantum_vesa_init(unsigned long mbinfo_ptr) {
@@ -24,6 +26,13 @@ void vesa_draw_rect(int x, int y, int w, int h, int r, int g, int b) {
     for (int _x = 0; _x < w; _x++)
         for (int _y = 0; _y < h; _y++)
             vesa_put_pixel(x + _x, y + _y, r, g, b);
+}
+
+void vesa_clear() {
+    multiboot_info_t* mbinfo = (multiboot_info_t*)global_addr;
+    unsigned char* framebuffer = (unsigned char*)mbinfo->framebuffer_addr;
+    
+    kmemset(framebuffer, 0, mbinfo->framebuffer_width * 4 + mbinfo->framebuffer_height * mbinfo->framebuffer_pitch);
 }
 
 void vesa_draw_circle(int center_x, int center_y, int radius, int r, int g, int b) {

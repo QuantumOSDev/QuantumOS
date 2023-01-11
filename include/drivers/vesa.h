@@ -3,6 +3,8 @@
 
 void quantum_vesa_init(unsigned long mbinfo_ptr);
 
+void vesa_clear();
+
 void vesa_put_pixel(int x, int y, int r, int g, int b);
 
 void vesa_draw_rect(int x, int y, int w, int h, int r, int g, int b);
