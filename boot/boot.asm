@@ -1,30 +1,26 @@
-; Now we are running in 32-bits
+; Magic header
+FLAGS       equ  0x4
+MAGIC_HEADER       equ  0x1BADB002
+CHECKSUM    equ -(MAGIC_HEADER + FLAGS)
 
-[bits 32]
-; Setup multiboot variables
-MULTIBOOT_HEADER equ 0x1BADB002
-MULTIBOOT_FLAGS  equ 0x04
-MULTIBOOT_CHECK  equ -(MULTIBOOT_HEADER + MULTIBOOT_FLAGS)
+; Bootloader magic number
+BOOTLOADER_MAGIC  equ  0x2BADB002
 
-BOOTLOADER_MAGIC equ 0x2BADB002
-
+; Section .multiboot
 section .multiboot
     align 4
-    
-    dd MULTIBOOT_HEADER
-    dd MULTIBOOT_FLAGS
-    dd MULTIBOOT_CHECK
-    
-    align 4
+    dd MAGIC_HEADER
+    dd FLAGS
+    dd CHECKSUM
     dd 0
     dd 0
     dd 0
     dd 0
     dd 0
     dd 0
-    dd 1280 ; width
-    dd 720  ; height
-    dd 32   ; pitch
+    dd 1024
+    dd 768
+    dd 32
 
 section .data
     align 4096
@@ -32,30 +28,24 @@ section .data
 section .initial_stack, nobits
     align 4
 
-__kernel_stack_bottom:
+stack_bottom:
     resb 104856
-__kernel_stack_top:
+stack_top:
 
-; Align and allocate the MULTIBOOT header
 section .text
-    global MULTIBOOT_HEADER
+    global _start
+    global MAGIC_HEADER
     global BOOTLOADER_MAGIC
 
-; Linker (_start) entry point
-global _start
-
-; Extern kernel initialization function
-extern quantum_kernel_init
-
-; Definition of _start function
 _start:
-    cli                            ; Disable interrupts
-
-    mov esp, __kernel_stack_top    ; Allocate stack space
-    mov eax, BOOTLOADER_MAGIC      ; Set eax to bootloader magic
-
-    push ebx                       ; Pass bootloader magic
-    push eax                       ; Pass multiboot structure pointer
-
-    call quantum_kernel_init       ; Call c function 
-    hlt                            ; Halt the CPU
+    extern quantum_kernel_init ; Extern c function 
+    
+    mov esp, stack_top
+    mov eax, BOOTLOADER_MAGIC
+    
+    push ebx
+    push eax
+    
+    call quantum_kernel_init
+loop:
+    jmp loop
