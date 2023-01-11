@@ -6,7 +6,9 @@
 #include <drivers/mouse.h>
 #include <drivers/vesa.h>
 #include <drivers/acpi.h>
+#include <drivers/cmos.h>
 
+#include <sys/userspace.h>
 #include <sys/syscalls.h>
 #include <sys/memory.h>
 
@@ -27,7 +29,20 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_vfs_init();
     quantum_syscalls_init();
 
-    printf("QuantumOS has boot up!\n");
+    printf("QuantumOS has boot up! ");
+
+    date_t date = get_date_cmos();
+    printf("Current time: %s%d:%s%d:%s%d %d%d:%s%d:%s%d\n\n", 
+           // Time
+           date.hour <= 9 ? "0" : "", date.hour, 
+           date.minute <= 9 ? "0" : "", date.minute, 
+           date.second <= 9 ? "0" : "", date.second,    
+
+           // Date
+           date.century, 
+           date.year, 
+           date.month <= 9 ? "0" : "", date.month, 
+           date.day <= 9 ? "0" : "", date.day);
 
 /* DISABLE MOUSE DRIVERS FOR NOW
     for (;;) {
@@ -47,11 +62,8 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     }
     else
     {
-        printf("\nBooting into userspace mode...\n");
-    }
-
-    for (int i = 0; i < 25; i++) {
-        printf("LOL\n");
+        printf("\n");
+        quantum_migrate_to_userspace();
     }
 
     return;

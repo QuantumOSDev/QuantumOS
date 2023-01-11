@@ -19,4 +19,6 @@ void printf_va(char* format, va_list arg);
 
 void print_set_color(int r, int g, int b);
 
+void set_default_pos();
+
 #endif

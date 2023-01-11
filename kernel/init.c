@@ -8,6 +8,7 @@
 #include <core/string.h>
 #include <core/print.h>
 
+#include <sys/userspace.h>
 #include <sys/memory.h>
 #include <sys/kmode.h>
 #include <sys/kgdt.h>
@@ -73,6 +74,7 @@ static inline int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_in
 
 void quantum_info(int __status, char *header, char *format, ...)
 {
+#if defined(INFO)
     printf("[");
     if (__status == 0)
     {
@@ -92,6 +94,9 @@ void quantum_info(int __status, char *header, char *format, ...)
     va_end(arg);
 
     insert_newline();
+#else
+    // TODO: qemu serial port
+#endif
 }
 
 void quantum_gdt_init(void)
@@ -138,10 +143,14 @@ void display_kernel_memory_map(KERNEL_MEMORY_MAP *kmap) {
            kmap->__available.__start, kmap->__available.__end, kmap->__available.__size);
 }
 
+KERNEL_MEMORY_MAP __kernel_memory_map;
+
+KERNEL_MEMORY_MAP* get_kernel_mm() {
+    return &__kernel_memory_map;
+}
+
 void quantum_pmm_init(unsigned long __addr)
 {
-    KERNEL_MEMORY_MAP __kernel_memory_map;
-
     multiboot_info_t *__mboot = (multiboot_info_t *)__addr;
 
     int __status = quantum_get_kernel_mmap(&__kernel_memory_map, __mboot);
@@ -171,4 +180,9 @@ void quantum_vfs_init(void)
 void quantum_migrate_to_kernel_mode(void)
 {
     kmode_initialize();
+}
+
+void quantum_migrate_to_userspace(void)
+{
+    userspace_initialize();
 }

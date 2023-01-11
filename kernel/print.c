@@ -18,6 +18,11 @@ int global_print_bg_r;
 int global_print_bg_g;
 int global_print_bg_b;
 
+void set_default_pos() {
+    global_print_vec_x = 2;
+    global_print_vec_y = 2;
+}
+
 void print_set_color(int r, int g, int b)
 {
     global_print_fg_r = r;

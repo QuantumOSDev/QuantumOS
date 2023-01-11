@@ -4,6 +4,12 @@
         "string.h": "c",
         "stdlib.h": "c",
         "memory.h": "c",
-        "syscalls.h": "c"
+        "syscalls.h": "c",
+        "cmos.h": "c",
+        "pio.h": "c",
+        "acpi.h": "c",
+        "kmode.h": "c",
+        "userspace.h": "c",
+        "vesa.h": "c"
     }
 }
