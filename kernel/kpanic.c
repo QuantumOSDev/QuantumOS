@@ -1,4 +1,4 @@
-#include <core/print.h>
+#include <print.h>
 
 void kpanic(const char *__message)
 {
