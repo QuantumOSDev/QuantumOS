@@ -1,12 +1,12 @@
+#include <quantum/multiboot.h>
 #include <quantum/kernel.h>
+#include <quantum/init.h>
 
 #include <drivers/vesa.h>
 #include <drivers/mouse.h>
 #include <drivers/acpi.h>
 
-#include <multiboot.h>
-#include <print.h>
-#include <init.h>
+#include <core/print.h>
 
 void quantum_kernel_init(unsigned long magic, unsigned long addr)
 {
@@ -17,6 +17,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_isr_init();
     quantum_memory_init();
     quantum_keyboard_init();
+    quantum_vfs_init();
 
     printf("QuantumOS has boot up!\n");
 

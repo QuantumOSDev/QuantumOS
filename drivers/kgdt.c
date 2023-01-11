@@ -1,5 +1,6 @@
+#include <quantum/init.h>
+
 #include <sys/kgdt.h>
-#include <init.h>
 
 #define SEGMENT_DESCRIPTOR_COUNT 3
 

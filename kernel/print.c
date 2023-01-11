@@ -1,10 +1,11 @@
-#include <print.h>
-#include <string.h>
+#include <quantum/init.h>
 
 #include <drivers/vesa.h>
 #include <sys/memory.h>
-#include <stdarg.h>
-#include <init.h>
+
+#include <core/string.h>
+#include <core/stdarg.h>
+#include <core/print.h>
 
 int global_print_vec_x;
 int global_print_vec_y;

@@ -1,8 +1,8 @@
-#include <drivers/vesa.h>
+#include <quantum/multiboot.h>
+#include <quantum/init.h>
 
-#include <multiboot.h>
-#include <init.h>
-#include <font.h>
+#include <drivers/vesa.h>
+#include <drivers/font.h>
 
 unsigned long global_addr;
 

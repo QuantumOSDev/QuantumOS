@@ -1,7 +1,7 @@
 #ifndef PRINT_H
 #define PRINT_H
 
-#include <stdarg.h>
+#include <core/stdarg.h>
 
 void quantum_print_init();
 

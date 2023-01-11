@@ -1,11 +1,12 @@
+#include <quantum/init.h>
+
 #include <drivers/vga.h>
+
+#include <core/print.h>
 
 #include <sys/pio.h>
 #include <sys/idt.h>
 #include <sys/isr.h>
-
-#include <print.h>
-#include <init.h>
 
 isr_t __interrupt_handlers[256];
 

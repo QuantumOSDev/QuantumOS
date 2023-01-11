@@ -1,19 +1,21 @@
-#include <init.h>
-#include <print.h>
-#include <string.h>
-#include <multiboot.h>
-
+#include <quantum/multiboot.h>
 #include <quantum/kernel.h>
+#include <quantum/init.h>
 
 #include <drivers/keyboard.h>
 
+
+#include <core/stdarg.h>
+#include <core/string.h>
+#include <core/print.h>
+
+#include <sys/memory.h>
+#include <sys/kgdt.h>
 #include <sys/idt.h>
 #include <sys/isr.h>
-#include <sys/kgdt.h>
 #include <sys/pmm.h>
-#include <sys/memory.h>
 
-#include <stdarg.h>
+#include <fs/vfs.h>
 
 KERNEL_MEMORY_MAP __kernel_memory_map;
 
@@ -121,4 +123,9 @@ void quantum_pmm_init(unsigned long __addr)
 
     pmm_initialize(__kernel_memory_map.__available.__start, __kernel_memory_map.__available.__size);
     pmm_initialize_region(__kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
+}
+
+void quantum_vfs_init(void)
+{
+    vfs_initialize(__VFS_RW);
 }

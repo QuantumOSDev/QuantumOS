@@ -1,4 +1,4 @@
-#include <string.h>
+#include <core/string.h>
 
 #include <sys/memory.h>
 

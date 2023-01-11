@@ -1,8 +1,9 @@
-#include <fs/vfs.h>
+#include <core/string.h>
+#include <core/print.h>
 
 #include <sys/memory.h>
-#include <string.h>
-#include <print.h>
+
+#include <fs/vfs.h>
 
 __vfs_t *__vfs;
 

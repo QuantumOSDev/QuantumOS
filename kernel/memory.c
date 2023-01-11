@@ -1,6 +1,6 @@
-#include <sys/memory.h>
+#include <quantum/init.h>
 
-#include <init.h>
+#include <sys/memory.h>
 
 void *__kmem_global_start = (void *) 0;
 void *__kmem_global_end   = (void *) 0;

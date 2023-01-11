@@ -1,8 +1,9 @@
 #include <drivers/mouse.h>
 
+#include <quantum/init.h>
+
 #include <sys/isr.h>
 #include <sys/pio.h>
-#include <init.h>
 
 static unsigned char mouse_cycle = 0; 
 static char mouse_byte[3];   
