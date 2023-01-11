@@ -4,12 +4,12 @@
 
 #include <drivers/keyboard.h>
 
-
 #include <core/stdarg.h>
 #include <core/string.h>
 #include <core/print.h>
 
 #include <sys/memory.h>
+#include <sys/kmode.h>
 #include <sys/kgdt.h>
 #include <sys/idt.h>
 #include <sys/isr.h>
@@ -128,4 +128,9 @@ void quantum_pmm_init(unsigned long __addr)
 void quantum_vfs_init(void)
 {
     vfs_initialize(__VFS_RW);
+}
+
+void quantum_migrate_to_kernel_mode(void)
+{
+    kmode_initialize();
 }

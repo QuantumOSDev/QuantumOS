@@ -3,6 +3,8 @@
 #include <quantum/init.h>
 
 #include <core/stdlib.h>
+#include <core/string.h>
+#include <core/print.h>
 
 #include <sys/memory.h>
 
@@ -98,6 +100,19 @@ char *keyboard_getchar_until(char __c)
 
     while (__input != __c)
     {
+        if (__input == '\b')
+        {
+            printf("\b");
+
+            __result[strlen(__result) - 1] = '\0';
+
+            __input = keyboard_getchar();
+
+            continue;
+        }
+
+        printf("%c", __input);
+
         kstrcat(__result, (char[]) {__input, 0});
 
         __input = keyboard_getchar();

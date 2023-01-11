@@ -1,18 +1,9 @@
 {
     "files.associations": {
-        "idt.h": "c",
-        "pmm.h": "c",
-        "vesa.h": "c",
-        "multiboot.h": "c",
-        "stdarg.h": "c",
-        "print.h": "c",
+        "typeinfo": "c",
         "memory.h": "c",
-        "stdlib.h": "c",
-        "init.h": "c",
-        "kernel.h": "c",
-        "keyboard.h": "c",
-        "exception": "c",
-        "isr.h": "c",
-        "pio.h": "c"
+        "multiboot.h": "c",
+        "kmode.h": "c",
+        "print.h": "c"
     }
 }

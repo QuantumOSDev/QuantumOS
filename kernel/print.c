@@ -55,10 +55,23 @@ void insert_newline()
         global_print_vec_y = 0;
 }
 
+void insert_backspace()
+{
+    global_print_vec_x = global_print_vec_x - 9;
+
+    vesa_draw_char(
+    ' ',
+    global_print_vec_x, global_print_vec_y,
+    global_print_fg_r, global_print_fg_g, global_print_fg_b,
+    global_print_bg_r, global_print_bg_g, global_print_bg_b);
+}
+
 void putc(char c)
 {
     if (c == '\n' || c == '\r')
         insert_newline();
+    else if (c == '\b')
+        insert_backspace();
     else if (c == '\t')
         insert_tab();
     else

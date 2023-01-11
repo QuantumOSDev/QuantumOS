@@ -9,6 +9,8 @@ void insert_tab();
 
 void insert_newline();
 
+void insert_backspace();
+
 void putc(char c);
 
 void printf(const char* format, ...);
