@@ -9,7 +9,7 @@ irq_handler:
     push eax
 
     mov ax, 0x10
-    mov dx, ax
+    mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax

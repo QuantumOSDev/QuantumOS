@@ -37,21 +37,6 @@ help:       Display this help window.\n");
             {
                 acpi_reboot();
             }
-            else if (strcmp(__basecmd, "time") == 0)
-            {
-                date_t date = get_date_cmos();
-                printf("UTC %s%d:%s%d:%s%d %d%d:%s%d:%s%d\n", 
-                       // Time
-                       date.hour <= 9 ? "0" : "", date.hour, 
-                       date.minute <= 9 ? "0" : "", date.minute, 
-                       date.second <= 9 ? "0" : "", date.second, 
-            
-                       // Dates
-                       date.century, 
-                       date.year, 
-                       date.month <= 9 ? "0" : "", date.month, 
-                       date.day <= 9 ? "0" : "", date.day);
-            }
             else if (strcmp(__basecmd, "userspace") == 0) 
             {
                 userspace_initialize();

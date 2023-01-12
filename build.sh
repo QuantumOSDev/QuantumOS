@@ -30,11 +30,7 @@ function __build_c
     $CC $CFLAGS $DRIVERSDIR/mouse.c -o $BUILDDIR/mouse.c.o
     $CC $CFLAGS $DRIVERSDIR/acpi.c -o $BUILDDIR/acpi.c.o
     $CC $CFLAGS $DRIVERSDIR/pic.c -o $BUILDDIR/pic.c.o
-<<<<<<< HEAD
     $CC $CFLAGS $DRIVERSDIR/ata.c -o $BUILDDIR/ata.c.o
-=======
-    $CC $CFLAGS $DRIVERSDIR/cmos.c -o $BUILDDIR/cmos.c.o
->>>>>>> 594d796a85f1050edc5ca665cda2391e381deab5
 
     $CC $CFLAGS $KERNELDIR/string.c -o $BUILDDIR/string.c.o
     $CC $CFLAGS $KERNELDIR/print.c -o $BUILDDIR/print.c.o
@@ -56,16 +52,13 @@ function __build_s
     $AS $ASFLAGS $KERNELDIR/sys/interrupts.asm -o $BUILDDIR/interrupts.asm.o
     $AS $ASFLAGS $KERNELDIR/sys/idt.asm -o $BUILDDIR/idt.asm.o
     $AS $ASFLAGS $KERNELDIR/sys/irq.asm -o $BUILDDIR/irq.asm.o
+    $AS $ASFLAGS $KERNELDIR/sys/syscalls.asm -o $BUILDDIR/syscalls.asm.o
     $AS $ASFLAGS $KERNELDIR/sys/bios32_call.asm -o $BUILDDIR/bios32_call.asm.o
 }
 
 function __link_k
 {
-<<<<<<< HEAD
-    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/vga.c.o $BUILDDIR/string.c.o $BUILDDIR/print.c.o $BUILDDIR/vesa.c.o  $BUILDDIR/pio.c.o $BUILDDIR/isr.c.o $BUILDDIR/idt.c.o $BUILDDIR/syscalls.c.o $BUILDDIR/kgdt.c.o $BUILDDIR/interrupts.asm.o $BUILDDIR/gdt.asm.o $BUILDDIR/pmm.c.o $BUILDDIR/init.c.o $BUILDDIR/memory.c.o $BUILDDIR/keyboard.c.o $BUILDDIR/mouse.c.o $BUILDDIR/stdlib.c.o $BUILDDIR/acpi.c.o $BUILDDIR/kpanic.c.o $BUILDDIR/vfs.c.o $BUILDDIR/kmode.c.o $BUILDDIR/pic.c.o $BUILDDIR/idt.asm.o $BUILDDIR/irq.asm.o $BUILDDIR/bios32_call.asm.o $BUILDDIR/ata.c.o
-=======
-    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/userspace.c.o $BUILDDIR/cmos.c.o $BUILDDIR/vga.c.o $BUILDDIR/string.c.o $BUILDDIR/print.c.o $BUILDDIR/vesa.c.o  $BUILDDIR/pio.c.o $BUILDDIR/isr.c.o $BUILDDIR/idt.c.o $BUILDDIR/syscalls.c.o $BUILDDIR/kgdt.c.o $BUILDDIR/interrupts.asm.o $BUILDDIR/gdt.asm.o $BUILDDIR/pmm.c.o $BUILDDIR/init.c.o $BUILDDIR/memory.c.o $BUILDDIR/keyboard.c.o $BUILDDIR/mouse.c.o $BUILDDIR/stdlib.c.o $BUILDDIR/acpi.c.o $BUILDDIR/kpanic.c.o $BUILDDIR/vfs.c.o $BUILDDIR/kmode.c.o $BUILDDIR/pic.c.o $BUILDDIR/idt.asm.o $BUILDDIR/irq.asm.o $BUILDDIR/bios32_call.asm.o
->>>>>>> 594d796a85f1050edc5ca665cda2391e381deab5
+    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/userspace.c.o $BUILDDIR/vga.c.o $BUILDDIR/string.c.o $BUILDDIR/print.c.o $BUILDDIR/vesa.c.o  $BUILDDIR/pio.c.o $BUILDDIR/isr.c.o $BUILDDIR/idt.c.o $BUILDDIR/syscalls.c.o $BUILDDIR/kgdt.c.o $BUILDDIR/interrupts.asm.o $BUILDDIR/gdt.asm.o $BUILDDIR/pmm.c.o $BUILDDIR/init.c.o $BUILDDIR/memory.c.o $BUILDDIR/keyboard.c.o $BUILDDIR/mouse.c.o $BUILDDIR/stdlib.c.o $BUILDDIR/acpi.c.o $BUILDDIR/kpanic.c.o $BUILDDIR/vfs.c.o $BUILDDIR/kmode.c.o $BUILDDIR/pic.c.o $BUILDDIR/idt.asm.o $BUILDDIR/syscalls.asm.o $BUILDDIR/irq.asm.o $BUILDDIR/bios32_call.asm.o $BUILDDIR/ata.c.o
 }
 
 function __gen_iso

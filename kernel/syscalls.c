@@ -341,24 +341,23 @@ const syscall_func_t SYSCALLS[MAX_SYSCALLS] = {
 
 void syscall_interrupt_handler(__registers_t* regs) 
 {
-    syscall_func_t syscall = SYSCALLS[regs->eax];
+    // syscall_func_t syscall = SYSCALLS[regs->eax];
 
-    quantum_info(0, " Syscall", "Got %d syscall", regs->eax);
-    if (syscall == NULL) 
-    {
-        quantum_info(1, " Syscall", "Syscall with number %d is not implemented", regs->eax);
-        return;
-    }
+    // quantum_info(0, " Syscall", "Got %d syscall", regs->eax);
+    // if (syscall == NULL) 
+    // {
+    //     quantum_info(1, " Syscall", "Syscall with number %d is not implemented", regs->eax);
+    //     return;
+    // }
 
-    int syscall_return = 0;
-    syscall(
-        &syscall_return, regs->eax,
-        regs->ebx, regs->ecx,
-        regs->edx, regs->esi,
-        regs->edi, regs->ebp
-    );
+    // syscall(
+    //     regs->eax, regs->ebx, 
+    //     regs->ecx, regs->edx, 
+    //     regs->esi, regs->edi, 
+    //     regs->ebp
+    // );
 
-    asm volatile("ret" : : "a"(syscall_return));
+    // asm volatile("ret" : : "a"(syscall_return));
 }
 
 void quantum_syscalls_init() 
@@ -367,7 +366,7 @@ void quantum_syscalls_init()
     quantum_info(0, " Syscall", "Successfully initialized syscall handler (0x%x)", 0x80);
 }
 
-void sys_write(int* syscall_return, int eax, int fd, int buf, int count, int esi, int edi, int ebp) 
+void sys_write(int eax, int fd, int buf, int count, int esi, int edi, int ebp) 
 {
-    printf("LOL %s", (const char*)buf);
+    printf("%s", (const char*)buf);
 }

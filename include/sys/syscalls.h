@@ -6,7 +6,6 @@
 #define MAX_SYSCALLS 325
 
 typedef void (*syscall_func_t) (
-    int*,  // return (eax)
     int,   // arg0 (eax)
     int,   // arg1 (ebx)
     int,   // arg2 (ecx)
@@ -20,6 +19,6 @@ void syscall_interrupt_handler(__registers_t* regs);
 void quantum_syscalls_init();
 
 // Syscalls
-void sys_write(int* syscall_return, int eax, int fd, int buf, int count, int esi, int edi, int ebp);
+void sys_write(int eax, int fd, int buf, int count, int esi, int edi, int ebp);
 
 #endif
