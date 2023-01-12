@@ -25,6 +25,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_keyboard_init();
     quantum_mouse_init();
     quantum_vfs_init();
+    quantum_ata_init();
     quantum_syscalls_init();
 
     printf("QuantumOS has boot up!\n");
@@ -48,12 +49,6 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     else
     {
         printf("\nBooting into userspace mode...\n");
-    }
-
-    asm volatile ("int $0x80");
-
-    for (int i = 0; i < 25; i++) {
-        printf("LOL\n");
     }
 
     return;

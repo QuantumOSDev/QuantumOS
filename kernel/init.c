@@ -3,6 +3,7 @@
 #include <quantum/init.h>
 
 #include <drivers/keyboard.h>
+#include <drivers/ata.h>
 
 #include <core/stdarg.h>
 #include <core/string.h>
@@ -166,6 +167,11 @@ void quantum_vfs_init(void)
     vfs_initialize(__VFS_RW);
 
     quantum_info(0, " VFS\t", "Initialized VFS!");
+}
+
+void quantum_ata_init(void)
+{
+    ata_initialize();
 }
 
 void quantum_migrate_to_kernel_mode(void)

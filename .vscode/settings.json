@@ -12,6 +12,7 @@
         "utility": "c",
         "mouse.h": "c",
         "pio.h": "c",
-        "pic.h": "c"
+        "pic.h": "c",
+        "string.h": "c"
     }
 }
