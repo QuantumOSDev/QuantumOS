@@ -74,7 +74,7 @@ void mouse_handler(__registers_t* regs) {
 
 void quantum_mouse_init() {
     quantum_info(0, " Mouse  ", "Initializing mouse drivers");
- /*   mouse_x = 640;
+    mouse_x = 640;
     mouse_y = 360;
 
     mouse_wait(1);
@@ -98,5 +98,5 @@ void quantum_mouse_init() {
     mouse_write(0xF4);
     mouse_read(); 
 
-    isr_register_interrupt_handler(IRQ_BASE + 12, mouse_handler);*/
+    isr_register_interrupt_handler(IRQ_BASE + 12, mouse_handler);
 }
