@@ -174,10 +174,10 @@ void quantum_vfs_init(void)
     quantum_info(0, " VFS\t", "Initialized VFS!");
 }
 
-void quantum_ata_init(void)
-{
-    ata_initialize();
-}
+// void quantum_ata_init(void)
+// {
+//     ata_initialize();
+// }
 
 void quantum_migrate_to_kernel_mode(void)
 {

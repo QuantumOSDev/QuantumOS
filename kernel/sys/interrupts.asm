@@ -38,7 +38,7 @@ section .text
 exception_handler:
     pusha
 
-    mov ax, dx
+    mov ax, ds
 
     push eax
 

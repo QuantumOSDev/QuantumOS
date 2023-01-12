@@ -1,6 +1,14 @@
 #include <sys/syscalls.h>
+#include <sys/memory.h>
+#include <sys/pic.h>
+#include <sys/isr.h>
+
 #include <core/string.h>
 #include <core/print.h>
+#include <core/time.h>
+
+#include <drivers/keyboard.h>
+#include <fs/vfs.h>
 
 #include <quantum/init.h>
 
@@ -15,17 +23,18 @@ const syscall_func_t SYSCALLS[MAX_SYSCALLS] = {
     NULL, // 0
     NULL, // 1
     NULL, // 2
-    NULL, // 3
+    sys_read, // sys_read 3 
     sys_write, // sys_write 4
-    NULL, // 5
+    sys_open, // sys_open 5
     NULL, // 6
     NULL, // 7
-    NULL, // 8
+    sys_creat, // sys_creat 8
+    NULL,
     NULL, // 9
     NULL, // 10
     NULL, // 11
     NULL, // 12
-    NULL, // 13
+    sys_time, // sys_time 13
     NULL, // 14
     NULL, // 15
     NULL, // 16
@@ -336,28 +345,27 @@ const syscall_func_t SYSCALLS[MAX_SYSCALLS] = {
     NULL, // 321
     NULL, // 322
     NULL, // 323
-    NULL, // 324
 };
 
 void syscall_interrupt_handler(__registers_t* regs) 
 {
-    // syscall_func_t syscall = SYSCALLS[regs->eax];
+    syscall_func_t syscall = SYSCALLS[regs->eax];
 
-    // quantum_info(0, " Syscall", "Got %d syscall", regs->eax);
-    // if (syscall == NULL) 
-    // {
-    //     quantum_info(1, " Syscall", "Syscall with number %d is not implemented", regs->eax);
-    //     return;
-    // }
+    quantum_info(0, " Syscall", "Got %d syscall", regs->eax);
+    if (syscall == NULL) 
+    {
+        quantum_info(1, " Syscall", "Syscall with number %d is not implemented", regs->eax);
+        return;
+    }
 
-    // syscall(
-    //     regs->eax, regs->ebx, 
-    //     regs->ecx, regs->edx, 
-    //     regs->esi, regs->edi, 
-    //     regs->ebp
-    // );
+    int syscall_ret = syscall(
+        regs->eax, regs->ebx, 
+        regs->ecx, regs->edx, 
+        regs->esi, regs->edi, 
+        regs->ebp
+    );
 
-    // asm volatile("ret" : : "a"(syscall_return));
+    quantum_info(0, " Syscall", "Syscall %d returned %d", regs->eax, syscall_ret);
 }
 
 void quantum_syscalls_init() 
@@ -366,7 +374,46 @@ void quantum_syscalls_init()
     quantum_info(0, " Syscall", "Successfully initialized syscall handler (0x%x)", 0x80);
 }
 
-void sys_write(int eax, int fd, int buf, int count, int esi, int edi, int ebp) 
+int sys_read(int eax, int fd, int buf, int count, int esi, int edi, int ebp) 
 {
-    printf("%s", (const char*)buf);
+    printf("sys_read: this syscall is not implemented");
+    return -1;
 }
+
+int sys_write(int eax, int fd, int buf, int count, int esi, int edi, int ebp) 
+{
+    const char* _buf = (const char*)buf;
+    for (int i = 0; i < count; i++) 
+        putc(_buf[i]);
+
+    return 0;
+}
+
+int sys_creat(int eax, int filename, int mode, int edx, int esi, int edi, int ebp) 
+{
+    int flag = O_CREAT;
+    return sys_open(0x05, filename, flag, mode, 0, 0, 0);
+}
+
+int sys_open(int eax, int filename, int flag, int mode, int esi, int edi, int ebp) 
+{
+    printf("sys_open: this syscall is not implemented");
+    return -1;
+}
+
+int sys_time(int eax, int time_ptr, int ecx, int edx, int esi, int edi, int ebp) 
+{
+    date_t now_date = get_date_cmos();
+    unsigned long timestamp = date_to_timestamp(&now_date);
+
+    if (time_ptr != 0)
+    {
+        unsigned long* _time_ptr = (unsigned long*)&time_ptr;
+        *_time_ptr = timestamp;
+        return 0;
+    }
+    return -1;
+}
+
+// char* input = keyboard_getchar_until('\n');
+// kmemcpy((void*)buf, (const void*)input, count);

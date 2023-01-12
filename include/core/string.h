@@ -29,4 +29,6 @@ char* strrchr(const char* str, int c);
 
 void itoa(int num, char* str, int base);
 
+void ltoa(long long value, char* buf);
+
 #endif

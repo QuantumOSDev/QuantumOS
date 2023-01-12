@@ -103,6 +103,7 @@ void printf(const char *format, ...)
     int format_int;
     double format_double;
     float format_float;
+    long format_long;
     char format_char;
     char *format_str;
     char bufprint[1024];
@@ -160,6 +161,13 @@ void printf(const char *format, ...)
                 for (int i2 = 0; i2 < strlen(format_str); i2++)
                     putc(format_str[i2]);
                 break;
+            case 'l':
+            case 'L':
+                format_long = va_arg(arg, long long);
+                ltoa(format_long, bufprint);
+                for (int i = 0; bufprint[i] != '\0'; i++)
+                    putc(bufprint[i]);
+                kmemset((unsigned char *)bufprint, 0, 1024);
             default:
                 break;
             }
