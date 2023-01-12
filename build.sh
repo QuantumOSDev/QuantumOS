@@ -49,12 +49,13 @@ function __build_s
     $AS $ASFLAGS $KERNELDIR/sys/gdt.asm -o $BUILDDIR/gdt.asm.o
     $AS $ASFLAGS $KERNELDIR/sys/interrupts.asm -o $BUILDDIR/interrupts.asm.o
     $AS $ASFLAGS $KERNELDIR/sys/idt.asm -o $BUILDDIR/idt.asm.o
-    $AS $ASFLAGS $KERNELDIR/sys/isr.asm -o $BUILDDIR/isr.asm.o
+    $AS $ASFLAGS $KERNELDIR/sys/irq.asm -o $BUILDDIR/irq.asm.o
+    $AS $ASFLAGS $KERNELDIR/sys/bios32_call.asm -o $BUILDDIR/bios32_call.asm.o
 }
 
 function __link_k
 {
-    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/vga.c.o $BUILDDIR/string.c.o $BUILDDIR/print.c.o $BUILDDIR/vesa.c.o  $BUILDDIR/pio.c.o $BUILDDIR/isr.c.o $BUILDDIR/idt.c.o $BUILDDIR/syscalls.c.o $BUILDDIR/kgdt.c.o $BUILDDIR/interrupts.asm.o $BUILDDIR/gdt.asm.o $BUILDDIR/pmm.c.o $BUILDDIR/init.c.o $BUILDDIR/memory.c.o $BUILDDIR/keyboard.c.o $BUILDDIR/mouse.c.o $BUILDDIR/stdlib.c.o $BUILDDIR/acpi.c.o $BUILDDIR/kpanic.c.o $BUILDDIR/vfs.c.o $BUILDDIR/kmode.c.o $BUILDDIR/pic.c.o $BUILDDIR/isr.asm.o $BUILDDIR/idt.asm.o
+    ld -m elf_i386 -Tconfig/linker.ld -o $BUILDDIR/kernel.elf $BUILDDIR/boot.asm.o $BUILDDIR/kernel.c.o $BUILDDIR/vga.c.o $BUILDDIR/string.c.o $BUILDDIR/print.c.o $BUILDDIR/vesa.c.o  $BUILDDIR/pio.c.o $BUILDDIR/isr.c.o $BUILDDIR/idt.c.o $BUILDDIR/syscalls.c.o $BUILDDIR/kgdt.c.o $BUILDDIR/interrupts.asm.o $BUILDDIR/gdt.asm.o $BUILDDIR/pmm.c.o $BUILDDIR/init.c.o $BUILDDIR/memory.c.o $BUILDDIR/keyboard.c.o $BUILDDIR/mouse.c.o $BUILDDIR/stdlib.c.o $BUILDDIR/acpi.c.o $BUILDDIR/kpanic.c.o $BUILDDIR/vfs.c.o $BUILDDIR/kmode.c.o $BUILDDIR/pic.c.o $BUILDDIR/idt.asm.o $BUILDDIR/irq.asm.o $BUILDDIR/bios32_call.asm.o
 }
 
 function __gen_iso
@@ -73,4 +74,4 @@ __build_s
 __link_k
 __gen_iso
 
-qemu-system-x86_64 -cdrom ./build/quantumos.iso -m 3G -vga vmware -serial stdio
+qemu-system-x86_64 -d int -no-shutdown -no-reboot -cdrom ./build/quantumos.iso -m 3G -vga vmware -serial stdio

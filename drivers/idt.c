@@ -20,7 +20,7 @@ void idt_set_entry(int __index, unsigned int __base, unsigned short __seg, unsig
 void idt_enable(void)
 {
     __idt.__base  = (unsigned int) __idt_descriptors;
-    __idt.__limit = sizeof(__idt_descriptors) - 1;
+    __idt.__limit = 256 * sizeof(IDT) - 1;
 
     pic_init();
 

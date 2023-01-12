@@ -99,7 +99,7 @@ void quantum_gdt_init(void)
     gdt_enable();
 }
 
-void quantum_isr_init(void)
+void quantum_idt_init(void)
 {
     idt_enable();
 }

@@ -19,7 +19,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_vesa_init(addr);
     quantum_print_init();
     quantum_gdt_init();
-    quantum_isr_init();
+    quantum_idt_init();
     quantum_pmm_init(addr);
     quantum_memory_init();
     quantum_keyboard_init();
@@ -50,8 +50,15 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
         printf("\nBooting into userspace mode...\n");
     }
 
+    asm volatile ("int $0x80");
+
     for (int i = 0; i < 25; i++) {
         printf("LOL\n");
+    }
+
+    for (;;)
+    {
+        asm ("hlt");
     }
 
     return;
