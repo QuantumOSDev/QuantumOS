@@ -11,5 +11,6 @@ void userspace_initialize(void) {
     set_default_pos();
     
     printf("Booting into userspace...\n");
+    printf("TODO: start window server");
     for (;;) {}
 }
