@@ -13,5 +13,7 @@ void userspace_initialize(void) {
     set_default_pos();
     
     printf("Booting into userspace...\n");
+    __SET_REGISTER__("eax", 109);
+    __SYSCALL__();
     for (;;) {}
 }

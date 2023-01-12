@@ -167,21 +167,21 @@ void itoa(int num, char* str, int base) {
 }
 
 void ltoa(long long value, char* buf) {
-    char* p;
-    unsigned long long v;
+//     char* p;
+//     unsigned long long v;
 
-    v = (value < 0) ? -value: value;
-    p = buf + 31;
-    do{
-        *p -- = '0' + (v%10);
-        v /= 10;
-    } while(v);
+//     v = (value < 0) ? -value: value;
+//     p = buf + 31;
+//     do{
+//         *p -- = '0' + (v%10);
+//         v /= 10;
+//     } while(v);
 
-    if(value < 0) *p-- = '-';
-    p++;
+//     if(value < 0) *p-- = '-';
+//     p++;
 
-    int len = 32 - (p - buf);
-    char *s = (char*)kmalloc(sizeof(char) * (len + 1));
-    kmemcpy(s, p, len);
-    s[len] = '\0';
+//     int len = 32 - (p - buf);
+//     char *s = (char*)kmalloc(sizeof(char) * (len + 1));
+//     kmemcpy(s, p, len);
+//     s[len] = '\0';
 }

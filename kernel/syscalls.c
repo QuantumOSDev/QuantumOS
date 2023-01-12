@@ -29,7 +29,6 @@ const syscall_func_t SYSCALLS[MAX_SYSCALLS] = {
     NULL, // 6
     NULL, // 7
     sys_creat, // sys_creat 8
-    NULL,
     NULL, // 9
     NULL, // 10
     NULL, // 11
@@ -130,7 +129,7 @@ const syscall_func_t SYSCALLS[MAX_SYSCALLS] = {
     NULL, // 106
     NULL, // 107
     NULL, // 108
-    NULL, // 109
+    sys_uname, // 109
     NULL, // 110
     NULL, // 111
     NULL, // 112
@@ -345,6 +344,7 @@ const syscall_func_t SYSCALLS[MAX_SYSCALLS] = {
     NULL, // 321
     NULL, // 322
     NULL, // 323
+    NULL, // 324
 };
 
 void syscall_interrupt_handler(__registers_t* regs) 
@@ -412,6 +412,12 @@ int sys_time(int eax, int time_ptr, int ecx, int edx, int esi, int edi, int ebp)
         *_time_ptr = timestamp;
         return 0;
     }
+    return -1;
+}
+
+int sys_uname(int eax, int uname_ptr, int ecx, int edx, int esi, int edi, int ebp) 
+{
+    printf("sys_uname: this syscall is not implemented");
     return -1;
 }
 

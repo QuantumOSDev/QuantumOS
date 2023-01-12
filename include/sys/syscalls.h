@@ -29,4 +29,6 @@ int sys_open(int eax, int filename, int mode, int edx, int esi, int edi, int ebp
 
 int sys_time(int eax, int time_ptr, int ecx, int edx, int esi, int edi, int ebp);
 
+int sys_uname(int eax, int uname_ptr, int ecx, int edx, int esi, int edi, int ebp);
+
 #endif
