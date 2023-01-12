@@ -6,6 +6,7 @@
 #include <drivers/mouse.h>
 #include <drivers/vesa.h>
 #include <drivers/acpi.h>
+#include <drivers/cmos.h>
 
 #include <sys/syscalls.h>
 #include <sys/memory.h>
@@ -48,7 +49,12 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     }
     else
     {
+<<<<<<< HEAD
         printf("\nBooting into userspace mode...\n");
+=======
+        printf("\n");
+        quantum_migrate_to_userspace();
+>>>>>>> 594d796a85f1050edc5ca665cda2391e381deab5
     }
 
     return;

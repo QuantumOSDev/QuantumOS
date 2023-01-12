@@ -9,6 +9,7 @@
 #include <core/string.h>
 #include <core/print.h>
 
+#include <sys/userspace.h>
 #include <sys/memory.h>
 #include <sys/kmode.h>
 #include <sys/kgdt.h>
@@ -74,6 +75,7 @@ static inline int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_in
 
 void quantum_info(int __status, char *header, char *format, ...)
 {
+#if defined(DEBUG)
     printf("[");
     if (__status == 0)
     {
@@ -93,6 +95,7 @@ void quantum_info(int __status, char *header, char *format, ...)
     va_end(arg);
 
     insert_newline();
+#endif
 }
 
 void quantum_gdt_init(void)
@@ -177,4 +180,9 @@ void quantum_ata_init(void)
 void quantum_migrate_to_kernel_mode(void)
 {
     kmode_initialize();
+}
+
+void quantum_migrate_to_userspace(void) 
+{
+    userspace_initialize();
 }
