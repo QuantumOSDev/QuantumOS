@@ -35,23 +35,20 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     }
 */
 
-    // printf("Press any key to continue booting into userspace!\nHit 'k' to enter kernel-mode...\n");
+    printf("Press any key to continue booting into userspace!\nHit 'k' to enter kernel-mode...\n");
 
-    // char __boot_mode = keyboard_getchar();
+    char __boot_mode = keyboard_getchar();
 
-    // if (__boot_mode == 'k')
-    // {
-    //     printf("\nBailing out!\nGood luck you're on your own...\n\n");
+    if (__boot_mode == 'k')
+    {
+        printf("\nBailing out!\nGood luck you're on your own...\n\n");
 
-    //     quantum_migrate_to_kernel_mode();
-    // }
-    // else
-    // {
-    //     printf("\nBooting into userspace mode...\n");
-    // }
-
-    asm volatile ("int $0x80");
-
+        quantum_migrate_to_kernel_mode();
+    }
+    else
+    {
+        printf("\nBooting into userspace mode...\n");
+    }
 
     return;
 }
