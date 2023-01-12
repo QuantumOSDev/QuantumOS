@@ -74,4 +74,4 @@ __build_s
 __link_k
 __gen_iso
 
-qemu-system-x86_64 -d int -no-shutdown -no-reboot -cdrom ./build/quantumos.iso -m 3G -vga vmware -serial stdio
+qemu-system-x86_64 -d int -enable-kvm -no-shutdown -no-reboot -cdrom ./build/quantumos.iso -m 3G -vga vmware -serial stdio

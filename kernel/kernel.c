@@ -56,10 +56,5 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
         printf("LOL\n");
     }
 
-    for (;;)
-    {
-        asm ("hlt");
-    }
-
     return;
 }
