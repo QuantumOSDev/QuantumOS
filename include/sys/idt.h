@@ -1,24 +1,29 @@
 #ifndef IDT_H
 #define IDT_H
 
-#define KERNEL_CS 0x08
-#define IDT_ENTRIES 256
+#define IDE_DESCRIPTOR_COUNT 256
 
-typedef struct {
-    unsigned short low_offset;
-    unsigned short sel;
-    unsigned char always0;
-    unsigned char flags;
-    unsigned short high_offset;
-} __attribute__((packed)) idt_gate_t;
+typedef struct
+{
+    unsigned short __base_low;
+    unsigned short __segment_selector;
+    
+    unsigned char __zero;
+    unsigned char __type;
 
-typedef struct {
-    unsigned short limit;
-    unsigned int base;
-} __attribute__((packed)) idt_register_t;
+    unsigned short __base_high;
+} __attribute__((packed)) IDT;
 
-void set_idt_gate(int __index, unsigned int __handler);
+typedef struct
+{
+    unsigned short __limit;
 
-int load_idt(void);
+    unsigned int __base;
+} __attribute__((packed)) IDT_PTR;
+
+extern void load_idt(unsigned int __idt_ptr);
+
+void idt_set_entry(int __index, unsigned int __base, unsigned short __seg, unsigned char __flags);
+void idt_enable(void);
 
 #endif

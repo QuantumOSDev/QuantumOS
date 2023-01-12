@@ -121,7 +121,7 @@ char *keyboard_getchar_until(char __c)
     return __result;
 }
 
-static void keyboard_handler(registers_t *__regs)
+static void keyboard_handler(__registers_t *__regs)
 {
     int scancode;
 

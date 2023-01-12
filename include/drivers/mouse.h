@@ -13,7 +13,7 @@ void mouse_write(unsigned char write);
 
 unsigned char mouse_read();
 
-void mouse_handler(registers_t* regs);
+void mouse_handler(__registers_t* regs);
 
 void quantum_mouse_init();
 

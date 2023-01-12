@@ -1,29 +1,29 @@
-;Load the Global Descriptor Table
+; GDT Loader
 
-global kgdt_load_gdt
-global kgdt_load_registers
+section .text
+	global load_gdt
 
-kgdt_load_gdt:
-	lgdt [esp + 4]
-	ret
+load_gdt:
+	mov eax, [esp + 4]
 
-kgdt_load_registers:
+	lgdt [eax]
+
 	mov ax, 0x10
-	mov ds, ax
-	mov ss, ax
+	mov dx, ax
 	mov es, ax
 	mov fs, ax
 	mov gs, ax
-	
-	cli
-	
-	mov eax, cr0
+	mov ss, ax
 
+	cli
+
+	mov eax, cr0
+	
 	or eax, 1
 
 	mov cr0, eax
 
-	jmp 0x08:flush_cs
+	jmp 0x08:far_jump
 
-flush_cs:
+far_jump:
 	ret

@@ -96,12 +96,12 @@ void quantum_info(int __status, char *header, char *format, ...)
 
 void quantum_gdt_init(void)
 {
-    kgdt_enable();
+    gdt_enable();
 }
 
 void quantum_isr_init(void)
 {
-    isr_enable();
+    idt_enable();
 }
 
 void quantum_memory_init(void)

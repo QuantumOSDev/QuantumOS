@@ -50,7 +50,7 @@ unsigned char mouse_read() {
     return pio_inb(0x60);
 }
 
-void mouse_handler(registers_t* regs) {
+void mouse_handler(__registers_t* regs) {
     switch(mouse_cycle) {
         case 0:
             mouse_byte[0] = pio_inb(0x60);
