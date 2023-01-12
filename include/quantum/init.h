@@ -1,7 +1,7 @@
 #ifndef INIT_H
 #define INIT_H
 
-#define DEBUG
+// #define DEBUG
 
 void quantum_info(int __status, char* header, char* format, ...);
 

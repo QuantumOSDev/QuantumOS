@@ -6,6 +6,7 @@
 #include <drivers/mouse.h>
 #include <drivers/vesa.h>
 #include <drivers/acpi.h>
+#include <drivers/cmos.h>
 
 #include <sys/syscalls.h>
 #include <sys/memory.h>
