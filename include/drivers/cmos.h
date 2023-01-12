@@ -30,7 +30,7 @@ typedef struct date_t {
     int century;
 } date_t;
 
-bool get_update_in_progress_flag();
+BOOL get_update_in_progress_flag();
 
 unsigned char get_rtc_register(int reg);
 

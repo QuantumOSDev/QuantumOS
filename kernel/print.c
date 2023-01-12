@@ -25,6 +25,11 @@ void print_set_color(int r, int g, int b)
     global_print_fg_b = b;
 }
 
+void set_default_pos() {
+    global_print_vec_x = 2;
+    global_print_vec_y = 2;
+}
+
 void quantum_print_init()
 {
     global_print_vec_x = 2;

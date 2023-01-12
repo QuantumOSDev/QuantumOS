@@ -5,6 +5,7 @@
 #include <core/string.h>
 #include <core/print.h>
 
+#include <sys/userspace.h>
 #include <sys/kmode.h>
 
 void kmode_initialize(void)
@@ -27,9 +28,10 @@ void kmode_initialize(void)
             if (strcmp(__basecmd, "help") == 0)
             {
                 printf("Help page:\n\
-reboot: Reboot the system.\n\
-time:   Show current time.\n\
-help:   Display this help window.\n");
+reboot:     Reboot the system.\n\
+time:       Show current time.\n\
+userspace:  Quit kernel-mode and go into userspace!\n\
+help:       Display this help window.\n");
             }
             else if (strcmp(__basecmd, "reboot") == 0)
             {
@@ -49,6 +51,10 @@ help:   Display this help window.\n");
                        date.year, 
                        date.month <= 9 ? "0" : "", date.month, 
                        date.day <= 9 ? "0" : "", date.day);
+            }
+            else if (strcmp(__basecmd, "userspace") == 0) 
+            {
+                userspace_initialize();
             }
             else
             {

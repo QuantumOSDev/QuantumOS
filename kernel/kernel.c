@@ -48,7 +48,8 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     }
     else
     {
-        printf("\nBooting into userspace mode...\n");
+        printf("\n");
+        quantum_migrate_to_userspace();
     }
 
     return;

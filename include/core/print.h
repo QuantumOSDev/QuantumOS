@@ -5,6 +5,8 @@
 
 void quantum_print_init();
 
+void set_default_pos();
+
 void insert_tab();
 
 void insert_newline();

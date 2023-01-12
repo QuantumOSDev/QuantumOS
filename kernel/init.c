@@ -8,6 +8,7 @@
 #include <core/string.h>
 #include <core/print.h>
 
+#include <sys/userspace.h>
 #include <sys/memory.h>
 #include <sys/kmode.h>
 #include <sys/kgdt.h>
@@ -173,4 +174,9 @@ void quantum_vfs_init(void)
 void quantum_migrate_to_kernel_mode(void)
 {
     kmode_initialize();
+}
+
+void quantum_migrate_to_userspace(void) 
+{
+    userspace_initialize();
 }
