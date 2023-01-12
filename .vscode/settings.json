@@ -1,9 +1,8 @@
 {
     "files.associations": {
-        "print.h": "c",
-        "string.h": "c",
-        "stdlib.h": "c",
+        "typeinfo": "c",
         "memory.h": "c",
+<<<<<<< HEAD
         "syscalls.h": "c",
         "cmos.h": "c",
         "pio.h": "c",
@@ -11,5 +10,18 @@
         "kmode.h": "c",
         "userspace.h": "c",
         "vesa.h": "c"
+=======
+        "multiboot.h": "c",
+        "kmode.h": "c",
+        "print.h": "c",
+        "init.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c",
+        "mouse.h": "c",
+        "pio.h": "c",
+        "pic.h": "c"
+>>>>>>> 191708f4a2fee615dcac4f6b72c9934725e27a01
     }
 }

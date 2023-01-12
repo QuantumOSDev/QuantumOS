@@ -15,7 +15,7 @@ typedef void (*syscall_func_t) (
     int,   // arg5 (edi)
     int);  // arg6 (ebp)
 
-void syscall_interrupt_handler(registers_t* regs);
+void syscall_interrupt_handler(__registers_t* regs);
 
 void quantum_syscalls_init();
 

@@ -339,7 +339,7 @@ const syscall_func_t SYSCALLS[MAX_SYSCALLS] = {
     NULL, // 324
 };
 
-void syscall_interrupt_handler(registers_t* regs) 
+void syscall_interrupt_handler(__registers_t* regs) 
 {
     syscall_func_t syscall = SYSCALLS[regs->eax];
 

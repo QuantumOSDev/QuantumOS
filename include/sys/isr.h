@@ -1,96 +1,98 @@
 #ifndef ISR_H
 #define ISR_H
 
-#define IRQ_BASE 0x20
+#define NULL (void *) 0
 
-/* ISRs reserved for CPU exceptions */
-extern void isr0();
-extern void isr1();
-extern void isr2();
-extern void isr3();
-extern void isr4();
-extern void isr5();
-extern void isr6();
-extern void isr7();
-extern void isr8();
-extern void isr9();
-extern void isr10();
-extern void isr11();
-extern void isr12();
-extern void isr13();
-extern void isr14();
-extern void isr15();
-extern void isr16();
-extern void isr17();
-extern void isr18();
-extern void isr19();
-extern void isr20();
-extern void isr21();
-extern void isr22();
-extern void isr23();
-extern void isr24();
-extern void isr25();
-extern void isr26();
-extern void isr27();
-extern void isr28();
-extern void isr29();
-extern void isr30();
-extern void isr31();
+#define IRQ_BASE            0x20
+#define IRQ0_TIMER          0x00
+#define IRQ1_KEYBOARD       0x01
+#define IRQ2_CASCADE        0x02
+#define IRQ3_SERIAL_PORT2   0x03
+#define IRQ4_SERIAL_PORT1   0x04
+#define IRQ5_RESERVED       0x05
+#define IRQ6_DISKETTE_DRIVE 0x06
+#define IRQ7_PARALLEL_PORT  0x07
+#define IRQ8_CMOS_CLOCK     0x08
+#define IRQ9_CGA            0x09
+#define IRQ10_RESERVED      0x0A
+#define IRQ11_RESERVED      0x0B
+#define IRQ12_AUXILIARY     0x0C
+#define IRQ13_FPU           0x0D
+#define IRQ14_HARD_DISK     0x0E
+#define IRQ15_RESERVED      0x0F
 
-/* IRQ definitions */
-extern void irq0();
-extern void irq1();
-extern void irq2();
-extern void irq3();
-extern void irq4();
-extern void irq5();
-extern void irq6();
-extern void irq7();
-extern void irq8();
-extern void irq9();
-extern void irq10();
-extern void irq11();
-extern void irq12();
-extern void irq13();
-extern void irq14();
-extern void irq15();
+#define INTERRUPT_HANDLERS_COUNT 256
 
-#define IRQ0 32
-#define IRQ1 33
-#define IRQ2 34
-#define IRQ3 35
-#define IRQ4 36
-#define IRQ5 37
-#define IRQ6 38
-#define IRQ7 39
-#define IRQ8 40
-#define IRQ9 41
-#define IRQ10 42
-#define IRQ11 43
-#define IRQ12 44
-#define IRQ13 45
-#define IRQ14 46
-#define IRQ15 47
+typedef struct registers
+{
+    unsigned int ds;
+    unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    unsigned int int_no, err_code;
+    unsigned int eip, cs, eflags, useresp, ss;
+} __registers_t;
 
-/* Struct which aggregates many registers.
- * It matches exactly the pushes on interrupt.asm. From the bottom:
- * - Pushed by the processor automatically
- * - `push byte`s on the isr-specific code: error code, then int number
- * - All the registers by pusha
- * - `push eax` whose lower 16-bits contain DS
- */
-typedef struct {
-    unsigned int ds; /* Data segment selector */
-    unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax; /* Pushed by pusha. */
-    unsigned int int_no, err_code; /* Interrupt number and error code (if applicable) */
-    unsigned int eip, cs, eflags, useresp, ss; /* Pushed by the processor automatically */
-} registers_t;
+typedef struct registers16
+{
+    unsigned short di, si, bp, sp, bx, dx, cx, ax;
+    unsigned short ds, es, fs, gs, ss, eflags;
+} __registers16_t;
 
-typedef void (*isr_t)(registers_t *);
+typedef void (*ISR) (__registers_t *);
 
-int isr_enable(void);
-void isr_handler(registers_t *__regs);
+void isr_register_interrupt_handler(int __index, ISR __handler);
+void isr_end_interrupt(int __index);
+void isr_exception_handler(__registers_t __regs);
+void isr_irq_handler(__registers_t *__regs);
 
-void isr_register_interrupt_handler(unsigned char __index, isr_t __handler);
+extern void exception_0();
+extern void exception_1();
+extern void exception_2();
+extern void exception_3();
+extern void exception_4();
+extern void exception_5();
+extern void exception_6();
+extern void exception_7();
+extern void exception_8();
+extern void exception_9();
+extern void exception_10();
+extern void exception_11();
+extern void exception_12();
+extern void exception_13();
+extern void exception_14();
+extern void exception_15();
+extern void exception_16();
+extern void exception_17();
+extern void exception_18();
+extern void exception_19();
+extern void exception_20();
+extern void exception_21();
+extern void exception_22();
+extern void exception_23();
+extern void exception_24();
+extern void exception_25();
+extern void exception_26();
+extern void exception_27();
+extern void exception_28();
+extern void exception_29();
+extern void exception_30();
+extern void exception_31();
+extern void exception_128();
+
+extern void irq_0();
+extern void irq_1();
+extern void irq_2();
+extern void irq_3();
+extern void irq_4();
+extern void irq_5();
+extern void irq_6();
+extern void irq_7();
+extern void irq_8();
+extern void irq_9();
+extern void irq_10();
+extern void irq_11();
+extern void irq_12();
+extern void irq_13();
+extern void irq_14();
+extern void irq_15();
 
 #endif

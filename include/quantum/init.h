@@ -9,7 +9,7 @@ void quantum_info(int __status, char* header, char* format, ...);
 
 void quantum_gdt_init(void);
 
-void quantum_isr_init(void);
+void quantum_idt_init(void);
 
 void quantum_memory_init(void);
 

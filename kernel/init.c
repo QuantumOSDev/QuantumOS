@@ -101,12 +101,12 @@ void quantum_info(int __status, char *header, char *format, ...)
 
 void quantum_gdt_init(void)
 {
-    kgdt_enable();
+    gdt_enable();
 }
 
-void quantum_isr_init(void)
+void quantum_idt_init(void)
 {
-    isr_enable();
+    idt_enable();
 }
 
 void quantum_memory_init(void)
@@ -181,8 +181,11 @@ void quantum_migrate_to_kernel_mode(void)
 {
     kmode_initialize();
 }
+<<<<<<< HEAD
 
 void quantum_migrate_to_userspace(void)
 {
     userspace_initialize();
 }
+=======
+>>>>>>> 191708f4a2fee615dcac4f6b72c9934725e27a01
