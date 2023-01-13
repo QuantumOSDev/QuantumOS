@@ -83,7 +83,11 @@ void quantum_info(int __status, char *header, char *format, ...)
     {
         print_set_color(0, 255, 0);
     }
-    else
+    else if (__status == 2)
+    {
+        print_set_color(255, 140, 0);
+    }
+    else if (__status == 1)
     {
         print_set_color(255, 0, 0);
     }
@@ -174,10 +178,10 @@ void quantum_vfs_init(void)
     quantum_info(0, " VFS\t", "Initialized VFS!");
 }
 
-// void quantum_ata_init(void)
-// {
-//     ata_initialize();
-// }
+void quantum_ata_init(void)
+{
+    ata_initialize(0x1F0, 0x3F6, 0x170, 0x376, 0x000);
+}
 
 void quantum_migrate_to_kernel_mode(void)
 {
