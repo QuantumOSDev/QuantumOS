@@ -63,9 +63,16 @@
 // Destination Field
 #define ICR_DESTINATION_SHIFT           24
 
-unsigned int lapic_in(unsigned int __register)
-{
-    
-}
+extern unsigned char *__global_apic_addr;
+
+unsigned int lapic_in(unsigned int __register);
+
+void lapic_out(unsigned int __register, unsigned int __data);
+
+void lapic_init(void);
+void lapic_send_init(unsigned int __id);
+void lapic_send_startup(unsigned int __id, unsigned int __vector);
+
+unsigned int lapic_getid(void);
 
 #endif
