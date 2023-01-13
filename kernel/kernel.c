@@ -2,14 +2,15 @@
 #include <quantum/kernel.h>
 #include <quantum/init.h>
 
+#include <userspace/syscalls.h>
+
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
 #include <drivers/vesa.h>
-#include <drivers/acpi.h>
-#include <drivers/cmos.h>
 
-#include <sys/syscalls.h>
 #include <sys/memory.h>
+#include <sys/acpi.h>
+#include <sys/cmos.h>
 
 #include <core/stdlib.h>
 #include <core/string.h>
@@ -33,6 +34,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     printf("Press any key to continue booting into userspace!\nHit 'k' to enter kernel-mode...\n");
 
     char __boot_mode = keyboard_getchar();
+
     if (__boot_mode == 'k')
     {
         printf("\nBailing out!\nGood luck you're on your own...\n\n");

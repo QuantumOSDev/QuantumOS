@@ -1,12 +1,13 @@
+#include <userspace/userspace.h>
+#include <quantum/kmode.h>
+
 #include <drivers/keyboard.h>
-#include <drivers/acpi.h>
-#include <drivers/cmos.h>
 
 #include <core/string.h>
 #include <core/print.h>
 
-#include <sys/userspace.h>
-#include <sys/kmode.h>
+#include <sys/acpi.h>
+#include <sys/cmos.h>
 
 void kmode_initialize(void)
 {
