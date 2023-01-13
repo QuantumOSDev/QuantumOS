@@ -19,7 +19,7 @@
 #include <fs/vfs.h>
 #include <fs/ata.h>
 
-static inline int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot)
+int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot)
 {
     unsigned int i;
 
