@@ -80,5 +80,6 @@ __link_k
 __gen_iso
 
 sudo sh mkdisk.sh
+sudo chown $USER:$USER ext2.img
 
 qemu-system-x86_64 -cdrom ./build/quantumos.iso -drive file=ext2.img,format=raw -m 3G -vga vmware -serial stdio
