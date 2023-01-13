@@ -1,6 +1,7 @@
 #include <sys/process.h>
-
 #include <sys/memory.h>
+
+#include <quantum/init.h>
 
 process_t* curr_process;
 int pid;
@@ -18,7 +19,9 @@ process_t* init_process(void* entry)
 void start_process(process_t* process)
 {
     curr_process = process;
-    ((void (*)(void))process->entry)();
+    quantum_info(0, " Process", "Starting process with pid %d", get_pid());
+    int process_return = ((int (*)(void))process->entry)();
+    quantum_info(0, " Process", "Process with pid %d, returned with %d", get_pid(), process_return);
 }
 
 process_t* get_current_process()
