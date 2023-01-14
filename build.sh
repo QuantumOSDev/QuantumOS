@@ -42,4 +42,4 @@ cp -f config/grub.cfg $BUILDDIR/iso/boot/grub
 
 grub-mkrescue -o build/quantumos.iso $BUILDDIR/iso
 
-qemu-system-x86_64 ./build/quantumos.iso -drive file=ext2.img,format=raw -m 3G -vga vmware -serial stdio -device sb16
+qemu-system-x86_64 -cdrom ./build/quantumos.iso -drive file=ext2.img,format=raw -m 3G -vga vmware -serial stdio -device sb16

@@ -6,6 +6,8 @@
 
 #include <fs/ata.h>
 
+static volatile unsigned char __ata_irq_invoked = 0;
+
 __ATA_CHANNELS __ata_channels[MAXIMUM_CHANNELS];
 __ATA_DEVICE   __ata_devices[MAXIMUM_IDE_DEVICES];
 
@@ -228,6 +230,7 @@ unsigned char ata_print_error(unsigned int __drive, unsigned char __error)
     if (__error == 1)
     {
         quantum_info(2, " IDE\t", "Human Readable Error: Device Fault");
+        __error = 19;
     }
     else if (__error == 2)
     {
@@ -355,6 +358,7 @@ unsigned char ata_access(unsigned char __direction, unsigned char __drive, unsig
     unsigned char __head, __sect, __err;
 
     unsigned short __cyl, i;
+    ata_write_register(__channel, ATA_REG_CONTROL, __ata_channels[__channel].__no_intr = (__ata_irq_invoked = 0x0) + 0x02);
 
     if (__lba >= 0x10000000)
     {
@@ -597,6 +601,7 @@ void ata_initialize(unsigned short __prim_base, unsigned short __prim_control,
         if (__ata_devices[i].__reserved == 1)
         {
             quantum_info(0, " ATA\t", "Drive [%d] is online!", __ata_devices[i].__drive);
+#define ATA_DEBUG
 #ifdef ATA_DEBUG
             quantum_info(0, " ATA\t", "Model: [%s]", __ata_devices[i].__model);
             quantum_info(0, " ATA\t", "Type: [%s]", (const char *[]) {"ATA", "ATAPI"}[__ata_devices[i].__type]);
