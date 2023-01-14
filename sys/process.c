@@ -1,35 +1,143 @@
+#include <quantum/init.h>
+
+#include <core/string.h>
+#include <core/kpanic.h>
+
 #include <sys/process.h>
 #include <sys/memory.h>
 
-#include <quantum/init.h>
+static __process_t *__phead;
 
-process_t* curr_process;
-int pid;
-
-process_t* init_process(void* entry)
+__process_t *process_find_by_pid(unsigned int __pid)
 {
-    // Allocate memory for process structure and set up structure
-    process_t* process = (process_t*)kcalloc(1, sizeof(process_t));
-    process->entry = entry;
-    process->pid = pid++;
+    __process_t *__head = __phead;
 
-    return process;
+    if (!__head)
+    {
+        quantum_info(1, " PROC\t", "Fatal error process head is NULL!");
+
+        kpanic("Fatal error occured kernel crashed");
+    }
+
+    while (__head != NULL)
+    {
+        if (__head->__pid == __pid)
+        {
+            return __head;
+        }
+
+        __head = __head->__next;
+    }
+
+    return NULL;
 }
 
-void start_process(process_t* process)
+void process_initialize(void)
 {
-    curr_process = process;
-    quantum_info(0, " Process", "Starting process with pid %d", get_pid());
-    int process_return = ((int (*)(void))process->entry)();
-    quantum_info(0, " Process", "Process with pid %d, returned with %d", get_pid(), process_return);
+    __phead = kmalloc(sizeof(*__phead));
+
+    __phead->__entry    = NULL;
+    __phead->__memsize  = 0;
+    __phead->__mode     = PROCESS_MODE_KERNEL;
+    __phead->__next     = NULL;
+    __phead->__pstatus  = PROCESS_SLEEPING;
+    __phead->__priority = 0;
 }
 
-process_t* get_current_process()
+void process_alloc(__process_t *__p)
 {
-    return curr_process;
+    __p->__entry = kmalloc(__p->__memsize);
 }
 
-int get_pid()
+void process_run(__process_t *__p)
 {
-    return curr_process->pid;
+    quantum_info(0, " PROC\t", "Running process [%d]...");
+
+    int __exit = ((int (*) (void)) __p->__entry)();
+
+    quantum_info(0, " PROC\t", "Process [%d] finished and is now a zombie process...");
+
+    process_kill(__p->__pid);
+}
+
+unsigned int process_spawn(void *__entry, unsigned int __mode, unsigned int __memsize, unsigned int __pstatus, unsigned int __instant_run)
+{
+    __process_t *__p = kmalloc(sizeof(*__p));
+
+    __p->__memsize = __memsize;
+    __p->__pstatus = __pstatus;
+    __p->__mode    = __mode;
+    __p->__next    = NULL;
+
+    process_alloc(__p);
+
+    __p->__entry = __entry;
+
+    __p->__pid = process_get_pid();
+
+    __process_t *__head = __phead;
+
+    while (__head->__next != NULL && __head->__pstatus != PROCESS_ZOMBIE)
+    {
+        __head = __head->__next;
+    }
+
+    __head->__next = __p;
+
+    if (__instant_run == 1)
+    {
+        process_run(__p);
+    }
+
+    return __p->__pid;
+}
+
+void process_kill(unsigned int __pid)
+{
+    __process_t *__head = __phead;
+
+    while (__head != NULL)
+    {
+        if (__head->__pid == __pid)
+        {
+            process_set_status(__pid, PROCESS_ZOMBIE);
+
+            kfree(__head->__entry);
+        }
+
+        __head = __head->__next;
+    }
+}
+
+void process_set_status(unsigned int __pid, __process_status __status)
+{
+    __process_t *__head = __phead;
+
+    while (__head != NULL)
+    {
+        if (__head->__pid == __pid)
+        {
+            __head->__pstatus = __status;
+        }
+
+        __head = __head->__next;
+    }
+}
+
+unsigned int process_get_pid(void)
+{
+    unsigned int __pid;
+
+    __process_t *__head = __phead;
+
+    while (__head != NULL)
+    {
+        __pid++;
+
+        __head = __head->__next;
+    }
+
+    __pid++;
+
+    return __pid;
 }

@@ -60,7 +60,7 @@ void sound_blaster_irq_handler(__registers_t* regs)
     printf("Got an interrupt from SB16\n");
 }
 
-void sound_blaster_dma_channel_16(unsigned char channel_number, unsigned char* sound_data, int sound_length)
+void sound_blaster_dma_channel_16(unsigned char channel_number, unsigned char* sound_data)
 {
     // Send low bits of position to port 0xC4(addr. port of channel 5) For example(see above) is 0x50.
     // Send high bits of position to port 0xC4(pos. port of channel 5) For example(see above) is 0x04.
