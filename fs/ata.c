@@ -644,7 +644,7 @@ int ata_read_sectors(unsigned char __drive, unsigned char __nsectors, unsigned c
         {
             __err = ata_access(ATA_READ, __drive, __lba, __nsectors, __buffer);
         }
-
+    
         return ata_print_error(__drive, __err);
     }
 

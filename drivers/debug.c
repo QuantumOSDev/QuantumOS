@@ -3,6 +3,7 @@
 #include <core/string.h>
 #include <core/stdarg.h>
 
+#include <sys/memory.h>
 #include <sys/pio.h>
 
 void debug_putc(char c)
