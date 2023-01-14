@@ -7,6 +7,7 @@
 #include <sys/memory.h>
 
 static __process_t *__phead;
+int pid = 0;
 
 __process_t *process_find_by_pid(unsigned int __pid)
 {

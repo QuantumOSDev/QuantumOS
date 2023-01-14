@@ -1,10 +1,29 @@
+#include <sys/memory.h>
 #include <sys/kgdt.h>
 #include <sys/pio.h>
 
 GDT __gdt_descriptors[GDT_DESCRIPTOR_COUNT];
 GDT_PTR __gdt;
 
+extern void tss_flush();
 extern void load_gdt(unsigned int __gdt_ptr);
+
+tss_entry_t tss_entry;
+
+static void write_tss(int num, unsigned short ss0, unsigned int esp0)
+{
+   unsigned int base = (unsigned int) &tss_entry;
+   unsigned int limit = base + sizeof(tss_entry);
+
+   gdt_set_entry(num, base, limit, 0xE9, 0x00);
+   kmemset(&tss_entry, 0, sizeof(tss_entry));
+
+   tss_entry.ss0  = ss0;  
+   tss_entry.esp0 = esp0; 
+
+   tss_entry.cs   = 0x0b;
+   tss_entry.ss = tss_entry.ds = tss_entry.es = tss_entry.fs = tss_entry.gs = 0x13;
+}
 
 void gdt_set_entry(int __index, unsigned int __base, unsigned int __limit, unsigned char __access, unsigned char __gran)
 {
@@ -31,6 +50,8 @@ void gdt_enable(void)
 	gdt_set_entry(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
 	gdt_set_entry(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);
 	gdt_set_entry(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
+	write_tss(5, 0x10, 0x0);
 
 	load_gdt((unsigned int) &__gdt);
+	tss_flush();
 }

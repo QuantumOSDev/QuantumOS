@@ -20,4 +20,4 @@ void qunatum_ext2_init()
     quantum_info(0, " Ext2   ", "\tTotal blocks: %d", ext2_superblock->total_blocks);
     quantum_info(0, " Ext2   ", "\tMagic: 0x%x", ext2_superblock->magic);
     quantum_info(0, " Ext2   ", "\tCreator OS: %d", ext2_superblock->creator_os);
-}
+} 

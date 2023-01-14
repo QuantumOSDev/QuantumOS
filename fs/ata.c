@@ -601,7 +601,7 @@ void ata_initialize(unsigned short __prim_base, unsigned short __prim_control,
         if (__ata_devices[i].__reserved == 1)
         {
             quantum_info(0, " ATA\t", "Drive [%d] is online!", __ata_devices[i].__drive);
-#define ATA_DEBUG
+// #define ATA_DEBUG
 #ifdef ATA_DEBUG
             quantum_info(0, " ATA\t", "Model: [%s]", __ata_devices[i].__model);
             quantum_info(0, " ATA\t", "Type: [%s]", (const char *[]) {"ATA", "ATAPI"}[__ata_devices[i].__type]);

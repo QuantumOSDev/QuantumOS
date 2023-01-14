@@ -42,6 +42,19 @@ help:       Display this help window.\n");
             {
                 userspace_initialize();
             }
+            else if (strcmp(__basecmd, "time") == 0) 
+            {
+                date_t date = get_date_cmos();
+                printf("%s%d:%s%d:%s%d %d%d:%s%d:%s%d\n", 
+                    date.hour <= 9 ? "0" : "",
+                    date.hour, date.minute <= 9 ? "0" : "", 
+                    date.minute, date.second <= 9 ? "0" : "", 
+                    date.second, 
+                    date.century,
+                    date.year, 
+                    date.month <= 9 ? "0" : "", date.month, 
+                    date.day <= 9 ? "0" : "", date.day);
+            }
             else
             {
                 printf("Invalid command: [%s]\n", __basecmd);

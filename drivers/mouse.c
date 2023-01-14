@@ -77,15 +77,11 @@ void quantum_mouse_init() {
     mouse_x = 640;
     mouse_y = 360;
 
-    /*
-
     mouse_wait(1);
     pio_outb(0x64, 0xA8);
  
     pio_outb(0x60, 0xF2);
-    quantum_info(0, " Mouse ", "mouse1");
     unsigned char status = mouse_read();
-    quantum_info(0, " Mouse ", "mouse2");
     quantum_info(0, " Mouse  ", "detected mouse with id 0x%x", status);
 
     mouse_wait(1);
@@ -97,16 +93,10 @@ void quantum_mouse_init() {
     mouse_wait(1);
     pio_outb(0x60, status);
 
-    quantum_info(0, " Mouse ", "mouse3");
- 
     mouse_write(0xF6);
     mouse_read();  
     mouse_write(0xF4);
     mouse_read(); 
 
-    quantum_info(0, " Mouse ", "mouse4");
-
     isr_register_interrupt_handler(IRQ_BASE + 12, mouse_handler);
-
-    quantum_info(0, " Mouse ", "mouse5");*/
 }
