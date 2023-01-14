@@ -1,6 +1,7 @@
 #include <userspace/userspace.h>
 #include <userspace/syscalls.h>
 
+#include <drivers/sound_blaster.h>
 #include <drivers/keyboard.h>
 #include <drivers/vesa.h>
 
@@ -9,6 +10,7 @@
 #include <core/print.h>
 
 #include <sys/process.h>
+#include <sys/memory.h>
 
 int process1() 
 {
@@ -23,6 +25,8 @@ void userspace_initialize(void)
     // switch_to_user_mode);
     printf("Booting into userspace...\n");
     
-    process_t* process = init_process(&process1);
-    start_process(process);
+    // process_t* process = init_process(&process1);
+    // start_process(process);
+    unsigned char* sound_data = (unsigned char*)kmalloc(sizeof(unsigned char) * 32);
+    sound_blaster_dma_channel_16(1, sound_data);
 }
