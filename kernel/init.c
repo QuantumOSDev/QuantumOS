@@ -5,11 +5,13 @@
 
 #include <userspace/userspace.h>
 
-#include <drivers/keyboard.h>
-
 #include <core/stdarg.h>
 #include <core/string.h>
 #include <core/print.h>
+
+#include <drivers/keyboard.h>
+#include <drivers/debug.h>
+
 #include <sys/memory.h>
 #include <sys/kgdt.h>
 #include <sys/idt.h>
@@ -73,9 +75,9 @@ int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot)
     return -1;
 }
 
-#define DEBUG
+// #define DEBUG
 
-void quantum_info(int __status, char *header, char *format, ...)
+void quantum_info(int __status, char* header, char* format, ...)
 {
 #if defined(DEBUG)
     printf("[");
@@ -101,6 +103,29 @@ void quantum_info(int __status, char *header, char *format, ...)
     va_end(arg);
 
     insert_newline();
+#else
+    debug_printf("[");
+    if (__status == 0)
+    {
+        debug_printf("\x1b[1;32m");
+    }
+    else if (__status == 2)
+    {
+        debug_printf("\x1b[1;33m");
+    }
+    else if (__status == 1)
+    {
+        debug_printf("\x1b[1;31m");
+    }
+    debug_printf("%s\x1b[0;0m", header);
+    debug_printf("] ");
+
+    va_list arg;
+    va_start(arg, format);
+    debug_printf_va(format, arg);
+    va_end(arg);
+
+    debug_printf("\n");
 #endif
 }
 

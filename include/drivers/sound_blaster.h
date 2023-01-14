@@ -15,7 +15,7 @@ void quantum_sound_blaster_init();
 
 BOOL is_sound_blaster_found();
 
-void sound_blaster_dma_channel_16(unsigned char channel_number, unsigned char* sound_data);
+void sound_blaster_dma_channel_16(unsigned char channel_number, unsigned char* sound_data, int sound_data_length);
 
 void sound_blaster_irq();
 

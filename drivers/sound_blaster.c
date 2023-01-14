@@ -60,34 +60,33 @@ void sound_blaster_irq_handler(__registers_t* regs)
     printf("Got an interrupt from SB16\n");
 }
 
-void sound_blaster_dma_channel_16(unsigned char channel_number, unsigned char* sound_data)
+void sound_blaster_dma_channel_16(unsigned char channel_number, unsigned char* sound_data, int sound_data_length)
 {
-    // Send low bits of position to port 0xC4(addr. port of channel 5) For example(see above) is 0x50.
-    // Send high bits of position to port 0xC4(pos. port of channel 5) For example(see above) is 0x04.
-    // Send low bits of length of data to port 0xC6(count port of channel 5) For example if is length 0x0FFF, send 0xFF
-    // Send high bits of length of data to port 0xC6(count port of channel 5) For example if is length 0x0FFF, send 0x0F
-    // Enable channel by writing channel number to port 0xD4
     unsigned char channel = channel_number + 0x04;
     unsigned char transfer_mode = channel_number + 0x48; // single mode + channel
 
     char buf[32] = { 0 };
     itoa((int)sound_data, buf, 16);
 
-    unsigned char page_data = (unsigned char)((int)sound_data >> (strlen(buf) - 2) * 4);  // if sound_data ptr = 0x71e241 then page_data = 0x71
+    unsigned char page_data     = (unsigned char)((int)sound_data >> (strlen(buf) - 2) * 4);  // if sound_data ptr = 0x71e241 then page_data = 0x71
     unsigned char high_bits_pos = (unsigned char)(((int)sound_data & 0xff00) >> 8);       // if sound_data ptr = 0x71e241 then high_bits_pos = 0xe2
-    unsigned char low_bits_pos = (unsigned char)((int)sound_data & 0xff);                 // if sound_data ptr = 0x71e241 then low_bits_pos = 0x41
+    unsigned char low_bits_pos  = (unsigned char)((int)sound_data & 0xff);                 // if sound_data ptr = 0x71e241 then low_bits_pos = 0x41
 
-    // printf("sound_data: 0x%x\n", (int)sound_data);
-    // printf("page_data: 0x%x\n", page_data);
-    // printf("high_bits_pos: 0x%x\n", high_bits_pos);
-    // printf("low_bits_pos: 0x%x\n", low_bits_pos);
+    char buf2[32] = { 0 };
+    itoa((int)sound_data_length, buf2, 16);
 
-    pio_outb(0xD4, channel);        // disable channel, channel number + 0x04
-    pio_outb(0xD8, 69);             // write any value to 0xD8, i will write 69 ^_^
-    pio_outb(0xD6, transfer_mode);  // send transfer mode
-    pio_outb(0x8B, page_data);      // set page of sound data, for example if sound data is at 0x71e241, page is 0x71
-    // TODO: Send low bits of length of data to port 0xC6(count port of channel 5) For example if is length 0x0FFF, send 0xFF
-    // pio_outb(0xC4, )
+    unsigned char low_bits_length  = (unsigned char)(sound_data_length >> (strlen(buf2) * 4));
+    unsigned char high_bits_length = (unsigned char)(sound_data_length & 0xff);
+
+    pio_outb(0xD4, channel);          // disable channel, channel number + 0x04
+    pio_outb(0xD8, 69);               // write any value to 0xD8, i will write 69 ^_^
+    pio_outb(0xD6, transfer_mode);    // send transfer mode
+    pio_outb(0x8B, page_data);        // send page of sound data, for example if sound data is at 0x71e241, page is 0x71
+    pio_outb(0xC4, low_bits_pos);     // send low bit of sound data, for example if sound data is at 0x71e241, page is 0x41
+    pio_outb(0xC4, high_bits_pos);    // send high bit of sound data, for example if sound data is at 0x71e241, page is 0xe2
+    pio_outb(0xC6, low_bits_length);  // send low bits of sound data length
+    pio_outb(0xC6, high_bits_length); // send high bits of sound data length
+    pio_outb(0xD4, channel_number);   // send channel number that need to be enabled
 }
 
 void sound_blaster_irq() 
