@@ -34,6 +34,9 @@ typedef struct __vfs_file_t
 
     __vfs_dir_t *__parent;
 
+    int __data_size;
+    int __data_count;
+    
     int __file_descriptor;
 } __vfs_file_t;
 
@@ -63,6 +66,8 @@ typedef struct __vfs_t
 } __vfs_t;
 
 void vfs_initialize(__vfs_mode __mode);
+
+__vfs_dir_t *vfs_get_rootfs();
 
 __vfs_file_t *vfs_get_file_in_dir(__vfs_dir_t *__directory, char *__fname);
 __vfs_file_t *vfs_get_file_by_desc(__vfs_dir_t *__directory, int __desc);

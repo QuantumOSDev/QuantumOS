@@ -7,6 +7,11 @@
 
 __vfs_t *__vfs;
 
+__vfs_dir_t *vfs_get_rootfs()
+{
+    return __vfs->__rootfs;
+}
+
 static inline void vfs_append_directory(__vfs_dir_t *__parent, __vfs_dir_t *__ndir)
 {
     if (__parent->__num_directories == VFS_MAX_DIRECTORIES)
@@ -124,7 +129,7 @@ __vfs_dir_t *vfs_get_dir_by_path(__vfs_dir_t *__directory, char *__path)
     {
         if (strcmp(__directory->__files[i]->__name, __path) == 0)
         {
-            printf("VFS: Error EOP is a file not a directory! [%s]\n", __path);
+            // printf("VFS: Error EOP is a file not a directory! [%s]\n", __path);
 
             return NULL;
         }
@@ -135,7 +140,7 @@ __vfs_dir_t *vfs_get_dir_by_path(__vfs_dir_t *__directory, char *__path)
 
     if (__current_directory == NULL)
     {
-        printf("VFS: Error EOP no such file or directory! [%s]\n", __path);
+        // printf("VFS: Error EOP no such file or directory! [%s]\n", __path);
 
         return NULL;
     }
@@ -144,7 +149,7 @@ __vfs_dir_t *vfs_get_dir_by_path(__vfs_dir_t *__directory, char *__path)
 
     if (__next == NULL)
     {
-        printf("VFS: Error EOP no such file or directory! [%s]\n", __path);
+        // printf("VFS: Error EOP no such file or directory! [%s]\n", __path);
 
         return NULL;
     }
@@ -169,7 +174,7 @@ __vfs_file_t *vfs_create_file(__vfs_dir_t *__directory, char *__fname)
     {
         if (strcmp(__directory->__files[i]->__name, __fname) == 0)
         {
-            printf("VFS: Error EOP file already exists! [%s]\n", __fname);
+            // printf("VFS: Error EOP file already exists! [%s]\n", __fname);
 
             return NULL;
         }
@@ -179,7 +184,7 @@ __vfs_file_t *vfs_create_file(__vfs_dir_t *__directory, char *__fname)
     {
         if (strcmp(__directory->__directories[i]->__name, __fname) == 0)
         {
-            printf("VFS: Error EOP a directory with this name already exists! [%s]\n", __fname);
+            // printf("VFS: Error EOP a directory with this name already exists! [%s]\n", __fname);
 
             return NULL;
         }
@@ -187,7 +192,7 @@ __vfs_file_t *vfs_create_file(__vfs_dir_t *__directory, char *__fname)
 
     if (__directory->__num_files == VFS_MAX_FILES)
     {
-        printf("VFS: Error directory is full! [%s]\n", __directory->__name);
+        // printf("VFS: Error directory is full! [%s]\n", __directory->__name);
 
         return NULL;
     }
@@ -214,7 +219,7 @@ __vfs_dir_t *vfs_create_dir(__vfs_dir_t *__directory, char *__dname)
     {
         if (strcmp(__directory->__directories[i]->__name, __dname) == 0)
         {
-            printf("VFS: Error EOP directory already exists! [%s]\n", __dname);
+            // printf("VFS: Error EOP directory already exists! [%s]\n", __dname);
 
             return NULL;
         }
@@ -224,7 +229,7 @@ __vfs_dir_t *vfs_create_dir(__vfs_dir_t *__directory, char *__dname)
     {
         if (strcmp(__directory->__files[i]->__name, __dname) == 0)
         {
-            printf("VFS: Error EOP a file with this name already exists! [%s]\n", __dname);
+            // printf("VFS: Error EOP a file with this name already exists! [%s]\n", __dname);
 
             return NULL;
         }
@@ -232,7 +237,7 @@ __vfs_dir_t *vfs_create_dir(__vfs_dir_t *__directory, char *__dname)
 
     if (__directory->__num_directories == VFS_MAX_DIRECTORIES)
     {
-        printf("VFS: Error directory is full! [%s]\n", __directory->__name);
+        // printf("VFS: Error directory is full! [%s]\n", __directory->__name);
 
         return NULL;
     }
@@ -271,6 +276,8 @@ __vfs_status vfs_write(const void *__buffer, int __size, int __count, __vfs_file
 {
     __file->__data = (char *) krealloc(__file->__data, (__size * __count) + 1);
     __file->__data = (char *) __buffer;
+    __file->__data_size = __size;
+    __file->__data_count = __count;
 
     return __VFS_SUCCESS;
 }

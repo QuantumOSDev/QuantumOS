@@ -102,12 +102,17 @@ char *keyboard_getchar_until(char __c)
     {
         if (__input == '\b')
         {
-            printf("\b");
+            if (strlen(__result) > 0)
+            {
+                printf("\b");
 
-            __result[strlen(__result) - 1] = '\0';
+                __result[strlen(__result) - 1] = '\0';
+
+                __input = keyboard_getchar();
+                continue;
+            }
 
             __input = keyboard_getchar();
-
             continue;
         }
 
@@ -132,17 +137,16 @@ static void keyboard_handler(__registers_t *__regs)
     if (scancode & KEYBOARD_KEY_UP)
     {
         /* Only valid for shifts */
-
+        // printf("lol %d ", scancode);
         switch (scancode)
         {
-            case KEYBOARD_LSHIFT_SC:
+            case -86:
             {
                 __keyboard_shift_pressed = FALSE;
-
                 break;
             }
 
-            case KEYBOARD_RSHIFT_SC:
+            case -74:
             {
                 __keyboard_shift_pressed = FALSE;
 

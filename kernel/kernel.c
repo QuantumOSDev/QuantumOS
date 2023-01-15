@@ -13,6 +13,8 @@
 #include <sys/acpi.h>
 #include <sys/cmos.h>
 
+#include <fs/ext2.h>
+
 #include <core/stdlib.h>
 #include <core/string.h>
 #include <core/print.h>

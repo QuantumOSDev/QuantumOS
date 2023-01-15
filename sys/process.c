@@ -7,7 +7,7 @@
 #include <sys/memory.h>
 
 static __process_t *__phead;
-int pid = 0;
+int __pid = 1;
 
 __process_t *process_find_by_pid(unsigned int __pid)
 {
@@ -52,11 +52,11 @@ void process_alloc(__process_t *__p)
 
 void process_run(__process_t *__p)
 {
-    quantum_info(0, " PROC\t", "Running process [%d]...");
+    quantum_info(0, " PROC\t", "Running process [%d]...", __p->__pid);
 
     int __exit = ((int (*) (void)) __p->__entry)();
 
-    quantum_info(0, " PROC\t", "Process [%d] finished and is now a zombie process...");
+    quantum_info(0, " PROC\t", "Process [%d] finished and is now a zombie process...", __p->__pid);
 
     process_kill(__p->__pid);
 }
@@ -127,18 +127,5 @@ void process_set_status(unsigned int __pid, __process_status __status)
 
 unsigned int process_get_pid(void)
 {
-    unsigned int __pid;
-
-    __process_t *__head = __phead;
-
-    while (__head != NULL)
-    {
-        __pid++;
-
-        __head = __head->__next;
-    }
-
-    __pid++;
-
-    return __pid;
+    return __pid++;
 }

@@ -10,31 +10,31 @@
 #define EXT2_CREATOR_ID_OTHER    4	
 
 typedef struct ext2_superblock_t {  
-    int total_inodes;
-    int total_blocks;
-    int number_of_blocks;
-    int unallocated_blocks;
-    int unallocated_inodes;
-    int block_number;
-	int log_block_size;		
-	int log_frag_size;
-    int block_per_group;
-    int fragments_per_group;
-    int inodes_per_group;
-    int mount_time;
-    int written_time;
-    short mnt_count;				
-	short max_mnt_count;			
-	short magic;					
-	short state;
-	short errors;
-	short minor_rev_level;
-	int lastcheck;
-	int checkinterval;
-	int creator_os;
-	int rev_level;
-	short def_resuid;
-	short def_resgid;
+    unsigned int	 total_inodes;
+    unsigned int	 total_blocks;
+    unsigned int	 number_of_blocks;
+    unsigned int	 unallocated_blocks;
+    unsigned int	 unallocated_inodes;
+    unsigned int	 block_number;
+	unsigned int	 log_block_size;		
+	unsigned int	 log_frag_size;
+    unsigned int	 block_per_group;
+    unsigned int	 fragments_per_group;
+    unsigned int	 inodes_per_group;
+    unsigned int	 mount_time;
+    unsigned int	 written_time;
+    unsigned short	 mnt_count;				
+	unsigned short	 max_mnt_count;			
+	unsigned short	 magic;					
+	unsigned short	 state;
+	unsigned short	 errors;
+	unsigned short	 minor_rev_level;
+	unsigned int	 lastcheck;
+	unsigned int	 checkinterval;
+	unsigned int	 creator_os;
+	unsigned int	 rev_level;
+	unsigned short	 def_resuid;
+	unsigned short	 def_resgid;
 } ext2_superblock_t;
 
 void ext2_superblock_read();
