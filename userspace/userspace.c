@@ -165,6 +165,26 @@ int shell_entry()
                 vfs_write(buf, sizeof(char), strlen(buf), file);
                 // file->__data = buf;
             }
+            else if (strcmp(__basecmd, "cd") == 0)
+            {
+                __basecmd = strtok(NULL, " ");
+                if (__basecmd == NULL) 
+                {
+                    print_error("cd", "expected directory path, cd [directory path]");
+                    break;
+                }
+
+                printf("%d\n", vfs_get_dir_by_path(vfs_get_rootfs(), __basecmd));
+                if (vfs_get_dir_by_path(vfs_get_rootfs(), __basecmd) == NULL)
+                {
+                    print_error("cd", "could not find directory path \"%s\" , cd [directory path]", __basecmd);
+                    break; 
+                }
+                else
+                {
+                    directory = __basecmd;
+                }
+            }
             else
             {
                 printf("Unknown command: \"%s\"\n", __basecmd);
@@ -184,10 +204,7 @@ void userspace_initialize(void)
     printf("Booting into userspace...\n");
     // switch_to_user_mode();
 
-    vesa_draw_line(get_mouse_x() - 5, get_mouse_y(), get_mouse_x() + 5, get_mouse_y(), 255, 255, 255);
-    vesa_draw_line(get_mouse_x(), get_mouse_y() - 5, get_mouse_x(), get_mouse_y() + 5, 255, 255, 255);
-
-    // process_spawn((void*)shell_entry, PROCESS_MODE_KERNEL, 10000, PROCESS_RUNNING, 1);
+    process_spawn((void*)shell_entry, PROCESS_MODE_KERNEL, 10000, PROCESS_RUNNING, 1);
 
     for (;;) {}
 }
