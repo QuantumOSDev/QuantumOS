@@ -296,7 +296,7 @@ __vfs_status vfs_read(const void *__buffer, int __size, int __count, __vfs_file_
             break;
         }
 
-        *((char *) __buffer + __n) == __c;
+        *((char *) __buffer + __n) = __c;
 
         __n++;
     }

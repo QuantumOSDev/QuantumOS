@@ -4,6 +4,7 @@
 
 #include <drivers/sound_blaster.h>
 #include <drivers/keyboard.h>
+#include <drivers/mouse.h>
 #include <drivers/vesa.h>
 
 #include <core/stdlib.h>
@@ -183,7 +184,10 @@ void userspace_initialize(void)
     printf("Booting into userspace...\n");
     // switch_to_user_mode();
 
-    process_spawn((void*)shell_entry, PROCESS_MODE_KERNEL, 10000, PROCESS_RUNNING, 1);
+    vesa_draw_line(get_mouse_x() - 5, get_mouse_y(), get_mouse_x() + 5, get_mouse_y(), 255, 255, 255);
+    vesa_draw_line(get_mouse_x(), get_mouse_y() - 5, get_mouse_x(), get_mouse_y() + 5, 255, 255, 255);
+
+    // process_spawn((void*)shell_entry, PROCESS_MODE_KERNEL, 10000, PROCESS_RUNNING, 1);
 
     for (;;) {}
 }

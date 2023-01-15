@@ -73,37 +73,31 @@ void mouse_handler(__registers_t* regs) {
 }
 
 void quantum_mouse_init() {
-    quantum_info(0, " Mouse  ", "Initializing mouse drivers");
+    quantum_info(2, " Mouse  ", "Initializing mouse drivers");
     mouse_x = 640;
     mouse_y = 360;
+    quantum_info(1, " Mouse  ", "Could not initalized mouse drivers");
 
-    printf("Mouse 1\n");
-    mouse_wait(1);
-    pio_outb(0x64, 0xA8);
+    // mouse_wait(1);
+    // pio_outb(0x64, 0xA8);
  
-    pio_outb(0x60, 0xF2);
-    printf("Mouse 2\n");
-    unsigned char status = mouse_read();
-    printf("Mouse 3 %d 0x%x\n", status, status);
-    quantum_info(0, " Mouse  ", "detected mouse with id 0x%x", status);
+    // pio_outb(0x60, 0xF2);
+    // unsigned char status = mouse_read();
+    // quantum_info(0, " Mouse  ", "detected mouse with id 0x%x", status);
 
-    printf("Mouse 4\n");
-    mouse_wait(1);
-    pio_outb(0x64, 0x20);
-    mouse_wait(0);
-    status = (pio_inb(0x60) | 2);
-    mouse_wait(1);
-    pio_outb(0x64, 0x60);
-    mouse_wait(1);
-    pio_outb(0x60, status);
-    printf("Mouse 5\n");
+    // mouse_wait(1);
+    // pio_outb(0x64, 0x20);
+    // mouse_wait(0);
+    // status = (pio_inb(0x60) | 2);
+    // mouse_wait(1);
+    // pio_outb(0x64, 0x60);
+    // mouse_wait(1);
+    // pio_outb(0x60, status);
 
-    mouse_write(0xF6);
-    mouse_read();  
-    mouse_write(0xF4);
-    mouse_read(); 
+    // mouse_write(0xF6);
+    // mouse_read();  
+    // mouse_write(0xF4);
+    // mouse_read(); 
 
-    printf("Mouse 6\n");
-    isr_register_interrupt_handler(IRQ_BASE + 12, mouse_handler);
-    printf("Mouse 7\n");
+    // isr_register_interrupt_handler(IRQ_BASE + 12, mouse_handler);
 }
