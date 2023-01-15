@@ -6,13 +6,14 @@
 
 void ext2_superblock_read(ext2_superblock_t* ext2_superblock)
 {
-    ata_read_sectors(1, 2, 1, (unsigned int*)(ext2_superblock));
-    ata_read_sectors(1, 3, 1, (unsigned int*)(ext2_superblock + 512));
+    ata_read_sectors(1, 2, 1, (unsigned int *)(ext2_superblock));
+    //ata_read_sectors(1, 3, 1, (unsigned int*)(ext2_superblock + 512));
 }
 
-void qunatum_ext2_init() 
+void quantum_ext2_init() 
 {
-    ext2_superblock_t* ext2_superblock = (ext2_superblock_t*)kmalloc(sizeof(ext2_superblock_t));
+    ext2_superblock_t* ext2_superblock = (ext2_superblock_t*) kmalloc(sizeof(ext2_superblock_t *));
+
     ext2_superblock_read(ext2_superblock);
 
     quantum_info(0, " Ext2   ", "Ext2 superblock info:");

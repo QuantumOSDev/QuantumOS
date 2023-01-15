@@ -11,24 +11,6 @@ static volatile unsigned char __ata_irq_invoked = 0;
 __ATA_CHANNELS __ata_channels[MAXIMUM_CHANNELS];
 __ATA_DEVICE   __ata_devices[MAXIMUM_IDE_DEVICES];
 
-void ata_push_register(const char *__name)
-{
-    if (strcmp(__name, "es"))
-    {
-        asm volatile ("pushw %es");
-        asm volatile ("movw %ds, %ax");
-        asm volatile ("movw %ax, %es");
-    }
-}
-
-void ata_pop_register(const char *__name)
-{
-    if (strcmp(__name, "es"))
-    {
-        asm volatile ("popw %es;");
-    }
-}
-
 void ata_insl(unsigned short __register, unsigned int *__buffer, int __quads)
 {
     for (int i = 0; i < __quads; i++)
@@ -116,7 +98,9 @@ void ata_read_buffer(unsigned char __channel, unsigned char __register, unsigned
         ata_write_register(__channel, ATA_REG_CONTROL, 0x80 | __ata_channels[__channel].__no_intr);
     }
 
-    ata_push_register("es");
+    asm ("pushw %es");
+    asm ("movw %ds, %ax");
+    asm ("movw %ax, %es");
 
     if (__register < 0x08)
     {
@@ -135,7 +119,7 @@ void ata_read_buffer(unsigned char __channel, unsigned char __register, unsigned
         ata_insl(__ata_channels[__channel].__bm_ide + __register - 0x0E, __buffer, __quads);
     }
 
-    ata_pop_register("es");
+    asm ("popw %es");
 
     if (__register > 0x07 && __register < 0x0C)
     {
@@ -150,7 +134,9 @@ void ata_write_buffer(unsigned char __channel, unsigned char __register, unsigne
         ata_write_register(__channel, ATA_REG_CONTROL, 0x80 | __ata_channels[__channel].__no_intr);
     }
 
-    ata_push_register("es");
+    asm ("pushw %es");
+    asm ("movw %ds, %ax");
+    asm ("movw %ax, %es");
 
     if (__register < 0x08)
     {
@@ -169,7 +155,7 @@ void ata_write_buffer(unsigned char __channel, unsigned char __register, unsigne
         ata_outsl(__ata_channels[__channel].__bm_ide + __register - 0x0E, __buffer, __quads);
     }
 
-    ata_pop_register("es");
+    asm ("popw %es");
 
     if (__register > 0x07 && __register < 0x0C)
     {
@@ -229,7 +215,8 @@ unsigned char ata_print_error(unsigned int __drive, unsigned char __error)
 
     if (__error == 1)
     {
-        quantum_info(2, " IDE\t", "Human Readable Error: Device Fault");
+        quantum_info(2, " ATA\t", "Human Readable Error: Device Fault");
+
         __error = 19;
     }
     else if (__error == 2)
@@ -238,65 +225,65 @@ unsigned char ata_print_error(unsigned int __drive, unsigned char __error)
 
         if (__status & ATA_ER_AMNF)
         {
-            quantum_info(2, " IDE\t", "Human Readable Error: No Address Mark Found");
+            quantum_info(2, " ATA\t", "Human Readable Error: No Address Mark Found");
 
             __error = 7;
         }
 
         if (__status & ATA_ER_TK0NF)
         {
-            quantum_info(2, " IDE\t", "Human Readable Error: No Media Or Media Error");
+            quantum_info(2, " ATA\t", "Human Readable Error: No Media Or Media Error");
 
             __error = 3;
         }
 
         if (__status & ATA_ER_ABRT)
         {
-            quantum_info(2, " IDE\t", "Human Readable Error: Command Aborted");
+            quantum_info(2, " ATA\t", "Human Readable Error: Command Aborted");
 
             __error = 20;
         }
 
         if (__status & ATA_ER_MCR)
         {
-            quantum_info(2, " IDE\t", "Human Readable Error: No Media Or Media Error");
+            quantum_info(2, " ATA\t", "Human Readable Error: No Media Or Media Error");
 
             __error = 3;
         }
 
         if (__status & ATA_ER_IDNF)
         {
-            quantum_info(2, " IDE\t", "Human Readable Error: ID Mark Not Found");
+            quantum_info(2, " ATA\t", "Human Readable Error: ID Mark Not Found");
 
             __error = 21;
         }
 
         if (__status & ATA_ER_MC)
         {
-            quantum_info(2, " IDE\t", "Human Readable Error: No Media Or Media Error");
+            quantum_info(2, " ATA\t", "Human Readable Error: No Media Or Media Error");
 
             __error = 3;
         }
 
         if (__status & ATA_ER_UNC)
         {
-            quantum_info(2, " IDE\t", "Human Readable Error: Uncorrectable Data Error");
+            quantum_info(2, " ATA\t", "Human Readable Error: Uncorrectable Data Error");
 
             __error = 22;
         }
 
         if (__status & ATA_ER_BBK)
         {
-            quantum_info(2, " IDE\t", "Human Readable Error: Bad Sectors");
+            quantum_info(2, " ATA\t", "Human Readable Error: Bad Sectors");
         }
     }
     else if (__error == 3)
     {
-        quantum_info(2, " IDE\t", "Human Readable Error: Reading Nothing");
+        quantum_info(2, " ATA\t", "Human Readable Error: Reading Nothing");
     }
     else if (__error == 4)
     {
-        quantum_info(2, " IDE\t", "Human Readable Error: Write Protected");
+        quantum_info(2, " ATA\t", "Human Readable Error: Write Protected");
     }
 
     quantum_info(2, " ATA\t", "DRIVE: [%s] [%s]", (const char*[]) {"Primary", "Secondary"}[__ata_devices[__drive].__channel], (const char*[]) {"Master", "Child"}[__ata_devices[__drive].__drive]);
@@ -304,46 +291,7 @@ unsigned char ata_print_error(unsigned int __drive, unsigned char __error)
     return __error;
 }
 
-void ata_select_drive(unsigned int __channel, unsigned int __childbit, unsigned char __lba_mode, unsigned char __head)
-{
-    /* Assuming drive is not BSY */
-
-    if (__lba_mode == LBA_MODE_CHS)
-    {
-        ata_write_register(__channel, ATA_REG_HDDEVSEL, 0xA0 | (__childbit << 4) | __head);
-    }
-    else
-    {
-        ata_write_register(__channel, ATA_REG_HDDEVSEL, 0xE0 | (__childbit << 4) | __head);
-    }
-}
-
-void ata_send_command(unsigned char __channel, unsigned char __lba_mode, unsigned char __direction, unsigned char __dma)
-{
-    unsigned char __cmd;
-
-    if (__lba_mode == LBA_MODE_CHS && __dma == 0 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_PIO;
-    if (__lba_mode == LBA_MODE_28  && __dma == 0 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_PIO;
-    if (__lba_mode == LBA_MODE_48  && __dma == 0 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_PIO_EXT;
-    if (__lba_mode == LBA_MODE_CHS && __dma == 1 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_DMA;
-    if (__lba_mode == LBA_MODE_28  && __dma == 1 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_DMA;
-    if (__lba_mode == LBA_MODE_48  && __dma == 1 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_DMA_EXT;
-    if (__lba_mode == LBA_MODE_CHS && __dma == 0 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_PIO;
-    if (__lba_mode == LBA_MODE_28  && __dma == 0 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_PIO;
-    if (__lba_mode == LBA_MODE_48  && __dma == 0 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_PIO_EXT;
-    if (__lba_mode == LBA_MODE_CHS && __dma == 1 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_DMA;
-    if (__lba_mode == LBA_MODE_28  && __dma == 1 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_DMA;
-    if (__lba_mode == LBA_MODE_48  && __dma == 1 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_DMA_EXT;
-
-    ata_write_register(__channel, ATA_REG_COMMAND, __cmd);
-}
-
-void ata_flush_drive(unsigned char __channel, unsigned char __lba_mode)
-{
-    ata_write_register(__channel, ATA_REG_COMMAND, (char[]) {ATA_CMD_CACHE_FLUSH, ATA_CMD_CACHE_FLUSH_EXT}[__lba_mode]);
-}
-
-unsigned char ata_access(unsigned char __direction, unsigned char __drive, unsigned int __lba, unsigned char __num_sectors, unsigned int __buffer)
+unsigned char ata_access(unsigned char __direction, unsigned char __drive, unsigned int __lba, unsigned char __num_sectors, unsigned int *__buffer)
 {
     unsigned char __lba_mode;
     unsigned char __lba_io[6];
@@ -358,6 +306,7 @@ unsigned char ata_access(unsigned char __direction, unsigned char __drive, unsig
     unsigned char __head, __sect, __err;
 
     unsigned short __cyl, i;
+
     ata_write_register(__channel, ATA_REG_CONTROL, __ata_channels[__channel].__no_intr = (__ata_irq_invoked = 0x0) + 0x02);
 
     if (__lba >= 0x10000000)
@@ -407,7 +356,14 @@ unsigned char ata_access(unsigned char __direction, unsigned char __drive, unsig
         /* Wait */
     }
 
-    ata_select_drive(__channel, __childbit, __lba_mode, __head);
+    if (__lba_mode == LBA_MODE_CHS)
+    {
+        ata_write_register(__channel, ATA_REG_HDDEVSEL, 0xA0 | (__childbit << 4) | __head);
+    }
+    else
+    {
+        ata_write_register(__channel, ATA_REG_HDDEVSEL, 0xE0 | (__childbit << 4) | __head);
+    }
 
     if (__lba_mode == LBA_MODE_48)
     {
@@ -422,7 +378,20 @@ unsigned char ata_access(unsigned char __direction, unsigned char __drive, unsig
     ata_write_register(__channel, ATA_REG_LBA1, __lba_io[1]);
     ata_write_register(__channel, ATA_REG_LBA2, __lba_io[2]);
 
-    ata_send_command(__channel, __lba_mode, __direction, __dma);
+    if (__lba_mode == LBA_MODE_CHS && __dma == 0 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_PIO;
+    if (__lba_mode == LBA_MODE_28  && __dma == 0 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_PIO;
+    if (__lba_mode == LBA_MODE_48  && __dma == 0 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_PIO_EXT;
+    if (__lba_mode == LBA_MODE_CHS && __dma == 1 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_DMA;
+    if (__lba_mode == LBA_MODE_28  && __dma == 1 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_DMA;
+    if (__lba_mode == LBA_MODE_48  && __dma == 1 && __direction == ATA_READ)  __cmd = ATA_CMD_READ_DMA_EXT;
+    if (__lba_mode == LBA_MODE_CHS && __dma == 0 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_PIO;
+    if (__lba_mode == LBA_MODE_28  && __dma == 0 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_PIO;
+    if (__lba_mode == LBA_MODE_48  && __dma == 0 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_PIO_EXT;
+    if (__lba_mode == LBA_MODE_CHS && __dma == 1 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_DMA;
+    if (__lba_mode == LBA_MODE_28  && __dma == 1 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_DMA;
+    if (__lba_mode == LBA_MODE_48  && __dma == 1 && __direction == ATA_WRITE) __cmd = ATA_CMD_WRITE_DMA_EXT;
+
+    ata_write_register(__channel, ATA_REG_COMMAND, __cmd);
 
     if (__dma)
     {
@@ -432,7 +401,7 @@ unsigned char ata_access(unsigned char __direction, unsigned char __drive, unsig
     {
         for (i = 0; i < __num_sectors; i++)
         {
-            if (__err = ata_ide_polling(__channel, 1))
+            if ((__err = ata_ide_polling(__channel, 1)))
             {
                 return __err;
             }
@@ -444,7 +413,7 @@ unsigned char ata_access(unsigned char __direction, unsigned char __drive, unsig
             
             asm ("popw %es");
 
-            __buffer = (__buffer + (__words * 2));
+            __buffer += (__words * 2);
         }
     }
     else
@@ -457,12 +426,12 @@ unsigned char ata_access(unsigned char __direction, unsigned char __drive, unsig
             asm ("rep outsw" ::"c"(__words), "d"(__bus), "S"(__buffer));
             asm ("popw %ds");
 
-            __buffer = (__buffer + (__words * 2));
+            __buffer += (__words * 2);
         }
-    }
 
-    ata_flush_drive(__channel, __lba_mode);
-    ata_ide_polling(__channel, 0);
+        ata_write_register(__channel, ATA_REG_COMMAND, (char[]) {ATA_CMD_CACHE_FLUSH, ATA_CMD_CACHE_FLUSH, ATA_CMD_CACHE_FLUSH_EXT}[__lba_mode]);
+        ata_ide_polling(__channel, 0);
+    }
 
     return 0;
 }
@@ -619,12 +588,17 @@ void ata_initialize(unsigned short __prim_base, unsigned short __prim_control,
 
 void ata_wait_irq(void)
 {
+    while (!__ata_irq_invoked)
+    {
+        /* Wait */   
+    }
 
+    __ata_irq_invoked = 0;
 }
 
 void ata_irq(void)
 {
-
+    __ata_irq_invoked = 1;
 }
 
 int ata_read_sectors(unsigned char __drive, unsigned char __nsectors, unsigned char __lba, unsigned int *__buffer)

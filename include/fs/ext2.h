@@ -39,6 +39,6 @@ typedef struct ext2_superblock_t {
 
 void ext2_superblock_read();
 
-void qunatum_ext2_init();
+void quantum_ext2_init();
 
 #endif

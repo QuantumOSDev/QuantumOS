@@ -33,7 +33,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_ata_init();
     quantum_syscalls_init();
     quantum_sound_blaster_init();
-    qunatum_ext2_init();
+    quantum_ext2_init();
 
     printf("QuantumOS has boot up!\n");
     printf("Press any key to continue booting into userspace!\nHit 'k' to enter kernel-mode...\n");

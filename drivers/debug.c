@@ -6,6 +6,8 @@
 #include <sys/memory.h>
 #include <sys/pio.h>
 
+#define DEBUG
+
 void debug_putc(char c)
 {
     pio_outb(DEBUG_PORT, c);
