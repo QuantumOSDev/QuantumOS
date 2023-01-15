@@ -84,11 +84,11 @@ void vesa_draw_line(int start_x, int start_y, int end_x, int end_y, int r, int g
 }
 
 void vesa_draw_char(char c, int x, int y, int fg_r, int fg_g, int fg_b, int bg_r, int bg_g, int bg_b) {
-    unsigned char* font_char = &font_data[c * 16];
+    unsigned char* font_char = &font_data[c * FONT_WIDTH];
 
-    for(int i = 0; i < 16; ++i){
-        for(int j = 0; j < 8; ++j){
-            if(font_char[i] & (1 << (8 - j))){
+    for(int i = 0; i < FONT_WIDTH; ++i){
+        for(int j = 0; j < FONT_HEIGHT; ++j){
+            if(font_char[i] & (1 << (FONT_HEIGHT - j))){
                 vesa_put_pixel(x+j, y+i, fg_r, fg_g, fg_b);
             } else {
                 vesa_put_pixel(x+j, y+i, bg_r, bg_g, bg_b);

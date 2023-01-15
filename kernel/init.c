@@ -75,7 +75,7 @@ int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot)
     return -1;
 }
 
-// #define DEBUG
+#define DEBUG
 
 void quantum_info(int __status, char* header, char* format, ...)
 {
