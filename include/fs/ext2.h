@@ -1,6 +1,8 @@
 #ifndef EXT2_H
 #define EXT2_H
 
+#define HARDDISK 0
+
 #define EXT2_MAGIC 0xEF53
 
 #define EXT2_CREATOR_ID_LINUX    0	
@@ -12,7 +14,7 @@
 typedef struct ext2_superblock_t {  
     unsigned int	 total_inodes;
     unsigned int	 total_blocks;
-    unsigned int	 number_of_blocks;
+    unsigned int	 reserved_blocks;
     unsigned int	 unallocated_blocks;
     unsigned int	 unallocated_inodes;
     unsigned int	 block_number;
@@ -35,7 +37,7 @@ typedef struct ext2_superblock_t {
 	unsigned int	 rev_level;
 	unsigned short	 def_resuid;
 	unsigned short	 def_resgid;
-} ext2_superblock_t;
+} __attribute__((packed)) ext2_superblock_t;
 
 void ext2_superblock_read();
 
