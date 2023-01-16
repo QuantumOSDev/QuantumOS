@@ -3,6 +3,8 @@
 #include <core/string.h>
 
 #include <sys/pio.h>
+#include <sys/isr.h>
+#include <sys/idt.h>
 
 #include <fs/ata.h>
 
@@ -570,8 +572,6 @@ void ata_initialize(unsigned short __prim_base, unsigned short __prim_control,
         if (__ata_devices[i].__reserved == 1)
         {
             quantum_info(0, " ATA\t", "Drive [%d] is online!", __ata_devices[i].__drive);
-// #define ATA_DEBUG
-#ifdef ATA_DEBUG
             quantum_info(0, " ATA\t", "Model: [%s]", __ata_devices[i].__model);
             quantum_info(0, " ATA\t", "Type: [%s]", (const char *[]) {"ATA", "ATAPI"}[__ata_devices[i].__type]);
             quantum_info(0, " ATA\t", "Drive: [%d]", __ata_devices[i].__drive);
@@ -581,7 +581,6 @@ void ata_initialize(unsigned short __prim_base, unsigned short __prim_control,
             quantum_info(0, " ATA\t", "Size: [%d] sectors | [%d] bytes", __ata_devices[i].__size, __ata_devices[i].__size * ATA_SECTOR_SIZE);
             quantum_info(0, " ATA\t", "Signature: [0x%x]", __ata_devices[i].__signature);
             quantum_info(0, " ATA\t", "Features: [%d]\n", __ata_devices[i].__features);
-#endif
         }
     }
 }
@@ -659,3 +658,10 @@ int ata_write_sectors(unsigned char __drive, unsigned char __nsectors, unsigned 
     return 0;
 }
 
+void ata_irq_handler(__registers_t *__regs)
+{
+    pio_inb(__ata_channels[0].__no_intr);
+    pio_inb(__ata_channels[0].__bm_ide);
+
+    pio_outb(__ata_channels[0].__base, 0x00);
+}
