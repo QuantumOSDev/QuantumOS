@@ -62,7 +62,7 @@ typedef struct __ext2_superblock_t
     unsigned short __reserved_ngbd;
 } __attribute__((packed)) __ext2_superblock_t;
 
-struct __ext2_bg_desc_t
+typedef struct __ext2_bg_desc_t
 {
     unsigned int __b_bitmap;
     unsigned int __i_bitmap;
@@ -76,7 +76,7 @@ struct __ext2_bg_desc_t
     unsigned int __reserved_2[3];
 } __attribute__((packed)) __ext2_bg_desc_t;
 
-struct __ext2_inode_t
+typedef struct __ext2_inode_t
 {
     unsigned short __mode;
     unsigned short __uid;
@@ -91,7 +91,6 @@ struct __ext2_inode_t
     unsigned short __nlink;
 
     unsigned int __nblock;
-    unsigned int __flags;
     unsigned int __flags;
     unsigned int __version;
 
@@ -119,7 +118,7 @@ struct __ext2_inode_t
     unsigned int __version_high;
 } __attribute__((packed)) __ext2_inode_t;
 
-struct __ext2_dirent_t
+typedef struct __ext2_dirent_t
 {
     unsigned int __inode;
 
@@ -131,14 +130,14 @@ struct __ext2_dirent_t
     char __name[];
 } __attribute__((packed)) __ext2_dirent_t;
 
-struct __ext2_block_buf_t
+typedef struct __ext2_block_buf_t
 {
     unsigned long __block_addr;
 
     unsigned char *__buffer;
 } __attribute__((packed)) __ext2_block_buf_t;
 
-struct __ext2_fs_t
+typedef struct __ext2_fs_t
 {
     struct __ext2_superblock_t __sb;
 
