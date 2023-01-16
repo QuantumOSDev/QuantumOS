@@ -1,7 +1,7 @@
 #ifndef FONT_H
 #define FONT_H
 
-#define FONT_VGA
+#define DEFAULT_FONT
 
 #ifdef SONY_FONT
 
