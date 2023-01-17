@@ -13,4 +13,6 @@
 
 void acpi_reboot(void);
 
+void acpi_shutdown();
+
 #endif

@@ -228,7 +228,6 @@ static void keyboard_handler(__registers_t *__regs)
             default:
             {
                 __keyboard_current_char = keyboard_map[scancode];
-                debug_printf("%d\n", scancode);
 
                 if (__keyboard_caps_lock)
                 {

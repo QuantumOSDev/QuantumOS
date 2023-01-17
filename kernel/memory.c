@@ -251,6 +251,16 @@ void *kmemset(void *__dest, char __c, unsigned int __n)
     return __dest;
 }
 
+int kmemcmp(char *m1, char *m2, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (m1[n] != m2[n])
+            return 1;
+    }
+    return 0;
+}
+
 void kfree(void *__address)
 {
     MEMORY_BLOCK *__block = __kmem_global_head;
