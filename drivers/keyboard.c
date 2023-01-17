@@ -1,4 +1,5 @@
 #include <drivers/keyboard.h>
+#include <drivers/debug.h>
 
 #include <quantum/init.h>
 
@@ -12,11 +13,23 @@
 #include <sys/idt.h>
 #include <sys/isr.h>
 
+static char keyboard_map[128] = KEYBOARD_MAP_ENG;
+
 static BOOL __keyboard_shift_pressed = FALSE;
 static BOOL __keyboard_caps_lock     = FALSE;
 
 static char __keyboard_current_char  = 0;
 static char __keyboard_current_sc    = 0;
+
+void keyboard_set_key_map(char* key_map)
+{
+    kmemcpy(keyboard_map, key_map, 128);
+}
+
+char* keyboard_get_key_map()
+{
+    return keyboard_map;
+}
 
 char keyboard_alternate(char ch)
 {
@@ -215,6 +228,7 @@ static void keyboard_handler(__registers_t *__regs)
             default:
             {
                 __keyboard_current_char = keyboard_map[scancode];
+                debug_printf("%d\n", scancode);
 
                 if (__keyboard_caps_lock)
                 {
@@ -261,6 +275,6 @@ static void keyboard_handler(__registers_t *__regs)
 
 void keyboard_enable()
 {
-    quantum_info(0, "Keyboard", "Initializing keyboard drivers");
+    quantum_info(0, "Keyboard ", "Initializing keyboard drivers");
     isr_register_interrupt_handler(IRQ_BASE + 1, keyboard_handler);
 }

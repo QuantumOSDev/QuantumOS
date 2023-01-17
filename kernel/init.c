@@ -199,7 +199,7 @@ void quantum_pmm_init(unsigned long __addr)
 
 void quantum_vfs_init(void)
 {
-    vfs_initialize(__VFS_RW);
+    // vfs_initialize(__VFS_RW);
 
     quantum_info(0, " VFS\t", "Initialized VFS!");
 }
@@ -211,7 +211,7 @@ void quantum_ata_init(void)
 
 void quantum_devmgr_init(void)
 {
-    device_init();
+    // device_init();
 }
 
 void quantum_migrate_to_kernel_mode(void)

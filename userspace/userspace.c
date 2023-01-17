@@ -38,6 +38,7 @@ void print_error(char* name, char* error_msg, ...)
     insert_newline();
 }
 
+/*
 int shell_entry() 
 {
     char* directory = "/";
@@ -195,6 +196,7 @@ int shell_entry()
         }
     }
 }
+*/
 
 void userspace_initialize(void) 
 {
@@ -204,7 +206,7 @@ void userspace_initialize(void)
     printf("Booting into userspace...\n");
     // switch_to_user_mode();
 
-    process_spawn((void*)shell_entry, PROCESS_MODE_KERNEL, 10000, PROCESS_RUNNING, 1);
+    // process_spawn((void*)shell_entry, PROCESS_MODE_KERNEL, 10000, PROCESS_RUNNING, 1);
 
     for (;;) {}
 }
