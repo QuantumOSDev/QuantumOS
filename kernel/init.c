@@ -18,6 +18,7 @@
 #include <sys/isr.h>
 #include <sys/pmm.h>
 
+#include <fs/device.h>
 #include <fs/vfs.h>
 #include <fs/ata.h>
 
@@ -208,12 +209,17 @@ void quantum_ata_init(void)
     ata_initialize(0x1F0, 0x3F6, 0x170, 0x376, 0x000);
 }
 
+void quantum_devmgr_init(void)
+{
+    device_init();
+}
+
 void quantum_migrate_to_kernel_mode(void)
 {
     kmode_initialize();
 }
 
-void quantum_migrate_to_userspace(void) 
+void quantum_migrate_to_userspace(void)
 {
     userspace_initialize();
 }

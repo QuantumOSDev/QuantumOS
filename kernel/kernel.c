@@ -29,6 +29,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_memory_init();
     quantum_keyboard_init();
     quantum_mouse_init();
+    quantum_devmgr_init();
     quantum_vfs_init();
     quantum_ata_init();
     quantum_syscalls_init();

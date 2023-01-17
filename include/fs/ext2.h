@@ -60,7 +60,7 @@ typedef struct __ext2_superblock_t
     unsigned char __dir_prealloc;
 
     unsigned short __reserved_ngbd;
-} __attribute__((packed)) __ext2_superblock_t;
+} __ext2_superblock_t;
 
 typedef struct __ext2_bg_desc_t
 {
@@ -74,7 +74,7 @@ typedef struct __ext2_bg_desc_t
     unsigned short __reserved;
 
     unsigned int __reserved_2[3];
-} __attribute__((packed)) __ext2_bg_desc_t;
+} __ext2_bg_desc_t;
 
 typedef struct __ext2_inode_t
 {
@@ -116,7 +116,7 @@ typedef struct __ext2_inode_t
     unsigned int __crtime;
     unsigned int __x_crtime;
     unsigned int __version_high;
-} __attribute__((packed)) __ext2_inode_t;
+} __ext2_inode_t;
 
 typedef struct __ext2_dirent_t
 {
@@ -128,14 +128,14 @@ typedef struct __ext2_dirent_t
     unsigned char __type;
 
     char __name[];
-} __attribute__((packed)) __ext2_dirent_t;
+} __ext2_dirent_t;
 
 typedef struct __ext2_block_buf_t
 {
     unsigned long __block_addr;
 
     unsigned char *__buffer;
-} __attribute__((packed)) __ext2_block_buf_t;
+}  __ext2_block_buf_t;
 
 typedef struct __ext2_fs_t
 {

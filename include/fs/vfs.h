@@ -1,86 +1,37 @@
 #ifndef VFS_H
 #define VFS_H
 
-#define VFS_MAX_FILES       100
-#define VFS_MAX_DIRECTORIES 100
-#define VFS_MAX_NAME_LENGTH 256
+#define VFS_PATH_SEPERATOR '/'
+#define VFS_PATH_UP ".."
+#define VFS_PATH_DOT "."
 
-#define VFS_ROOT_FILE_DESCRIPTOR 0
+#define VFS_EXT2_MAGIC 0xeeee2222
 
-#define VFS_EFILE_NOT_FOUND        -1
-#define VFS_EFILE_EXISTS           -2
-#define VFS_EFILE_EXCEEDS_BOUNDARY -3
+#define O_RDONLY     0x0000
+#define O_WRONLY     0x0001
+#define O_RDWR       0x0002
+#define O_APPEND     0x0008
+#define O_CREAT      0x0200
+#define O_TRUNC      0x0400
+#define O_EXCL       0x0800
+#define O_NOFOLLOW   0x1000
+#define O_PATH       0x2000
 
-typedef enum
-{
-    __VFS_SUCCESS,
-    __VFS_ERROR,
-    __VFS_PANIC,
-} __vfs_status;
+#define FS_FILE        0x01
+#define FS_DIRECTORY   0x02
+#define FS_CHARDEVICE  0x04
+#define FS_BLOCKDEVICE 0x08
+#define FS_PIPE        0x10
+#define FS_SYMLINK     0x20
+#define FS_MOUNTPOINT  0x40
 
-typedef enum
-{
-    __VFS_RO,
-    __VFS_RW,
-} __vfs_mode;
-
-typedef struct __vfs_dir_t __vfs_dir_t;
-
-typedef struct __vfs_file_t
-{
-    char __name[VFS_MAX_NAME_LENGTH];
-
-    char *__data;
-
-    __vfs_dir_t *__parent;
-
-    int __data_size;
-    int __data_count;
-    
-    int __file_descriptor;
-} __vfs_file_t;
-
-typedef struct __vfs_dir_t
-{
-    char __name[VFS_MAX_NAME_LENGTH];
-
-    __vfs_file_t *__files[VFS_MAX_FILES];
-
-    struct __vfs_dir_t *__directories[VFS_MAX_DIRECTORIES];
-    struct __vfs_dir_t *__parent;
-
-    int __dir_descriptor;
-    int __num_directories;
-    int __num_files;
-} __vfs_dir_t;
-
-typedef struct __vfs_t
-{
-    unsigned char __initialized;
-    unsigned char __mode;
-
-    unsigned int __fid;
-    unsigned int __did;
-
-    __vfs_dir_t *__rootfs;
-} __vfs_t;
-
-void vfs_initialize(__vfs_mode __mode);
-
-__vfs_dir_t *vfs_get_rootfs();
-
-__vfs_file_t *vfs_get_file_in_dir(__vfs_dir_t *__directory, char *__fname);
-__vfs_file_t *vfs_get_file_by_desc(__vfs_dir_t *__directory, int __desc);
-
-__vfs_dir_t *vfs_get_dir_in_dir(__vfs_dir_t *__directory, char *__dname);
-__vfs_dir_t *vfs_get_dir_by_path(__vfs_dir_t *__directory, char *__path);
-__vfs_dir_t *vfs_get_dir_by_desc(__vfs_dir_t *__directory, int __desc);
-
-__vfs_file_t *vfs_create_file(__vfs_dir_t *__directory, char *__fname);
-__vfs_dir_t *vfs_create_dir(__vfs_dir_t *__directory, char *__dname);
-
-__vfs_status vfs_putchar(int __c, __vfs_file_t *__file);
-__vfs_status vfs_write(const void *__buffer, int __size, int __count, __vfs_file_t *__file);
-__vfs_status vfs_read(const void *__buffer, int __size, int __count, __vfs_file_t *__file);
+#define     _IFMT   0170000 /* type of file */
+#define     _IFDIR  0040000 /* directory */
+#define     _IFCHR  0020000 /* character special */
+#define     _IFBLK  0060000 /* block special */
+#define     _IFREG  0100000 /* regular */
+#define     _IFLNK  0120000 /* symbolic link */
+#define     _IFSOCK 0140000 /* socket */
+#define     _IFIFO  0010000 /* fifo */
 
 #endif
