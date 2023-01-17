@@ -36,7 +36,7 @@ unsigned int vfs_write(vfs_node_t *__node, unsigned int __offset, unsigned int _
 {
     if (__node && __node->read)
     {
-        unsigned int __ret = __node->read(__node, __offset, __size, __buffer)
+        unsigned int __ret = __node->read(__node, __offset, __size, __buffer);
 
         return __ret;
     }
@@ -88,7 +88,7 @@ void vfs_mkdir(char *__name, unsigned short __permission)
     {
         if (__dirname[i] == '/')
         {
-            if i != 0)
+            if (i != 0)
             {
                 __dirname[i] = '\0';
 
@@ -160,7 +160,7 @@ int vfs_create_file(char *__name, unsigned short __permission)
 
     if (__parent_node->create)
     {
-        parent_node->create(__parent_node, __dirname, __permission);
+        __parent_node->create(__parent_node, __dirname, __permission);
     }
 
     kfree(__tdirname);
@@ -191,7 +191,7 @@ int vfs_ioctl(vfs_node_t *__node, int __request, void *__argp)
         return __node->ioctl(__node, __request, __argp);
     }
 
-    return ENOTTY;;
+    return ENOTTY;
 }
 
 void vfs_chmod(vfs_node_t *__node, unsigned int __mode)
@@ -229,7 +229,7 @@ void vfs_unlink(char *__name)
         i--;
     }
 
-    vfs_node_t *__parent_node = file_open(__parent, 0)
+    vfs_node_t *__parent_node = file_open(__parent, 0);
 
     if (!__parent_node)
     {
@@ -278,7 +278,7 @@ void vfs_db_listdir(char *__name)
         return;
     }
 
-    char **__files = __node->__listdir(__node);
+    char **__files = __node->listdir(__node);
     char **__temp  = __files;
 
     while (*__files)
