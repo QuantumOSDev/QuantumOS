@@ -2,6 +2,8 @@
 #include <sys/kgdt.h>
 #include <sys/pio.h>
 
+#include <quantum/init.h>
+
 GDT __gdt_descriptors[GDT_DESCRIPTOR_COUNT];
 GDT_PTR __gdt;
 
@@ -54,4 +56,7 @@ void gdt_enable(void)
 
 	load_gdt((unsigned int) &__gdt);
 	tss_flush();
+
+    quantum_info(0, " GDT    ", "Successfully initialized GDT");
+    quantum_info(0, " TSS    ", "Successfully initialized TSS");
 }

@@ -3,6 +3,8 @@
 #include <sys/pio.h>
 #include <sys/pic.h>
 
+#include <quantum/init.h>
+
 IDT __idt_descriptors[IDE_DESCRIPTOR_COUNT];
 IDT_PTR __idt;
 
@@ -75,6 +77,8 @@ void idt_enable(void)
     idt_set_entry(128, (unsigned int)exception_128, 0x08, 0x8E);
 
     load_idt((unsigned int) &__idt);
+
+    quantum_info(0, " IDT    ", "Successfully initialized IDT");
 
     asm volatile ("sti");
 }

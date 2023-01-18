@@ -1,6 +1,8 @@
 #include <sys/pic.h>
 #include <sys/pio.h>
 
+#include <quantum/init.h>
+
 void pic_init(void)
 {
     unsigned char __a1, __a2;
@@ -22,6 +24,8 @@ void pic_init(void)
 
     pio_outb(PIC1_DATA, __a1);
     pio_outb(PIC2_DATA, __a2);
+
+    quantum_info(0, " PIC    ", "Successfully initialized PIC");
 }
 
 void pic_eoi(unsigned char __irq)

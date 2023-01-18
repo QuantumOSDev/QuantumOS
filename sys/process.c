@@ -15,7 +15,7 @@ __process_t *process_find_by_pid(unsigned int __pid)
 
     if (!__head)
     {
-        quantum_info(1, " PROC\t", "Fatal error process head is NULL!");
+        quantum_info(1, " PROC   ", "Fatal error process head is NULL!");
 
         kpanic("Fatal error occured kernel crashed");
     }
@@ -43,6 +43,8 @@ void process_initialize(void)
     __phead->__next     = NULL;
     __phead->__pstatus  = PROCESS_SLEEPING;
     __phead->__priority = 0;
+
+    quantum_info(0, " PROC   ", "Successfully initialized processes");
 }
 
 void process_alloc(__process_t *__p)
@@ -52,11 +54,11 @@ void process_alloc(__process_t *__p)
 
 void process_run(__process_t *__p)
 {
-    quantum_info(0, " PROC\t", "Running process [%d]...", __p->__pid);
+    quantum_info(0, " PROC   ", "Running process [%d]...", __p->__pid);
 
     int __exit = ((int (*) (void)) __p->__entry)();
 
-    quantum_info(0, " PROC\t", "Process [%d] finished and is now a zombie process...", __p->__pid);
+    quantum_info(0, " PROC   ", "Process [%d] finished and is now a zombie process...", __p->__pid);
 
     process_kill(__p->__pid);
 }

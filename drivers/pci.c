@@ -220,7 +220,7 @@ void pci_probe_devices(void)
 
                 pci_add_device(__device);
 
-                quantum_info(0, " PIC\t", "PCI Device: [CC: 0x%x | SC: 0x%x | PI: 0x%x]", __device->__class_code, __device->__subclass, __device->__prog_if);
+                quantum_info(0, " PIC    ", "PCI Device: [CC: 0x%x | SC: 0x%x | PI: 0x%x]", __device->__class_code, __device->__subclass, __device->__prog_if);
 
                 for (int i = 0; i < __known_device_amount; i++)
                 {
@@ -229,7 +229,7 @@ void pci_probe_devices(void)
                         __device->__driver = __known_devices[i].__driver;
                         __device->__name   = __known_devices[i].__device_name;
 
-                        quantum_info(0, " PIC\t", "Driver found for PCI Device: [%s] [CC: 0x%x | SC: 0x%x | PI: 0x%x]", __device->__name, __device->__class_code, __device->__subclass, __device->__prog_if);
+                        quantum_info(0, " PIC    ", "Driver found for PCI Device: [%s] [CC: 0x%x | SC: 0x%x | PI: 0x%x]", __device->__name, __device->__class_code, __device->__subclass, __device->__prog_if);
                     }
                 }
 
@@ -240,7 +240,7 @@ void pci_probe_devices(void)
                         __device->__driver = __generic_devices[i].__driver;
                         __device->__name   = __generic_devices[i].__device_name;
 
-                        quantum_info(0, " PIC\t", "Driver found for PCI Device: [%s] [CC: 0x%x | SC: 0x%x | PI: 0x%x]", __device->__name, __device->__class_code, __device->__subclass, __device->__prog_if);
+                        quantum_info(0, " PIC    ", "Driver found for PCI Device: [%s] [CC: 0x%x | SC: 0x%x | PI: 0x%x]", __device->__name, __device->__class_code, __device->__subclass, __device->__prog_if);
                     }
                 }
             }

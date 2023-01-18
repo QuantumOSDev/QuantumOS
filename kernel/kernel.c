@@ -35,21 +35,22 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_syscalls_init();
     quantum_sound_blaster_init();
 
-    printf("QuantumOS has boot up!\n");
-    printf("Press any key to continue booting into userspace!\nHit 'k' to enter kernel-mode...\n");
+    quantum_menu();
+    // printf("QuantumOS has boot up!\n");
+    // printf("Press any key to continue booting into userspace!\nHit 'k' to enter kernel-mode...\n");
 
-    char __boot_mode = keyboard_getchar();
+    // char __boot_mode = keyboard_getchar();
 
-    if (__boot_mode == 'k')
-    {
-        printf("\nBailing out!\nGood luck you're on your own...\n\n");
-        quantum_migrate_to_kernel_mode();
-    }
-    else
-    {
-        printf("\n");
-        quantum_migrate_to_userspace();
-    }
+    // if (__boot_mode == 'k')
+    // {
+    //     printf("\nBailing out!\nGood luck you're on your own...\n\n");
+    //     quantum_migrate_to_kernel_mode();
+    // }
+    // else
+    // {
+    //     printf("\n");
+    //     quantum_migrate_to_userspace();
+    // }
 
     return;
 }

@@ -32,6 +32,8 @@ int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot)
         return -1;
     }
 
+    quantum_info(0, " MMAP   ", "Trying to get kernel memory map");
+
     __map->__kernel.__kernel_start = (unsigned int)&__kernel_section_start;
     __map->__kernel.__kernel_end = (unsigned int)&__kernel_section_end;
     __map->__kernel.__kernel_len = ((unsigned int)&__kernel_section_end - (unsigned int)&__kernel_section_start);
@@ -146,7 +148,7 @@ void quantum_memory_init(void)
     void *__start = pmm_allocate_blocks(20);
     void *__end = __start + (pmm_next_free(1) * PMM_BLOCK_SIZE);
 
-    quantum_info(0, " PMM\t", "Successfully allocated 20 blocks! START: 0x%x END: 0x%x", __start, __end);
+    quantum_info(0, " PMM    ", "Successfully allocated 20 blocks! START: 0x%x END: 0x%x", __start, __end);
 
     kmem_initialize(__start, __end);
 }
@@ -187,7 +189,7 @@ void quantum_pmm_init(unsigned long __addr)
     {
         /* Error */
 
-        quantum_info(1, " PMM\t", "Failed to initialize PMM!");
+        quantum_info(1, " PMM    ", "Failed to initialize PMM!");
 
         return;
     }
@@ -195,14 +197,14 @@ void quantum_pmm_init(unsigned long __addr)
     pmm_initialize(__kernel_memory_map.__available.__start, __kernel_memory_map.__available.__size);
     pmm_initialize_region(__kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
 
-    quantum_info(0, " PMM\t", "Initialized PMM from address: 0x%x to 0x%x", __kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
+    quantum_info(0, " PMM    ", "Initialized PMM from address: 0x%x to 0x%x", __kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
 }
 
 void quantum_vfs_init(void)
 {
-    // vfs_initialize(__VFS_RW);
+    vfs_init();
 
-    quantum_info(0, " VFS\t", "Initialized VFS!");
+    quantum_info(0, " VFS    ", "Initialized VFS!");
 }
 
 void quantum_ata_init(void)
@@ -212,7 +214,9 @@ void quantum_ata_init(void)
 
 void quantum_devmgr_init(void)
 {
-    // device_init();
+    device_init();
+
+    quantum_info(0, " Devmgr ", "Successfully initialized devmgr");
 }
 
 void quantum_pci_init(void)
