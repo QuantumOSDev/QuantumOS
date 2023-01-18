@@ -12,7 +12,7 @@ void quantum_ext2_init()
 
     unsigned int *__sb_buffer = kmalloc(sizeof(*__sb_buffer));
 
-    ata_read_sectors(HARDDISK, 1, 2, (unsigned int *) __ext2_superblock);
+    //ata_read_sectors(HARDDISK, 1, 2, (unsigned int *) __ext2_superblock);
 
     quantum_info(0, " Ext2   ", "Ext2 superblock info:");
     quantum_info(0, " Ext2   ", "\tTotal inodes: %d", __ext2_superblock->__icount);

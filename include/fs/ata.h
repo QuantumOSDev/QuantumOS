@@ -1,88 +1,43 @@
 #ifndef ATA_H
 #define ATA_H
 
-typedef struct
-{
-    unsigned short __base;
-    unsigned short __control;
-    unsigned short __bm_ide;
-    unsigned short __no_intr;
-} __ATA_CHANNELS;
+#include <drivers/pci.h>
 
-typedef struct
-{
-    unsigned char __reserved;
-    unsigned char __channel;
-    unsigned char __drive;
+#define ATA_REG_DATA       0x00
+#define ATA_REG_ERROR      0x01
+#define ATA_REG_FEATURES   0x01
+#define ATA_REG_SECCOUNT0  0x02
+#define ATA_REG_LBA0       0x03
+#define ATA_REG_LBA1       0x04
+#define ATA_REG_LBA2       0x05
+#define ATA_REG_HDDEVSEL   0x06
+#define ATA_REG_CMD        0x07
+#define ATA_REG_STATUS     0x07
+#define ATA_REG_SECCOUNT1  0x08
+#define ATA_REG_LBA3       0x09
+#define ATA_REG_LBA4       0x0A
+#define ATA_REG_LBA5       0x0B
+#define ATA_REG_CONTROL    0x0C
+#define ATA_REG_ALTSTATUS  0x0C
+#define ATA_REG_DEVADDRESS 0x0D
 
-    unsigned short __type;
-    unsigned short __signature;
-    unsigned short __features;
+#define ATA_ERROR_BBK   0x080 /* Bad block */
+#define ATA_ERROR_UNC   0x040 /* Uncorrectable data */
+#define ATA_ERROR_MC    0x020 /* Media changed */
+#define ATA_ERROR_IDNF  0x010 /* ID mark not found */
+#define ATA_ERROR_MCR   0x008 /* Media change request */
+#define ATA_ERROR_ABRT  0x004 /* Command aborted */
+#define ATA_ERROR_TK0NF 0x002 /* Track 0 not found */
+#define ATA_ERROR_AMNF  0x001 /* No address mark */
 
-    unsigned int __command_sets;
-    unsigned int __size;
-
-    unsigned char __model[41];
-} __ATA_DEVICE;
-
-#define MAXIMUM_CHANNELS    2
-#define MAXIMUM_IDE_DEVICES    5
-
-// ATA register ports for read/write
-#define ATA_REG_DATA         0x00
-#define ATA_REG_ERROR        0x01
-#define ATA_REG_FEATURES     0x01
-#define ATA_REG_SECCOUNT0    0x02
-#define ATA_REG_LBA0         0x03
-#define ATA_REG_LBA1         0x04
-#define ATA_REG_LBA2         0x05
-#define ATA_REG_HDDEVSEL     0x06
-#define ATA_REG_COMMAND      0x07
-#define ATA_REG_STATUS       0x07
-#define ATA_REG_SECCOUNT1    0x08
-#define ATA_REG_LBA3         0x09
-#define ATA_REG_LBA4         0x0A
-#define ATA_REG_LBA5         0x0B
-#define ATA_REG_CONTROL      0x0C
-#define ATA_REG_ALTSTATUS    0x0C
-#define ATA_REG_DEVADDRESS   0x0D
-
-// ATA drive status
-#define ATA_SR_BSY     0x80    // Busy
-#define ATA_SR_DRDY    0x40    // Drive ready
-#define ATA_SR_DF      0x20    // Drive write fault
-#define ATA_SR_DSC     0x10    // Drive seek complete
-#define ATA_SR_DRQ     0x08    // Data request ready
-#define ATA_SR_CORR    0x04    // Corrected data
-#define ATA_SR_IDX     0x02    // Index
-#define ATA_SR_ERR     0x01    // Error
-
-// ATA drive error status
-#define ATA_ER_BBK      0x80    // Bad block
-#define ATA_ER_UNC      0x40    // Uncorrectable data
-#define ATA_ER_MC       0x20    // Media changed
-#define ATA_ER_IDNF     0x10    // ID mark not found
-#define ATA_ER_MCR      0x08    // Media change request
-#define ATA_ER_ABRT     0x04    // Command aborted
-#define ATA_ER_TK0NF    0x02    // Track 0 not found
-#define ATA_ER_AMNF     0x01    // No address mark
-
-
-// Channels
-#define ATA_PRIMARY      0x00
-#define ATA_SECONDARY    0x01
-
-// IDE types
-#define IDE_ATA      0x00
-#define IDE_ATAPI    0x01
-
-// Command types
-#define ATA_CMD_READ_PIO          0x20
-#define ATA_CMD_READ_PIO_EXT      0x24
+/* ATA commands */
+#define ATA_CMD_RESET             0x04
+#define ATA_CMD_READ_SECTORS      0x20
+#define ATA_CMD_READ_SECTORS_EXT  0x24
+#define ATA_CMD_WRITE_SECTORS     0x30
+#define ATA_CMD_WRITE_SECTORS_EXT 0x34
 #define ATA_CMD_READ_DMA          0xC8
 #define ATA_CMD_READ_DMA_EXT      0x25
-#define ATA_CMD_WRITE_PIO         0x30
-#define ATA_CMD_WRITE_PIO_EXT     0x34
 #define ATA_CMD_WRITE_DMA         0xCA
 #define ATA_CMD_WRITE_DMA_EXT     0x35
 #define ATA_CMD_CACHE_FLUSH       0xE7
@@ -91,7 +46,29 @@ typedef struct
 #define ATA_CMD_IDENTIFY_PACKET   0xA1
 #define ATA_CMD_IDENTIFY          0xEC
 
-// Identify types
+#define ATA_STATUS_BSY  0x80 /* Busy */
+#define ATA_STATUS_DRDY 0x40 /* Drive ready */
+#define ATA_STATUS_DF   0x20 /* Drive write fault */
+#define ATA_STATUS_DSC  0x10 /* Drive seek complete */
+#define ATA_STATUS_DRQ  0x08 /* Data request ready */
+#define ATA_STATUS_CORR 0x04 /* Corrected data */
+#define ATA_STATUS_IDX  0x02 /* Index */
+#define ATA_STATUS_ERR  0x01 /* Error */
+
+#define ATA_MODE_CHS   0x10
+#define ATA_MODE_LBA28 0x20
+#define ATA_MODE_LBA48 0x40
+
+#define ATA_PIO_PORT_P_BASE 0x1F0
+#define ATA_PIO_PORT_P_CTRL 0x3F6
+#define ATA_PIO_PORT_S_BASE 0x170
+#define ATA_PIO_PORT_S_CTRL 0x376
+
+#define ATA_CAPABILITIES_LBA 0x200
+
+#define ATA_PRIMARY   0x00
+#define ATA_SECONDARY 0x01
+
 #define ATA_IDENT_DEVICETYPE   0
 #define ATA_IDENT_CYLINDERS    2
 #define ATA_IDENT_HEADS        6
@@ -104,26 +81,31 @@ typedef struct
 #define ATA_IDENT_COMMANDSETS  164
 #define ATA_IDENT_MAX_LBA_EXT  200
 
+#define ATA_TYPE_PATA   0x0000
+#define ATA_TYPE_SATA   0xC33C
+#define ATA_TYPE_PATAPI 0xEB14
+#define ATA_TYPE_SATAPI 0x9669
 
-#define ATA_SECTOR_SIZE    512
+#define ATA_COMMAND_SET_48 (1 << 26)
 
-// Directions
-#define ATA_READ     0x00
-#define ATA_WRITE    0x01
+typedef struct __ata_drive
+{
+    unsigned int __base;
+    unsigned int __ctrl;
 
-// LBA(Linear Block Address) modes
-#define LBA_MODE_48   0x02
-#define LBA_MODE_28   0x01
-#define LBA_MODE_CHS  0x00
+    int __id;
+    int __mode;
+    int __type;
+    int __child;
 
-void ata_initialize(unsigned short __prim_base, unsigned short __prim_control,
-                      unsigned short __sec_base,  unsigned short __sec_control,
-                      unsigned short __bus_addr);
+    int __capabilities;
+    int __command_set;
+    int __signature;
+    int __max_lba;
 
-void ata_wait_irq(void);
-void ata_irq(void);
+    char __model[41];
+} __ata_drive_t;
 
-int ata_read_sectors(unsigned char __drive, unsigned char __nsectors, unsigned char __lba, unsigned int *__buffer);
-int ata_write_sectors(unsigned char __drive, unsigned char __nsectors, unsigned char __lba, unsigned int *__buffer);
+int ata_initialize(__pci_device_t *__dev);
 
 #endif

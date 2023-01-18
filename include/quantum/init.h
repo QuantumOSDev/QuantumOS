@@ -25,6 +25,8 @@ void quantum_ata_init(void);
 
 void quantum_devmgr_init(void);
 
+void quantum_pci_init(void);
+
 void quantum_migrate_to_kernel_mode(void);
 
 void quantum_migrate_to_userspace(void);
