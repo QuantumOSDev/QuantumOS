@@ -22,6 +22,18 @@ void vesa_put_pixel(int x, int y, int r, int g, int b) {
     framebuffer[offset + 2] = r;
 }
 
+int get_screen_x()
+{
+    multiboot_info_t* mbinfo = (multiboot_info_t*)global_addr;
+    return mbinfo->framebuffer_width;
+}
+
+int get_screen_y() 
+{
+    multiboot_info_t* mbinfo = (multiboot_info_t*)global_addr;
+    return mbinfo->framebuffer_height;
+}
+
 void vesa_draw_rect(int x, int y, int w, int h, int r, int g, int b) {
     for (int _x = 0; _x < w; _x++)
         for (int _y = 0; _y < h; _y++)
