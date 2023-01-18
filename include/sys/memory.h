@@ -31,6 +31,7 @@ void *krealloc(void *__address, int __nsize);
 
 void *kmemcpy(void *__dest, const void *__src, unsigned int __n);
 void *kmemset(void *__dest, char __c, unsigned int __n);
+int   kmemcmp(char *m1, char *m2, int n);
 
 void kfree(void *__address);
 

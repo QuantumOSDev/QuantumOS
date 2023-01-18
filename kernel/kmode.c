@@ -30,6 +30,7 @@ void kmode_initialize(void)
             {
                 printf("Help page:\n\
 reboot:     Reboot the system.\n\
+shutdown:   Shutdown the system.\n\
 time:       Show current time.\n\
 userspace:  Quit kernel-mode and go into userspace!\n\
 help:       Display this help window.\n");
@@ -37,6 +38,10 @@ help:       Display this help window.\n");
             else if (strcmp(__basecmd, "reboot") == 0)
             {
                 acpi_reboot();
+            }
+            else if (strcmp(__basecmd, "shutdown") == 0)
+            {
+                acpi_shutdown();
             }
             else if (strcmp(__basecmd, "userspace") == 0) 
             {
