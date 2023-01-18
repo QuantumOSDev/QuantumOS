@@ -1,6 +1,9 @@
 #ifndef VFS_H
 #define VFS_H
 
+#include <core/gtree.h>
+#include <core/list.h>
+
 #define VFS_PATH_SEPERATOR '/'
 #define VFS_PATH_UP ".."
 #define VFS_PATH_DOT "."
@@ -34,43 +37,47 @@
 #define     _IFSOCK 0140000 /* socket */
 #define     _IFIFO  0010000 /* fifo */
 
-struct vfs_node;
+struct __vfs_node;
 
-typedef unsigned int (*get_file_size_callback)(struct vfs_node * node);
-typedef unsigned int (*read_callback) (struct vfs_node *, unsigned int, unsigned int, char *);
-typedef unsigned int (*write_callback) (struct vfs_node *, unsigned int, unsigned int, char *);
-typedef void (*open_callback) (struct vfs_node*, unsigned int flags);
-typedef void (*close_callback) (struct vfs_node *);
-typedef struct dirent *(*readdir_callback) (struct vfs_node *, unsigned int);
-typedef struct vfs_node *(*finddir_callback) (struct vfs_node *, char *name);
-typedef void (*create_callback) (struct vfs_node *, char *name, unsigned short permission);
-typedef void (*unlink_callback) (struct vfs_node *, char *name);
-typedef void (*mkdir_callback) (struct vfs_node *, char *name, unsigned short permission);
-typedef int (*ioctl_callback) (struct vfs_node *, int request, void * argp);
-typedef int (*get_size_callback) (struct vfs_node *);
-typedef void (*chmod_callback) (struct vfs_node *, unsigned int mode);
-typedef char ** (*listdir_callback) (struct vfs_node *);
+typedef unsigned int (*get_file_size_callback)  (struct __vfs_node *__node);
+typedef unsigned int (*read_callback)           (struct __vfs_node *, unsigned int, unsigned int, char *);
+typedef unsigned int (*write_callback)          (struct __vfs_node *, unsigned int, unsigned int, char *);
+typedef void (*open_callback)                   (struct __vfs_node *, unsigned int __flags);
+typedef void (*close_callback)                  (struct __vfs_node *);
+typedef struct dirent *(*readdir_callback)      (struct __vfs_node *, unsigned int);
+typedef struct vfs_node *(*finddir_callback)    (struct __vfs_node *, char *__name);
+typedef void (*create_callback)                 (struct __vfs_node *, char *__name, unsigned short __permission);
+typedef void (*unlink_callback)                 (struct __vfs_node *, char *__name);
+typedef void (*mkdir_callback)                  (struct __vfs_node *, char *__name, unsigned short __permission);
+typedef int (*ioctl_callback)                   (struct __vfs_node *, int __request, void *__argp);
+typedef int (*get_size_callback)                (struct __vfs_node *);
+typedef void (*chmod_callback)                  (struct __vfs_node *, unsigned int __mode);
+typedef char ** (*listdir_callback)             (struct __vfs_node *);
 
-typedef struct vfs_node {
+typedef struct __vfs_node {
     // Baisc information about a file(note: in linux, everything is file, so the vfs_node could be used to describe a file, directory or even a device!)
-    char name[256];
-    void * device;
-    unsigned int mask;
-    unsigned int uid;
-    unsigned int gid;
-    unsigned int flags;
-    unsigned int inode_num;
-    unsigned int size;
-    unsigned int fs_type;
-    unsigned int open_flags;
+    char __name[256];
+    
+    void *__device;
+    
+    unsigned int __mask;
+    unsigned int __uid;
+    unsigned int __gid;
+    unsigned int __flags;
+    unsigned int __inode_num;
+    unsigned int __size;
+    unsigned int __fs_type;
+    unsigned int __open_flags;
     // Time
-    unsigned int create_time;
-    unsigned int access_time;
-    unsigned int modified_time;
+    unsigned int __create_time;
+    unsigned int __access_time;
+    unsigned int __modified_time;
 
-    unsigned int offset;
-    unsigned nlink;
-    int refcount;
+    unsigned int __offset;
+
+    unsigned __nlink;
+    
+    int __refcount;
 
     // File operations
     read_callback read;
@@ -88,63 +95,63 @@ typedef struct vfs_node {
     get_file_size_callback get_file_size;
 
     listdir_callback listdir;
-}vfs_node_t;
+} __vfs_node_t;
 
 struct dirent {
-    char name[256];
-    unsigned int inode_num;
+    char __name[256];
+    
+    unsigned int __inode_num;
 };
 
-typedef struct vfs_entry {
-    char * name;
-    vfs_node_t * file;
-}vfs_entry_t;
+typedef struct __vfs_entry {
+    char *__name;
+    
+    __vfs_node_t *__file;
+} __vfs_entry_t;
 
+unsigned int vfs_get_file_size(__vfs_node_t *node);
 
-unsigned int vfs_get_file_size(vfs_node_t * node);
+unsigned int vfs_read(__vfs_node_t *__node, unsigned int __offset, unsigned int __size, char *__buffer);
+unsigned int vfs_write(__vfs_node_t *__node, unsigned int __offset, unsigned int __size, char *__buffer);
 
-unsigned int vfs_read(vfs_node_t *node, unsigned int offset, unsigned int size, char *buffer);
+void vfs_open(__vfs_node_t *__node, unsigned int __flags);
+void vfs_close(__vfs_node_t *__node);
 
-unsigned int vfs_write(vfs_node_t *node, unsigned int offset, unsigned int size, char *buffer);
+__vfs_node_t *vfs_finddir(__vfs_node_t *node, char *name);
 
-void vfs_open(struct vfs_node *node, unsigned int flags);
+void vfs_mkdir(char *__name, unsigned short __permission);
 
-void vfs_close(vfs_node_t *node);
+void vfs_mkfile(char *__name, unsigned short __permission);
 
-vfs_node_t *vfs_finddir(vfs_node_t *node, char *name);
+int vfs_create_file(char *__name, unsigned short __permission);
 
-void vfs_mkdir(char *name, unsigned short permission);
+__vfs_node_t *file_open(const char *__file, unsigned int __flags);
 
-void vfs_mkfile(char *name, unsigned short permission);
+char *expand_path(char *__input);
 
-int vfs_create_file(char *name, unsigned short permission);
+int vfs_ioctl(__vfs_node_t *__node, int __request, void *__argp);
 
-vfs_node_t *file_open(const char *file_name, unsigned int flags);
+void vfs_chmod(__vfs_node_t *__node, unsigned int __mode);
 
-char *expand_path(char *input);
+void vfs_unlink(char *__name);
 
-int vfs_ioctl(vfs_node_t *node, int request, void * argp);
+int vfs_symlink(char *__value, char *__name);
+int vfs_readlink(__vfs_node_t *node, char *__buf, unsigned int __size);
 
-void vfs_chmod(vfs_node_t *node, unsigned int mode);
+void vfs_init(void);
+void vfs_mount(char *__path, __vfs_node_t *__fs);
 
-void vfs_unlink(char * name);
+typedef __vfs_node_t *(* __vfs_mount_callback) (char *__arg, char *__mountpoint);
 
-int vfs_symlink(char * value, char * name);
+void vfs_register(char *__name, __vfs_mount_callback __caller);
+void vfs_mount_dev(char *_mountpoint, __vfs_node_t *_node);
+void vfs_mount_recur(char *__path, __gtreenode_t *__subroot, __vfs_node_t *__fs);
 
-int vfs_readlink(vfs_node_t * node, char * buf, unsigned int size);
+void print_vfstree(void);
+void vfs_db_listdir(char *__name);
 
-void vfs_init();
+__vfs_node_t *vfs_get_mountpoint_recur(char **__path, __gtreenode_t *__subroot);
+__vfs_node_t *vfs_get_mountpoint(char **__path);
 
-void vfs_mount(char * path, vfs_node_t * local_root);
-
-typedef vfs_node_t * (*vfs_mount_callback)(char * arg, char * mountpoint);
-
-void vfs_register(char * name, vfs_mount_callback callme);
-
-void vfs_mount_dev(char * mountpoint, vfs_node_t * node);
-
-void print_vfstree();
-
-void vfs_db_listdir(char * name);
 
 #endif

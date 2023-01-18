@@ -1,5 +1,7 @@
 #include <core/string.h>
 #include <core/print.h>
+#include <core/gtree.h>
+#include <core/list.h>
 
 #include <sys/memory.h>
 
@@ -184,4 +186,168 @@ void ltoa(long long value, char* buf) {
 //     char *s = (char*)kmalloc(sizeof(char) * (len + 1));
 //     kmemcpy(s, p, len);
 //     s[len] = '\0';
+}
+
+int strncmp(const char *__s1, const char *__s2, int __c)
+{
+    int __result = 0;
+
+    while (__c)
+    {
+        __result = *__s1 - *__s2++;
+
+        if ((__result != 0) || (*__s1++ == 0))
+        {
+            break;
+        }
+
+        __c--;
+    }
+
+    return __result;
+}
+
+char *strstr(const char *__in, const char *__str)
+{
+    char __c;
+
+    unsigned int __len;
+
+    __c = *__str++;
+
+    if (!__c)
+    {
+        return (char *) __in;
+    }
+
+    __len = strlen(__str);
+
+    do
+    {
+        char __sc;
+
+        do
+        {
+            __sc = *__in++;
+
+            if (!__sc)
+            {
+                return (char *) 0;
+            }
+        } while (__sc != __c);
+    } while (strncmp(__in, __str, __len) != 0);
+
+    return (char *) (__in - 1);
+}
+
+char *strsep(char **__stringp, const char *__delim)
+{
+    const char *__spanp;
+
+    char *__tok;
+    char *__s;
+
+    int __c, __sc;
+
+    if ((__s = *__stringp) == NULL)
+    {
+        return NULL;
+    }
+
+    for (__tok = __s;;)
+    {
+        __c = *__s++;
+
+        __spanp = __delim;
+
+        do
+        {
+            if ((__sc = *__spanp++) == __c)
+            {
+                if (__c == 0)
+                {
+                    __s = NULL;
+                }
+                else
+                {
+                    __s[-1] = 0;
+                }
+
+                *__stringp = __s;
+
+                return __tok;
+            }
+        } while (__sc != 0);
+    }
+
+    return NULL;
+}
+
+__list_t *list_strtok(const char *__str, const char *__delim, unsigned int *__ntok)
+{
+    __list_t *__ret = list_create();
+
+    char *__s     = strdup(__str);
+    char *__token;
+    char *__rest  = __s;
+
+    while ((__token = strsep(&__rest, __delim)) != NULL)
+    {
+        if (!strcmp(__token, "."))
+        {
+            continue;
+        }
+        
+        if (!strcmp(__token, ".."))
+        {
+            if (list_size(__ret) > 0)
+            {
+                list_pop(__ret);
+            }
+
+                            continue;
+        }
+
+        list_push(__ret, strdup(__token));
+
+        if (__ntok)
+        {
+            (*__ntok)++;
+        }
+    }
+
+    kfree(__s);
+
+    return __ret;
+}
+
+char *list_to_str(__list_t *__list, const char *__delim)
+{
+    char *__ret = kmalloc(256);
+
+    kmemset(__ret, 0, 256);
+
+    int __len  = 0;
+    int __rlen = 256;
+
+    while (list_size(__list) > 0)
+    {
+        char *__temp = list_pop(__list)->__val;
+
+        int __tlen = strlen(__temp);
+
+        if (__len + __tlen + 2 > __rlen)
+        {
+            __rlen = __rlen * 2;
+
+            __ret = krealloc(__ret, __rlen);
+
+            __len = __len + __tlen + 1;
+        }
+
+        kstrcat(__ret, __delim);
+        kstrcat(__ret, __temp);
+    }
+
+    return __ret;
 }
