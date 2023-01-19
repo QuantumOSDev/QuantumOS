@@ -7,7 +7,6 @@
 #include <drivers/sound_blaster.h>
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
-#include <drivers/cpuid.h>
 #include <drivers/vesa.h>
 
 #include <sys/memory.h>
@@ -33,26 +32,11 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_devmgr_init();
     quantum_vfs_init();
     quantum_pci_init();
+    quantum_time_init(TIME_ZONES_UTC_0); 
     quantum_syscalls_init();
     quantum_sound_blaster_init();
 
-    get_cpu_vendor_string();
-    // quantum_menu();
-    // printf("QuantumOS has boot up!\n");
-    // printf("Press any key to continue booting into userspace!\nHit 'k' to enter kernel-mode...\n");
-
-    // char __boot_mode = keyboard_getchar();
-
-    // if (__boot_mode == 'k')
-    // {
-    //     printf("\nBailing out!\nGood luck you're on your own...\n\n");
-    //     quantum_migrate_to_kernel_mode();
-    // }
-    // else
-    // {
-    //     printf("\n");
-    //     quantum_migrate_to_userspace();
-    // }
-
+    quantum_menu();
+    
     return;
 }

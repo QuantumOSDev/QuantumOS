@@ -142,8 +142,6 @@ void quantum_menu()
                 break;
             }
         }
-
-        // Menu logic
     }   
 
 }

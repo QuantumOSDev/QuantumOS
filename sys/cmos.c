@@ -3,17 +3,206 @@
 #include <sys/cmos.h>
 #include <sys/pio.h>
 
-BOOL get_update_in_progress_flag() {
+const static time_zone_struct_t time_zones[TIME_ZONES_UTC_PLUS_14 + 1] = {
+    [TIME_ZONES_UTC_MINUS_12]   = {
+        .offset_hour = -12,
+        .offset_minute = 0,
+    },  
+    [TIME_ZONES_UTC_MINUS_11]   = {
+        .offset_hour = -11,
+        .offset_minute = 0,
+    },  
+    [TIME_ZONES_UTC_MINUS_10]   = {
+        .offset_hour = -10,
+        .offset_minute = 0,
+    },  
+    [TIME_ZONES_UTC_MINUS_9_30] = {
+        .offset_hour = -9,
+        .offset_minute = -30,
+    },
+    [TIME_ZONES_UTC_MINUS_9]    = {
+        .offset_hour = -9,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_MINUS_8]    = {
+        .offset_hour = -8,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_MINUS_7]    = {
+        .offset_hour = -7,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_MINUS_6]    = {
+        .offset_hour = -6,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_MINUS_5]    = {
+        .offset_hour = -5,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_MINUS_4]    = {
+        .offset_hour = -4,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_MINUS_3_30] = {
+        .offset_hour = -3,
+        .offset_minute = -30,
+    },
+    [TIME_ZONES_UTC_MINUS_3]    = {
+        .offset_hour = -3,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_MINUS_2]    = {
+        .offset_hour = -2,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_MINUS_1]    = {
+        .offset_hour = -1,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_0]          = {
+        .offset_hour = 0,
+        .offset_minute = 0,
+    },         
+    [TIME_ZONES_UTC_PLUS_1]     = {
+        .offset_hour = 1,
+        .offset_minute = 0,
+    },    
+    [TIME_ZONES_UTC_PLUS_2]     = {
+        .offset_hour = 2,
+        .offset_minute = 0,
+    },    
+    [TIME_ZONES_UTC_PLUS_3]     = {
+        .offset_hour = 3,
+        .offset_minute = 0,
+    },    
+    [TIME_ZONES_UTC_PLUS_3_30]  = {
+        .offset_hour = 3,
+        .offset_minute = 30,
+    }, 
+    [TIME_ZONES_UTC_PLUS_4]     = {
+        .offset_hour = 4,
+        .offset_minute = 0,
+    },    
+    [TIME_ZONES_UTC_PLUS_4_30]  = {
+        .offset_hour = 4,
+        .offset_minute = 30,
+    }, 
+    [TIME_ZONES_UTC_PLUS_5]     = {
+        .offset_hour = 5,
+        .offset_minute = 0,
+    },    
+    [TIME_ZONES_UTC_PLUS_5_30]  = {
+        .offset_hour = 5,
+        .offset_minute = 30,
+    }, 
+    [TIME_ZONES_UTC_PLUS_5_45]  = {
+        .offset_hour = 5,
+        .offset_minute = 45,
+    }, 
+    [TIME_ZONES_UTC_PLUS_6]     = {
+        .offset_hour = 6,
+        .offset_minute = 0,
+    },    
+    [TIME_ZONES_UTC_PLUS_6_30]  = {
+        .offset_hour = 6,
+        .offset_minute = 30,
+    }, 
+    [TIME_ZONES_UTC_PLUS_7]     = {
+        .offset_hour = 7,
+        .offset_minute = 0,
+    },    
+    [TIME_ZONES_UTC_PLUS_8]     = {
+        .offset_hour = 8,
+        .offset_minute = 0,
+    },    
+    [TIME_ZONES_UTC_PLUS_8_45]  = {
+        .offset_hour = 8,
+        .offset_minute = 45,
+    }, 
+    [TIME_ZONES_UTC_PLUS_9]     = {
+        .offset_hour = 9,
+        .offset_minute = 0,
+    },    
+    [TIME_ZONES_UTC_PLUS_9_30]  = {
+        .offset_hour = 9,
+        .offset_minute = 30,
+    }, 
+    [TIME_ZONES_UTC_PLUS_10]    = {
+        .offset_hour = 10,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_PLUS_10_30] = {
+        .offset_hour = 10,
+        .offset_minute = 30,
+    },
+    [TIME_ZONES_UTC_PLUS_11]    = {
+        .offset_hour = 11,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_PLUS_12]    = {
+        .offset_hour = 12,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_PLUS_12_45] = {
+        .offset_hour = 12,
+        .offset_minute = 45,
+    },
+    [TIME_ZONES_UTC_PLUS_13]    = {
+        .offset_hour = 13,
+        .offset_minute = 0,
+    },   
+    [TIME_ZONES_UTC_PLUS_14]    = {
+        .offset_hour = 14,
+        .offset_minute = 0,
+    }   
+};
+
+static time_zone_t global_time_zone = TIME_ZONES_UTC_0;
+
+BOOL get_update_in_progress_flag() 
+{
     pio_outb(CMOS_ADDRESS, 0x0A);
     return pio_inb(CMOS_DATA) & 0x80;
 }
 
-unsigned char get_rtc_register(int reg) {
+unsigned char get_rtc_register(int reg) 
+{
     pio_outb(CMOS_ADDRESS, reg);
     return pio_inb(CMOS_DATA);
 }
 
-date_t get_date_cmos() {
+void quantum_time_init(time_zone_t time_zone)
+{
+    global_time_zone = time_zone;
+}
+
+void change_date_as_time_zone(date_t* date)
+{
+    time_zone_struct_t time_zone = time_zones[global_time_zone];
+    int rest = 0;
+
+    date->minute += time_zone.offset_minute;
+    date->hour   += time_zone.offset_hour;
+
+    if (date->minute >= 60)
+    {
+        rest = date->minute - 60;
+        date->minute = rest;
+        for (int i = 0; i < (int)rest / 60; i++)
+            date->hour++;
+    }
+    else if (date->hour >= 24)
+    {
+        rest = date->hour - 24;
+        date->hour = rest;
+        for (int i = 0; i < (int)rest / 24; i++)
+            date->day++;
+    }
+}
+
+date_t get_date_cmos() 
+{
     date_t date;
     while (get_update_in_progress_flag());
     date.second      = get_rtc_register(RTC_REGISTER_SECOND);
@@ -33,6 +222,8 @@ date_t get_date_cmos() {
         date.month = (date.month & 0x0F) + ((date.month / 16) * 10);
         date.year = (date.year & 0x0F) + ((date.year / 16) * 10);
     }
+
+    change_date_as_time_zone(&date);
 
     return date;
 }

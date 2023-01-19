@@ -13,13 +13,6 @@
 
 #include <quantum/init.h>
 
-/*
-
-Syscalls don't work because when i try to interrupt at 0x80
-it there pop out an isr error (0x13) General protection fault
-
-*/
-
 const syscall_func_t SYSCALLS[MAX_SYSCALLS] = {
     NULL, // 0
     NULL, // 1
@@ -404,11 +397,11 @@ int sys_open(int eax, int filename, int flag, int mode, int esi, int edi, int eb
 
 int sys_time(int eax, int time_ptr, int ecx, int edx, int esi, int edi, int ebp) 
 {
-    date_t now_date = get_date_cmos();
-    unsigned long timestamp = date_to_timestamp(&now_date);
-
-    if (time_ptr != 0)
+    if (time_ptr != 0) 
     {
+        date_t now_date = get_date_cmos();
+        unsigned long timestamp = date_to_timestamp(&now_date);
+
         unsigned long* _time_ptr = (unsigned long*)&time_ptr;
         *_time_ptr = timestamp;
         return 0;
@@ -421,6 +414,3 @@ int sys_uname(int eax, int uname_ptr, int ecx, int edx, int esi, int edi, int eb
     printf("sys_uname: this syscall is not implemented");
     return -1;
 }
-
-// char* input = keyboard_getchar_until('\n');
-// kmemcpy((void*)buf, (const void*)input, count);
