@@ -27,6 +27,7 @@
 #define FS_PIPE        0x10
 #define FS_SYMLINK     0x20
 #define FS_MOUNTPOINT  0x40
+#define FS_SOCKET      0x80000000
 
 #define     _IFMT   0170000 /* type of file */
 #define     _IFDIR  0040000 /* directory */
@@ -38,6 +39,8 @@
 #define     _IFIFO  0010000 /* fifo */
 
 struct __vfs_node;
+
+#include <net/socket.h>
 
 typedef unsigned int (*get_file_size_callback)  (struct __vfs_node *__node);
 typedef unsigned int (*read_callback)           (struct __vfs_node *, unsigned int, unsigned int, char *);
@@ -78,6 +81,8 @@ typedef struct __vfs_node {
     unsigned __nlink;
     
     int __refcount;
+
+    socket_t* socket;
 
     // File operations
     read_callback read;

@@ -1,5 +1,15 @@
 {
     "files.associations": {
-        "cmos.h": "c"
+        "cmos.h": "c",
+        "socket.h": "c",
+        "vfs.h": "c",
+        "gtree.h": "c",
+        "struct_osockaddr.h": "c",
+        "errno.h": "c",
+        "unix.h": "c",
+        "memory.h": "c",
+        "string.h": "c",
+        "list.h": "c",
+        "init.h": "c"
     }
 }
