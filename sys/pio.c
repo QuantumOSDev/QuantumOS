@@ -46,3 +46,15 @@ void pio_sleep(void)
 {
     pio_outb(0x80, 0);
 }
+
+unsigned short pio_mminw(unsigned int* addr) 
+{
+    unsigned short ret;
+    asm volatile (
+        "movw (%1), %0"
+        : "=r" (ret)
+        : "r"  (addr)
+        : "memory"
+    );
+    return ret;
+}

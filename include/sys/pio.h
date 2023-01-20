@@ -11,4 +11,6 @@ unsigned int pio_inl(unsigned short __port);
 
 void pio_sleep(void);
 
+unsigned short pio_mminw(unsigned int* addr);
+
 #endif
