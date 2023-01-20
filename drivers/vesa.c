@@ -4,6 +4,8 @@
 #include <drivers/vesa.h>
 #include <drivers/font.h>
 
+#include <core/tga.h>
+
 #include <sys/memory.h>
 
 unsigned long global_addr;
@@ -107,4 +109,20 @@ void vesa_draw_char(char c, int x, int y, int fg_r, int fg_g, int fg_b, int bg_r
             }
         }
     }
+}
+
+int vesa_draw_image(char* img_data, int img_data_size, image_format_t format)
+{
+    // For now we don't support other image format than tga, why? because
+    // tga is very easy to parse and we don't need anything more complex
+    // for now
+    if (format != IMAGE_TGA) return -1;
+    
+    if (img_data_size < 54) return -1;
+
+    tga_structure_t* tga_structure = parse_tga(img_data, img_data_size);
+
+    multiboot_info_t* mbinfo = (multiboot_info_t*)global_addr;
+    unsigned char* framebuffer = (unsigned char*)mbinfo->framebuffer_addr;
+    kmemcpy(framebuffer, tga_structure->pixel_data, img_data_size);
 }

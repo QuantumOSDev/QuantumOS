@@ -1,6 +1,7 @@
 #include <userspace/userspace.h>
 #include <userspace/syscalls.h>
 #include <userspace/usermode.h>
+#include <userspace/wallpaper.h>
 
 #include <drivers/sound_blaster.h>
 #include <drivers/keyboard.h>
@@ -203,11 +204,10 @@ void userspace_initialize(void)
 {
     vesa_clear();
     set_default_pos();
+    // vesa_draw_image(wallpaper_tga, wallpaper_tga_length, IMAGE_TGA);
 
-    printf("Booting into userspace...\n");
-    printf("Please wait 1 second\n");
-    pit_sleep(1000);
-    printf("1 second elapsed");
+    // printf("Booting into userspace...\n");
+
 
     for (;;) {}
 }
