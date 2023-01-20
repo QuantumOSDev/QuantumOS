@@ -14,6 +14,7 @@
 
 #include <sys/process.h>
 #include <sys/memory.h>
+#include <sys/pit.h>
 
 #include <fs/vfs.h>
 
@@ -204,9 +205,9 @@ void userspace_initialize(void)
     set_default_pos();
 
     printf("Booting into userspace...\n");
-    // switch_to_user_mode();
-
-    // process_spawn((void*)shell_entry, PROCESS_MODE_KERNEL, 10000, PROCESS_RUNNING, 1);
+    printf("Please wait 1 second\n");
+    pit_sleep(1000);
+    printf("1 second elapsed");
 
     for (;;) {}
 }

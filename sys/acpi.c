@@ -6,6 +6,8 @@
 #include <core/string.h>
 #include <core/print.h>
 
+#include <sys/pit.h>
+
 void acpi_reboot(void)
 {
     unsigned char __value;
@@ -32,11 +34,10 @@ __rescue_loop:
 
 void acpi_shutdown()
 {
-    printf("ACPI Shutdown is not implemented, trying to shutdown by virtual machines");
+    printf("ACPI Shutdown is not implemented, trying to shutdown by virtual machines\n");
+    printf("Wait 1s to shutdown\n");
 
-    /* Wait XD */
-    for (long i = 0; i < 100000000; i++)
-        continue;
+    pit_sleep(1000);
 
     pio_outs(0xB004, 0x2000);
     pio_outs(0x604, 0x2000);

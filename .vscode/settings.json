@@ -10,6 +10,9 @@
         "memory.h": "c",
         "string.h": "c",
         "list.h": "c",
-        "init.h": "c"
+        "init.h": "c",
+        "pit.h": "c",
+        "debug.h": "c",
+        "pio.h": "c"
     }
 }

@@ -12,6 +12,7 @@
 #include <sys/memory.h>
 #include <sys/acpi.h>
 #include <sys/cmos.h>
+#include <sys/pit.h>
 
 #include <fs/ext2.h>
 
@@ -32,6 +33,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_devmgr_init();
     quantum_vfs_init();
     quantum_pci_init();
+    quantum_pit_init();
     quantum_time_init(TIME_ZONES_UTC_0); 
     quantum_syscalls_init();
     quantum_sound_blaster_init();
