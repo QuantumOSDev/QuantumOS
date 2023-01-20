@@ -78,6 +78,10 @@ typedef struct __time_zone_struct_t {
 
 void quantum_time_init(); 
 
+void set_time_zone(time_zone_t __time_zone);
+
+time_zone_t convert_str_to_time_zone(char* time_zone_str);
+
 BOOL get_update_in_progress_flag();
 
 unsigned char get_rtc_register(int reg);

@@ -1,4 +1,5 @@
 #include <core/stdlib.h>
+#include <core/string.h>
 
 #include <sys/cmos.h>
 #include <sys/pio.h>
@@ -199,6 +200,54 @@ void change_date_as_time_zone(date_t* date)
         for (int i = 0; i < (int)rest / 24; i++)
             date->day++;
     }
+}
+
+void set_time_zone(time_zone_t __time_zone) 
+{
+    global_time_zone = __time_zone;
+}
+
+time_zone_t convert_str_to_time_zone(char* time_zone_str)
+{
+    if      (strcmp(time_zone_str, "UTC -12:00") == 0) return TIME_ZONES_UTC_MINUS_12;    // UTC -12:00
+    else if (strcmp(time_zone_str, "UTC -11:00") == 0) return TIME_ZONES_UTC_MINUS_11;    // UTC -11:00
+    else if (strcmp(time_zone_str, "UTC -10:00") == 0) return TIME_ZONES_UTC_MINUS_10;    // UTC -10:00
+    else if (strcmp(time_zone_str, "UTC -09:30") == 0) return TIME_ZONES_UTC_MINUS_9_30;  // UTC -09:30
+    else if (strcmp(time_zone_str, "UTC -09:00") == 0) return TIME_ZONES_UTC_MINUS_9;     // UTC -09:00
+    else if (strcmp(time_zone_str, "UTC -08:00") == 0) return TIME_ZONES_UTC_MINUS_8;     // UTC -08:00
+    else if (strcmp(time_zone_str, "UTC -07:00") == 0) return TIME_ZONES_UTC_MINUS_7;     // UTC -07:00
+    else if (strcmp(time_zone_str, "UTC -06:00") == 0) return TIME_ZONES_UTC_MINUS_6;     // UTC -06:00
+    else if (strcmp(time_zone_str, "UTC -05:00") == 0) return TIME_ZONES_UTC_MINUS_5;     // UTC -05:00
+    else if (strcmp(time_zone_str, "UTC -04:00") == 0) return TIME_ZONES_UTC_MINUS_4;     // UTC -04:00
+    else if (strcmp(time_zone_str, "UTC -03:30") == 0) return TIME_ZONES_UTC_MINUS_3_30;  // UTC -03:30
+    else if (strcmp(time_zone_str, "UTC -03:00") == 0) return TIME_ZONES_UTC_MINUS_3;     // UTC -03:00
+    else if (strcmp(time_zone_str, "UTC -02:00") == 0) return TIME_ZONES_UTC_MINUS_2;     // UTC -02:00
+    else if (strcmp(time_zone_str, "UTC -01:00") == 0) return TIME_ZONES_UTC_MINUS_1;     // UTC -01:00
+    else if (strcmp(time_zone_str, "UTC 0")      == 0) return TIME_ZONES_UTC_0;           // UTC 0
+    else if (strcmp(time_zone_str, "UTC -01:00") == 0) return TIME_ZONES_UTC_PLUS_1;      // UTC +01:00
+    else if (strcmp(time_zone_str, "UTC +02:00") == 0) return TIME_ZONES_UTC_PLUS_2;      // UTC +02:00
+    else if (strcmp(time_zone_str, "UTC +03:00") == 0) return TIME_ZONES_UTC_PLUS_3;      // UTC +03:00
+    else if (strcmp(time_zone_str, "UTC +03:30") == 0) return TIME_ZONES_UTC_PLUS_3_30;   // UTC +03:30
+    else if (strcmp(time_zone_str, "UTC +04:00") == 0) return TIME_ZONES_UTC_PLUS_4;      // UTC +04:00
+    else if (strcmp(time_zone_str, "UTC +04:30") == 0) return TIME_ZONES_UTC_PLUS_4_30;   // UTC +04:30
+    else if (strcmp(time_zone_str, "UTC +05:00") == 0) return TIME_ZONES_UTC_PLUS_5;      // UTC +05:00
+    else if (strcmp(time_zone_str, "UTC +05:30") == 0) return TIME_ZONES_UTC_PLUS_5_30;   // UTC +05:30
+    else if (strcmp(time_zone_str, "UTC +05:45") == 0) return TIME_ZONES_UTC_PLUS_5_45;   // UTC +05:45
+    else if (strcmp(time_zone_str, "UTC +06:00") == 0) return TIME_ZONES_UTC_PLUS_6;      // UTC +06:00
+    else if (strcmp(time_zone_str, "UTC +06:30") == 0) return TIME_ZONES_UTC_PLUS_6_30;   // UTC +06:30
+    else if (strcmp(time_zone_str, "UTC +07:00") == 0) return TIME_ZONES_UTC_PLUS_7;      // UTC +07:00
+    else if (strcmp(time_zone_str, "UTC +08:00") == 0) return TIME_ZONES_UTC_PLUS_8;      // UTC +08:00
+    else if (strcmp(time_zone_str, "UTC +08:45") == 0) return TIME_ZONES_UTC_PLUS_8_45;   // UTC +08:45
+    else if (strcmp(time_zone_str, "UTC +09:00") == 0) return TIME_ZONES_UTC_PLUS_9;      // UTC +09:00
+    else if (strcmp(time_zone_str, "UTC +09:30") == 0) return TIME_ZONES_UTC_PLUS_9_30;   // UTC +09:30
+    else if (strcmp(time_zone_str, "UTC +10:00") == 0) return TIME_ZONES_UTC_PLUS_10;     // UTC +10:00
+    else if (strcmp(time_zone_str, "UTC +10:30") == 0) return TIME_ZONES_UTC_PLUS_10_30;  // UTC +10:30
+    else if (strcmp(time_zone_str, "UTC +11:00") == 0) return TIME_ZONES_UTC_PLUS_11;     // UTC +11:00
+    else if (strcmp(time_zone_str, "UTC +12:00") == 0) return TIME_ZONES_UTC_PLUS_12;     // UTC +12:00
+    else if (strcmp(time_zone_str, "UTC +12:45") == 0) return TIME_ZONES_UTC_PLUS_12_45;  // UTC +12:45
+    else if (strcmp(time_zone_str, "UTC +13:00") == 0) return TIME_ZONES_UTC_PLUS_13;     // UTC +13:00
+    else if (strcmp(time_zone_str, "UTC +14:00") == 0) return TIME_ZONES_UTC_PLUS_14;     // UTC +14:00
+    else                                               return (time_zone_t)-1;
 }
 
 date_t get_date_cmos() 

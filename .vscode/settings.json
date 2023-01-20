@@ -15,6 +15,7 @@
         "debug.h": "c",
         "pio.h": "c",
         "tga.h": "c",
-        "elf.h": "c"
+        "elf.h": "c",
+        "stdlib.h": "c"
     }
 }
