@@ -20,6 +20,8 @@
         "acpi.h": "c",
         "kernel.h": "c",
         "task.h": "c",
-        "paging.h": "c"
+        "paging.h": "c",
+        "syscalls.h": "c",
+        "ata.h": "c"
     }
 }

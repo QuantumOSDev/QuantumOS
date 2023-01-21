@@ -1,3 +1,8 @@
+/*
+ * QuantumOS Copyright (c) 2021-2022
+ *  - CodeSploit <samuelthart@pm.me>
+ */
+
 #include <sys/mio.h>
 
 void mio_out8(void *__ptr, unsigned char __data)

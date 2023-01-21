@@ -1,3 +1,9 @@
+/*
+ * QuantumOS Copyright (c) 2021-2022
+ *  - Solindek <solindeklive.biznes@gmail.com>
+ *  - CodeSploit <samuelthart@pm.me>
+ */
+
 #include <drivers/keyboard.h>
 #include <drivers/debug.h>
 

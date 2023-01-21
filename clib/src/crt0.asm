@@ -1,3 +1,8 @@
+;
+; QuantumOS Copyright (c) 2021-2022
+;   - Solindek <solindeklive.biznes@gmail.com>
+;  
+ 
 section .text
     global _start
 

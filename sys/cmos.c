@@ -1,3 +1,9 @@
+/*
+ * QuantumOS Copyright (c) 2021-2022
+ *  - Solindek <solindeklive.biznes@gmail.com>
+ */
+
+
 #include <core/stdlib.h>
 #include <core/string.h>
 

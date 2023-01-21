@@ -1,3 +1,8 @@
+/*
+ * QuantumOS Copyright (c) 2021-2022
+ *  - CodeSploit <samuelthart@pm.me>
+ */
+
 #include <sys/pio.h>
 
 void pio_outb(unsigned short __port, unsigned char __data)

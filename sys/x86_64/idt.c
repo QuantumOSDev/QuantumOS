@@ -1,3 +1,8 @@
+/*
+ * QuantumOS Copyright (c) 2021-2022
+ *  - Solindek <solindeklive.biznes@gmail.com>
+ */
+
 #include <sys/idt.h>
 #include <sys/isr.h>
 #include <sys/pio.h>

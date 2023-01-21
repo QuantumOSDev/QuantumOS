@@ -1,3 +1,9 @@
+/*
+ * QuantumOS Copyright (c) 2021-2022
+ *  - Solindek <solindeklive.biznes@gmail.com>
+ *  - CodeSploit <samuelthart@pm.me>
+ */
+
 #include <quantum/multiboot.h>
 #include <quantum/kernel.h>
 #include <quantum/kmode.h>
