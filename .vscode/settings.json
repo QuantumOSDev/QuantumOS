@@ -23,5 +23,6 @@
         "paging.h": "c",
         "syscalls.h": "c",
         "ata.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

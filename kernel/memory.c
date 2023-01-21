@@ -256,6 +256,18 @@ void *kmemset(void *__dest, char __c, unsigned int __n)
     return __dest;
 }
 
+void *memset(void *__dest, char __c, unsigned int __n)
+{
+    char *__tmp = __dest;
+
+    for (; __n != 0; __n--)
+    {
+        *__tmp++ = __c;
+    }
+
+    return __dest;
+}
+
 int kmemcmp(char *m1, char *m2, int n)
 {
     for (int i = 0; i < n; i++)
