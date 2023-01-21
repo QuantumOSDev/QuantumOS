@@ -56,7 +56,8 @@ void process_run(__process_t *__p)
 {
     quantum_info(0, " PROC   ", "Running process [%d]...", __p->__pid);
 
-    int __exit = ((int (*) (void)) __p->__entry)();
+    // int __exit = ((int (*) (void)) __p->__entry)();
+    create_and_run_task(__p->__task, __p->__entry);
 
     quantum_info(0, " PROC   ", "Process [%d] finished and is now a zombie process...", __p->__pid);
 
@@ -75,6 +76,7 @@ unsigned int process_spawn(void *__entry, unsigned int __mode, unsigned int __me
     process_alloc(__p);
 
     __p->__entry = __entry;
+    __p->__task = (task_t*)kmalloc(sizeof(task_t));
 
     __p->__pid = process_get_pid();
 

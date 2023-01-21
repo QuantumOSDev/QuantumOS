@@ -17,6 +17,9 @@
         "tga.h": "c",
         "elf.h": "c",
         "stdlib.h": "c",
-        "acpi.h": "c"
+        "acpi.h": "c",
+        "kernel.h": "c",
+        "task.h": "c",
+        "paging.h": "c"
     }
 }

@@ -4,6 +4,8 @@
 #define PROCESS_MODE_KERNEL 0
 #define PROCESS_MODE_USER   1
 
+#include <sys/task.h>
+
 typedef enum
 {
     PROCESS_RUNNING,
@@ -21,7 +23,8 @@ typedef struct __process_t
     int __pstatus;
 
     struct __process_t *__next;
-
+    
+    task_t *__task;
     void *__entry;
 } __process_t;
 

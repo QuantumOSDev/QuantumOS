@@ -1,4 +1,5 @@
 #include <quantum/multiboot.h>
+#include <quantum/kernel_menu.h>
 #include <quantum/kernel.h>
 #include <quantum/init.h>
 
@@ -10,6 +11,8 @@
 #include <drivers/vesa.h>
 
 #include <sys/memory.h>
+#include <sys/paging.h>
+#include <sys/task.h>
 #include <sys/acpi.h>
 #include <sys/cmos.h>
 #include <sys/pit.h>
@@ -28,6 +31,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_idt_init();
     quantum_pmm_init(addr);
     quantum_memory_init();
+    quantum_paging_init();
     quantum_keyboard_init();
     quantum_mouse_init();
     quantum_devmgr_init();

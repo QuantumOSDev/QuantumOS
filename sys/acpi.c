@@ -14,8 +14,8 @@ static BOOL machine_support_acpi = TRUE;
 static rsdp_t* rsdp = NULL;
 static rsdp_t* rsdt = NULL;
 
-static unsigned long *PM1a_CNT;
-static unsigned long *PM1b_CNT;
+static unsigned long* PM1a_CNT;
+static unsigned long* PM1b_CNT;
 
 static unsigned short SLP_TYPa;
 static unsigned short SLP_TYPb;
@@ -36,10 +36,10 @@ unsigned char acpi_checksum(void*ptr, unsigned long size)
 
 unsigned long acpi_get_ebda()
 {
-    unsigned int* ebda = ((unsigned int*)(pio_mminw(0x40e) << 4));
-    if (ebda < 0x80000 || ebda >= 0xa0000)
-        ebda = 0x80000;
-    return ebda;
+    unsigned int* ebda = ((unsigned int*)(pio_mminw((unsigned int*)0x40e) << 4));
+    if (ebda < (unsigned int*)0x80000 || ebda >= (unsigned int*)0xa0000)
+        ebda = (unsigned int*)0x80000;
+    return (unsigned long)ebda;
 }
 
 void* acpi_get_rsdp(void) 
@@ -71,7 +71,7 @@ void quantum_acpi_init()
         return;
     }
 
-    quantum_info(0, " ACPI   ", "Successfully initialized ACPI");
+    quantum_info(0, " ACPI   ", "Successfully initialized A CPI");
 }
 
 void acpi_reboot(void)
@@ -103,10 +103,10 @@ void acpi_shutdown()
     // If machine supports ACPI, shutdown with ACPI
     if (machine_support_acpi == TRUE)
     {
-        acpi_enable();
-        pio_outs((unsigned int) PM1a_CNT, SLP_TYPa | SLP_EN);
+        // acpi_enable();
+        pio_outs((unsigned int)PM1a_CNT, SLP_TYPa | SLP_EN);
         if (PM1b_CNT != 0)
-            pio_outs((unsigned int) PM1b_CNT, SLP_TYPb | SLP_EN);
+            pio_outs((unsigned int)PM1b_CNT, SLP_TYPb | SLP_EN);
     }
 
     printf("Something gone wrong while trying to shutdown with ACPI\n");
