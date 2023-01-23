@@ -15,11 +15,18 @@
 
 unsigned long global_addr;
 
-void quantum_vesa_init(unsigned long mbinfo_ptr) {
+unsigned long get_global_mutliboot_addr()
+{
+    return global_addr;
+}
+
+void quantum_vesa_init(unsigned long mbinfo_ptr)
+{
     global_addr = mbinfo_ptr;
 }
 
-void vesa_put_pixel(int x, int y, int r, int g, int b) {
+void vesa_put_pixel(int x, int y, int r, int g, int b) 
+{
     multiboot_info_t* mbinfo = (multiboot_info_t*)global_addr;
     unsigned char* framebuffer = (unsigned char*)mbinfo->framebuffer_addr;
     unsigned offset = x * 4 + y * mbinfo->framebuffer_pitch;
@@ -41,20 +48,23 @@ int get_screen_y()
     return mbinfo->framebuffer_height;
 }
 
-void vesa_draw_rect(int x, int y, int w, int h, int r, int g, int b) {
+void vesa_draw_rect(int x, int y, int w, int h, int r, int g, int b) 
+{
     for (int _x = 0; _x < w; _x++)
         for (int _y = 0; _y < h; _y++)
             vesa_put_pixel(x + _x, y + _y, r, g, b);
 }
 
-void vesa_clear() {
+void vesa_clear() 
+{
     multiboot_info_t* mbinfo = (multiboot_info_t*)global_addr;
     unsigned char* framebuffer = (unsigned char*)mbinfo->framebuffer_addr;
     
     kmemset(framebuffer, 0, mbinfo->framebuffer_width * 4 + mbinfo->framebuffer_height * mbinfo->framebuffer_pitch);
 }
 
-void vesa_draw_circle(int center_x, int center_y, int radius, int r, int g, int b) {
+void vesa_draw_circle(int center_x, int center_y, int radius, int r, int g, int b) 
+{
     int x = 0, y = radius;
     int d = 3 - 2 * radius;
 
@@ -86,7 +96,8 @@ void vesa_draw_circle(int center_x, int center_y, int radius, int r, int g, int 
     }
 }
 
-void vesa_draw_line(int start_x, int start_y, int end_x, int end_y, int r, int g, int b) {
+void vesa_draw_line(int start_x, int start_y, int end_x, int end_y, int r, int g, int b) 
+{
     int dx = end_x - start_x;
     int dy = end_y - start_y;
     int d = 2 * dy - dx;
@@ -102,18 +113,16 @@ void vesa_draw_line(int start_x, int start_y, int end_x, int end_y, int r, int g
     }
 }
 
-void vesa_draw_char(char c, int x, int y, int fg_r, int fg_g, int fg_b, int bg_r, int bg_g, int bg_b) {
+void vesa_draw_char(char c, int x, int y, int fg_r, int fg_g, int fg_b, int bg_r, int bg_g, int bg_b) 
+{
     unsigned char* font_char = &font_data[c * FONT_WIDTH];
 
-    for(int i = 0; i < FONT_WIDTH; ++i){
-        for(int j = 0; j < FONT_HEIGHT; ++j){
-            if(font_char[i] & (1 << (FONT_HEIGHT - j))){
+    for (int i = 0; i < FONT_WIDTH; ++i)
+        for (int j = 0; j < FONT_HEIGHT; ++j)
+            if (font_char[i] & (1 << (FONT_HEIGHT - j)))
                 vesa_put_pixel(x+j, y+i, fg_r, fg_g, fg_b);
-            } else {
+            else 
                 vesa_put_pixel(x+j, y+i, bg_r, bg_g, bg_b);
-            }
-        }
-    }
 }
 
 int vesa_draw_image(char* img_data, int img_data_size, image_format_t format)

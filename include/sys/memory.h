@@ -34,6 +34,10 @@ void *kmemset(void *__dest, char __c, unsigned int __n);
 void *memset(void *__dest, char __c, unsigned int __n);
 int   kmemcmp(char *m1, char *m2, int n);
 
+unsigned long kmem_get_memory_usage();
+unsigned long kmem_get_total_memory_size();
+unsigned long kmem_get_memory_usage_precent();
+
 void kfree(void *__address);
 
 #endif

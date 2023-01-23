@@ -5,7 +5,7 @@ AS='nasm'
 
 BUILDDIR='build'
 
-C_SOURCES=`find ./core/ ./drivers/ ./net/ ./fs/ ./kernel/ ./sys/ ./userspace/ ./boot/ -name "*.c"`
+C_SOURCES=`find ./core/ ./gui/ ./drivers/ ./net/ ./fs/ ./kernel/ ./sys/ ./userspace/ ./boot/ -name "*.c"`
 AS_SOURCES=`find ./core/ ./drivers/ ./net/ ./fs/ ./kernel/ ./sys/ ./userspace/ ./boot/ -name "*.asm"`
 
 CFLAGS='-m32 -c -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -I include'

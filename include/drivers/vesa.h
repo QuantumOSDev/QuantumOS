@@ -9,6 +9,8 @@ typedef enum __image_format_t {
 
 void quantum_vesa_init(unsigned long mbinfo_ptr);
 
+unsigned long get_global_mutliboot_addr();
+
 int get_screen_x();
 
 int get_screen_y();

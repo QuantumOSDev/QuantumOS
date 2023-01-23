@@ -32,6 +32,21 @@ void kmem_initialize(void *__start, void *__end)
     __kmem_global_used_size = 0;
 }
 
+unsigned long kmem_get_memory_usage()
+{
+    return (__kmem_global_used_size);
+}
+
+unsigned long kmem_get_memory_usage_precent()
+{
+    return ((__kmem_global_used_size / __kmem_global_total_size) * 100);
+}
+
+unsigned long kmem_get_total_memory_size()
+{
+    return (__kmem_global_total_size);
+}
+
 void *kbrk(int __size)
 {
     void *__address = (void *)0;
