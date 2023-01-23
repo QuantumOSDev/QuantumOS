@@ -3,6 +3,10 @@
 ## About
 A simple operating system written in C and Assembly.
 
+## Screenshots
+![](/screenshots/screenshot1.png)
+![](/screenshots/F9838711-A50F-44C9-8CC5-C9C84AD35576.jpeg)
+
 ## Project Map
 - `boot`: Multiboot assembly code
 - `clib`: C-Library (aiming for POSIX-like userland)
@@ -25,9 +29,5 @@ A simple operating system written in C and Assembly.
 - [] Implement IWL-Wifi drivers
 - [] Implement sound-card drivers
 - [] More...
-
-# Screenshots
-![](/screenshots/screenshot1.png)
-![](/screenshots/F9838711-A50F-44C9-8CC5-C9C84AD35576.jpeg)
 
 
