@@ -6,6 +6,7 @@
 #include <userspace/userspace.h>
 #include <userspace/syscalls.h>
 #include <userspace/usermode.h>
+#include <userspace/elf.h>
 
 #include <drivers/sound_blaster.h>
 #include <drivers/keyboard.h>
@@ -22,7 +23,6 @@
 #include <sys/memory.h>
 #include <sys/task.h>
 #include <sys/pit.h>
-#include <sys/elf.h>
 
 #include <fs/vfs.h>
 

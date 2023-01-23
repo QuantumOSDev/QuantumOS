@@ -3,9 +3,11 @@
  *  - CodeSploit <samuelthart@pm.me>
  */
 
+#include <quantum/module.h>
 #include <quantum/init.h>
 
 #include <sys/memory.h>
+#include <sys/pmm.h>
 
 #include <core/print.h>
 
@@ -309,3 +311,14 @@ void kfree(void *__address)
         __block = __block->__next;
     }
 }
+
+void __init(void)
+{
+    void *__start = pmm_allocate_blocks(20);
+    void *__end   = (__start + (pmm_next_free(1) * PMM_BLOCK_SIZE));
+
+    kmem_initialize(__start, __end);
+}
+
+MODULE_NAME("QUANTUM_MEMORY_C");
+MODULE_INIT(__init);

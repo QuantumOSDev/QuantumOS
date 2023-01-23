@@ -4,8 +4,9 @@
  *  - CodeSploit <samuelthart@pm.me>
  */
 
-#include <quantum/multiboot.h>
 #include <quantum/kernel_menu.h>
+#include <quantum/multiboot.h>
+#include <quantum/module.h>
 #include <quantum/kernel.h>
 #include <quantum/init.h>
 
@@ -30,7 +31,7 @@
 #include <core/print.h>
 
 void quantum_kernel_init(unsigned long magic, unsigned long addr)
-{
+{/*
     quantum_vesa_init(addr);
     quantum_print_init();
     quantum_gdt_init();
@@ -47,7 +48,11 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_acpi_init();
     quantum_time_init(TIME_ZONES_UTC_0); 
     quantum_syscalls_init();
-    quantum_sound_blaster_init();
+    quantum_sound_blaster_init();*/
+
+    __module_init();
+
+    __module_call("QUANTUM_MEMORY_C");
 
     quantum_menu();
     
