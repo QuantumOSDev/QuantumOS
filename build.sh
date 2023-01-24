@@ -5,7 +5,7 @@ AS='nasm'
 
 BUILDDIR='build'
 
-C_SOURCES=`find ./core/ ./gui/ ./drivers/ ./net/ ./fs/ ./kernel/ ./sys/ ./userspace/ ./boot/ -name "*.c"`
+C_SOURCES=`find ./core/ ./drivers/ ./net/ ./fs/ ./kernel/ ./sys/ ./userspace/ ./boot/ -name "*.c"`
 AS_SOURCES=`find ./core/ ./drivers/ ./net/ ./fs/ ./kernel/ ./sys/ ./userspace/ ./boot/ -name "*.asm"`
 
 CFLAGS='-m32 -c -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -I include'
@@ -17,12 +17,19 @@ for c_file in $C_SOURCES
 do
     mkdir -p $(dirname $BUILDDIR/$c_file)
 
-    $CC $CFLAGS $c_file -o $BUILDDIR/$c_file.o
+    echo "Compiling: [$c_file]"
+
+    if ["$1" == "nodebug"]
+    then
+        $CC $CFLAGS $c_file -o $BUILDDIR/$c_file.o
+    fi
 done
 
 for s_file in $AS_SOURCES
 do
     mkdir -p $(dirname $BUILDDIR/$s_file)
+
+    echo "Compiling: [$s_file]"
 
     $AS $ASFLAGS $s_file -o $BUILDDIR/$s_file.o
 done
