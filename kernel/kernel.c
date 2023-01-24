@@ -46,7 +46,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_pci_init();
     quantum_pit_init();
     quantum_acpi_init();
-    quantum_time_init(TIME_ZONES_UTC_0); 
+    quantum_time_init(TIME_ZONES_UTC_PLUS_1); 
     quantum_syscalls_init();
     quantum_sound_blaster_init();
 

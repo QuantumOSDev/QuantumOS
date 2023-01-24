@@ -6,6 +6,9 @@
 #include <quantum/init.h>
 
 #include <drivers/pci.h>
+#include <drivers/ac97.h>
+
+#include <net/ethernet.h>
 
 #include <sys/memory.h>
 #include <sys/pio.h>
@@ -47,6 +50,20 @@ const __pci_generic_device_t __generic_devices[] = {
         .__prog_if     = -1,
         .__driver      = &ata_initialize,
         .__device_name = "PATA Hard Drive"
+    },
+    {
+        .__class_code  = 0x02,
+        .__subclass    = 0x00,
+        .__prog_if     = -1,
+        .__driver      = &ethernet_initalize,
+        .__device_name = "Ethernet"
+    },
+    {
+        .__class_code  = 0x04,
+        .__subclass    = 0x01,
+        .__prog_if     = -1,
+        .__driver      = &ac97_initialize,
+        .__device_name = "AC97 Sound card"
     }
 };
 
@@ -246,6 +263,8 @@ void pci_probe_devices(void)
                         __device->__name   = __generic_devices[i].__device_name;
 
                         quantum_info(0, " PIC    ", "Driver found for PCI Device: [%s] [CC: 0x%x | SC: 0x%x | PI: 0x%x]", __device->__name, __device->__class_code, __device->__subclass, __device->__prog_if);
+                        __device->__driver(__device);
+                
                     }
                 }
             }

@@ -52,6 +52,13 @@ typedef struct
     unsigned char __max_latency;
 } __pci_common_header_t;
 
+#define GET_COMMON_HEADER_PCI(pci_header, dev)                                 \
+    __pci_common_header_t* pci_header = (__pci_common_header_t*)dev->__header; \
+
+#define GET_BAR_FROM_PCI_HEADER(pci_header, bar0, bar1)                        \
+    unsigned short bar0 = (unsigned short)pci_header->__BAR[0] & 0xFFF0;       \
+    unsigned short bar1 = (unsigned short)pci_header->__BAR[1] & 0xFFF0;       \
+
 void pci_write_dword(unsigned short __bus, unsigned short __slot, unsigned short __function,
                      unsigned short __offset, unsigned int __value);
 
