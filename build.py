@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 CFLAGS='-m32 -c -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -I include '
 ASFLAGS='-f elf '
 
@@ -17,13 +19,17 @@ for root, dirnames, filenames in os.walk('.'):
         if "apps" not in os.path.join(root, filename) and "clib" not in os.path.join(root, filename):
             ssources.append(os.path.join(root, filename))
 
-for c in csources:
-    print("Compiling: [" + c + "]")
+for i in range(len(csources)):
+    c = csources[i]
+
+    print("[" + str(i + 1) + "/" + str(len(csources)) + "] " + "Compiling: [" + c + "]")
 
     os.system("gcc " + CFLAGS + c + " -o build/" + c + ".o")
 
-for s in ssources:
-    print("Compiling: [" + c + "]")
+for i in range(len(ssources)):
+    s = ssources[i]
+
+    print("[" + str(i + 1) + "/" + str(len(ssources)) + "] "+ "Compiling: [" + c + "]")
 
     os.system("nasm " + ASFLAGS + s + " -o build/" + s + ".o")
 
