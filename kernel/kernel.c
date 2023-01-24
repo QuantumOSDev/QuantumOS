@@ -31,7 +31,7 @@
 #include <core/print.h>
 
 void quantum_kernel_init(unsigned long magic, unsigned long addr)
-{/*
+{
     quantum_vesa_init(addr);
     quantum_print_init();
     quantum_gdt_init();
@@ -48,11 +48,10 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_acpi_init();
     quantum_time_init(TIME_ZONES_UTC_0); 
     quantum_syscalls_init();
-    quantum_sound_blaster_init();*/
+    quantum_sound_blaster_init();
 
-    __module_init();
-
-    __module_call("QUANTUM_MEMORY_C");
+    // __module_init();
+    // __module_call("QUANTUM_MEMORY_C");
 
     quantum_menu();
     
