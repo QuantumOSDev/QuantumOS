@@ -187,12 +187,13 @@ void ata_handler(unsigned int __prim_channel_base_addr, unsigned int __prim_chan
 
     for (i = 0; i < 4; i++)
     {
+        quantum_info(1, " ATA    ", "i: %d, active: %d", i, __ata_devices[i].__active);
         if (__ata_devices[i].__active == 1)
         {
-            printf("Drive Detected: \n");
-            printf("\t->\tModel: %s\n", __ata_devices[i].__model);
-            printf("\t->\tType: %s\n", (const char *[]) {"ATA", "ATAPI"}[__ata_devices[i].__type]);
-            printf("\t->\tSize: %d\n", __ata_devices[i].__size);
+            quantum_info(0, " ATA    ", "Drive Detected: ");
+            quantum_info(0, " ATA    ", "\t->\tModel: %s\n", __ata_devices[i].__model);
+            quantum_info(0, " ATA    ", "\t->\tType: %s\n", (const char *[]) {"ATA", "ATAPI"}[__ata_devices[i].__type]);
+            quantum_info(0, " ATA    ", "\t->\tSize: %d\n", __ata_devices[i].__size);
         }
     }
 }
@@ -400,7 +401,7 @@ unsigned char ata_probe_drive(unsigned char __channel, unsigned char __advanced)
 
         if (__state & ATA_SR_ERR)
         {
-            printf("ata_probe_drive() -> ATA_SR_ERR -> returning (1)\n");
+            quantum_info(1, " ATA    ", "ata_probe_drive() -> ATA_SR_ERR -> returning (1)");
 
             return 1;
         }
@@ -409,7 +410,7 @@ unsigned char ata_probe_drive(unsigned char __channel, unsigned char __advanced)
 
         if (__state & ATA_SR_DF)
         {
-            printf("ata_probe_drive() -> ATA_SR_DF -> returning (2)\n");
+            quantum_info(1, " ATA    ", "ata_probe_drive() -> ATA_SR_DF -> returning (2)");
 
             return 2;
         }
@@ -418,7 +419,7 @@ unsigned char ata_probe_drive(unsigned char __channel, unsigned char __advanced)
 
         if ((__state & ATA_SR_DRQ) == 0)
         {
-            printf("ata_probe_drive() -> ATA_SR_DRQ -> returning (3)\n");
+            quantum_info(1, " ATA    ", "ata_probe_drive() -> ATA_SR_DRQ -> returning (3)");
 
             return 3;
         }
@@ -442,13 +443,13 @@ unsigned char ata_print_error(unsigned int __drive, unsigned char __error)
 
     /* Seems like something went wrong */
 
-    printf("ata_print_error() ->");
+    quantum_info(1, " ATA    ", "ata_print_error() ->");
 
     if (__error == 1)
     {
         /* Device fault as mentioned above in ata_probe_drive() */
 
-        printf(" Device Fault\n");
+        quantum_info(1, " ATA    ", " Device Fault");
 
         __error = ATA_ERROR_CODE_DF;
     }
@@ -462,56 +463,56 @@ unsigned char ata_print_error(unsigned int __drive, unsigned char __error)
 
         if (__st & ATA_ER_AMNF)
         {
-            printf(" No Address Mark Found\n");
+            quantum_info(1, " ATA    ", " No Address Mark Found");
 
             __error = ATA_ERROR_CODE_AMNF;
         }
 
         if (__st & ATA_ER_TK0NF)
         {
-            printf(" Track [0] not found\n");
+            quantum_info(1, " ATA    ", " Track [0] not found");
 
             __error = ATA_ERROR_CODE_TK0NF;
         }
 
         if (__st & ATA_ER_ABRT)
         {
-            printf(" Command Aborted\n");
+            quantum_info(1, " ATA    ", " Command Aborted");
 
             __error = ATA_ERROR_CODE_ABRT;
         }
 
         if (__st & ATA_ER_MCR)
         {
-            printf(" No Media or Media Error\n");
+            quantum_info(1, " ATA    ", " No Media or Media Error");
 
             __error = ATA_ERROR_CODE_MCR;
         }
 
         if (__st & ATA_ER_IDNF)
         {
-            printf(" ID Mark not found\n");
+            quantum_info(1, " ATA    ", " ID Mark not found");
 
             __error = ATA_ERROR_CODE_IDNF;
         }
 
         if (__st & ATA_ER_MC)
         {
-            printf(" No Media or Media Error\n");
+            quantum_info(1, " ATA    ", " No Media or Media Error");
 
             __error = ATA_ERROR_CODE_MC;
         }
 
         if (__st & ATA_ER_UNC)
         {
-            printf(" Uncorrectable Data Error\n");
+            quantum_info(1, " ATA    ", " Uncorrectable Data Error");
 
             __error = ATA_ERROR_CODE_UNC;
         }
 
         if (__st & ATA_ER_BBK)
         {
-            printf(" Bad Sectors\n");
+            quantum_info(1, " ATA    ", " Bad Sectors");
 
             __error = ATA_ERROR_CODE_BBK;
         }
@@ -520,13 +521,13 @@ unsigned char ata_print_error(unsigned int __drive, unsigned char __error)
     {
         /* DRQ Flag is not set as mentioned above in ata_probe_drive() */
 
-        printf(" Null Read\n");
+        quantum_info(1, " ATA    ", " Null Read");
 
         __error = ATA_ERROR_CODE_NULL_READ;
     }
     else if (__error == 4)
     {
-        printf(" Write Protected\n");
+        quantum_info(1, " ATA    ", " Write Protected");
 
         __error = ATA_ERROR_CODE_WRITE_PROTECTED;
     }
@@ -534,12 +535,12 @@ unsigned char ata_print_error(unsigned int __drive, unsigned char __error)
     const char *__ps[] = {"Primary", "Secondary"};
     const char *__mc[] = {"Master", "Child"};
 
-    printf("\n\t-> Error occured in: {%s %s} %s\n", __ps[__ata_devices[__drive].__channel], __mc[__ata_devices[__drive].__drive], __ata_devices[__drive].__model);
+    quantum_info(1, " ATA    ", "\n\t-> Error occured in: {%s %s} %s\n", __ps[__ata_devices[__drive].__channel], __mc[__ata_devices[__drive].__drive], __ata_devices[__drive].__model);
 
     return __error;
 }
 
-unsigned char ata_access_drive(unsigned char __direction, unsigned char __drive, unsigned int __lba, unsigned char __sectors, unsigned int __buffer)
+unsigned char ata_access_drive(unsigned char __direction, unsigned char __drive, unsigned int __lba, unsigned char __sectors, unsigned int* __buffer)
 {
     unsigned char __lba_mode;
     unsigned char __dma;
@@ -693,17 +694,17 @@ unsigned char ata_access_drive(unsigned char __direction, unsigned char __drive,
     return 0;
 }
 
-int ata_read_sectors(unsigned char __drive,  unsigned char __sectors, unsigned int __lba, unsigned int __buffer)
+int ata_read_sectors(unsigned char __drive,  unsigned char __sectors, unsigned int __lba, unsigned int* __buffer)
 {
     if (__drive > ATA_MAX_DEVICES || __ata_devices[__drive].__active == 0)
     {
-        printf("ATA Error: Drive not found\n");
+        quantum_info(1, " ATA    ", "ATA Error: Drive not found, %d", __ata_devices[__drive].__active);
 
         return -1;
     }
     else if (((__lba + __sectors) > __ata_devices[__drive].__size) && (__ata_devices[__drive].__type == IDE_ATA))
     {
-        printf("ATA Error: LBA Address (0x%x) exceeds disk boundary (0x%x)\n", __lba, __ata_devices[__drive].__size);
+        quantum_info(1, " ATA    ", "ATA Error: LBA Address (0x%x) exceeds disk boundary (0x%x)\n", __lba, __ata_devices[__drive].__size);
 
         return -2;
     }
@@ -722,17 +723,17 @@ int ata_read_sectors(unsigned char __drive,  unsigned char __sectors, unsigned i
     return 0;
 }
 
-int ata_write_sectors(unsigned char __drive, unsigned char __sectors, unsigned int __lba, unsigned int __buffer)
+int ata_write_sectors(unsigned char __drive, unsigned char __sectors, unsigned int __lba, unsigned int* __buffer)
 {
     if (__drive > ATA_MAX_DEVICES || __ata_devices[__drive].__active == 0)
     {
-        printf("ATA Error: Drive not found\n");
+        quantum_info(1, " ATA    ", "ATA Error: Drive not found");
 
         return -1;
     }
     else if (((__lba + __sectors) > __ata_devices[__drive].__size) && (__ata_devices[__drive].__type == IDE_ATA))
     {
-        printf("ATA Error: LBA Address (0x%x) exceeds disk boundary (0x%x)\n", __lba, __ata_devices[__drive].__size);
+        quantum_info(1, " ATA    ", "ATA Error: LBA Address (0x%x) exceeds disk boundary (0x%x)\n", __lba, __ata_devices[__drive].__size);
 
         return -2;
     }
@@ -753,7 +754,7 @@ int ata_write_sectors(unsigned char __drive, unsigned char __sectors, unsigned i
 
 int ata_initialize(__pci_device_t *__dev)
 {
-    printf("Initializing ATA Drivers!\n");
+    quantum_info(0, " ATA    ", "Initializing ATA Drivers!");
 
     return 0;
 }

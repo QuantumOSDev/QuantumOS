@@ -150,8 +150,8 @@ void ata_write_buffer(unsigned char __channel, unsigned char __register, unsigne
 unsigned char ata_probe_drive(unsigned char __channel, unsigned char __advanced);
 unsigned char ata_print_error(unsigned int __drive, unsigned char __error);
 
-int ata_read_sectors(unsigned char __drive,  unsigned char __sectors, unsigned int __lba, unsigned int __buffer);
-int ata_write_sectors(unsigned char __drive, unsigned char __sectors, unsigned int __lba, unsigned int __buffer);
+int ata_read_sectors(unsigned char __drive,  unsigned char __sectors, unsigned int __lba, unsigned int* __buffer);
+int ata_write_sectors(unsigned char __drive, unsigned char __sectors, unsigned int __lba, unsigned int* __buffer);
 
 int ata_initialize(__pci_device_t *__dev);
 
