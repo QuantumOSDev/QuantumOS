@@ -63,3 +63,19 @@ unsigned short pio_mminw(unsigned int* addr)
     );
     return ret;
 }
+
+void pio_qinl(unsigned short __register, unsigned int *__buffer, int __quads)
+{
+    for (int i = 0; i < __quads; i++)
+    {
+        __buffer[i] = pio_inl(__register);
+    }
+}
+
+void pio_qoutl(unsigned short __register, unsigned int *__buffer, int __quads)
+{
+    for (int i = 0; i < __quads; i++)
+    {
+        pio_outl(__register, __buffer[i]);
+    }
+}

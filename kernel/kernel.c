@@ -50,8 +50,12 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_syscalls_init();
     quantum_sound_blaster_init();
 
-    // __module_init();
-    // __module_call("QUANTUM_MEMORY_C");
+    printf("KERNEL: Essential systems bootup... [DONE]\n");
+    printf("(Press any key to continue...)\n");
+
+    keyboard_getchar();
+
+    vesa_clear();
 
     quantum_menu();
     

@@ -1,9 +1,10 @@
 #ifndef INIT_H
 #define INIT_H
 
-// #define DEBUG
 #include <quantum/multiboot.h>
 #include <quantum/kernel.h>
+
+//#define DEBUG
 
 int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot);
 

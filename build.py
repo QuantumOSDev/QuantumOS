@@ -22,6 +22,8 @@ for root, dirnames, filenames in os.walk('.'):
 for i in range(len(csources)):
     c = csources[i]
 
+    os.system("mkdir -p build/" + c)
+
     print("[" + str(i + 1) + "/" + str(len(csources)) + "] " + "Compiling: [" + c + "]")
 
     os.system("gcc " + CFLAGS + c + " -o build/" + c + ".o")
@@ -29,11 +31,15 @@ for i in range(len(csources)):
 for i in range(len(ssources)):
     s = ssources[i]
 
-    print("[" + str(i + 1) + "/" + str(len(ssources)) + "] "+ "Compiling: [" + c + "]")
+    os.system("mkdir -p build/" + s)
+
+    print("[" + str(i + 1) + "/" + str(len(ssources)) + "] "+ "Compiling: [" + s + "]")
 
     os.system("nasm " + ASFLAGS + s + " -o build/" + s + ".o")
 
 total = ""
+
+os.system("mkdir -p build/iso/boot/grub/")
 
 for c in csources:
     total += "build/"
@@ -51,6 +57,12 @@ os.system("ld -m elf_i386 -Tconfig/linker.ld -o build/iso/boot/kernel.elf " + to
 os.system("cp -f config/grub.cfg build/iso/boot/grub/")
 os.system("grub-mkrescue -o build/quantumos.iso build/iso")
 
+os.system("grub-mkrescue -o ./build/quantumos.iso ./build/iso")
+
+os.system("grub-mkrescue -o ./build/quantumos.iso ./build/iso")
+
+os.system("grub-mkrescue -o ./build/quantumos.iso ./build/iso")
+
 print("Done!\nRunning kernel...")
 
-os.system("qemu-system-x86_64 -cdrom ./build/quantumos.iso -drive file=ext2.img,format=raw -m 3G -vga vmware -serial stdio -device ac97 ")
+os.system("qemu-system-x86_64 -cdrom ./build/quantumos.iso -drive file=ext2.img,format=raw -m 3G -vga vmware -serial stdio -device ac97")

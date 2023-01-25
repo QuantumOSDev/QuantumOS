@@ -95,9 +95,8 @@ void draw_menu()
 
 void quantum_menu()
 {
-    quantum_info(2, " Menu   ", "Waiting for user decision");
-
     char sc = 0;
+
     draw_menu();
 
     for (;;) 

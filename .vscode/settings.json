@@ -1,15 +1,8 @@
 {
     "files.associations": {
-        "sound_blaster.h": "c",
-        "ethernet.h": "c",
-        "pci.h": "c",
-        "pio.h": "c",
-        "ata.h": "c",
-        "memory.h": "c",
+        "type_traits": "c",
         "print.h": "c",
-        "ac97.h": "c",
-        "init.h": "c",
-        "debug.h": "c"
+        "kmode.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

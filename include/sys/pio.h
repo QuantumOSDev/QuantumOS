@@ -13,4 +13,7 @@ void pio_sleep(void);
 
 unsigned short pio_mminw(unsigned int* addr);
 
+void pio_qinl(unsigned short __register, unsigned int *__buffer, int __quads);
+void pio_qoutl(unsigned short __register, unsigned int *__buffer, int __quads);
+
 #endif

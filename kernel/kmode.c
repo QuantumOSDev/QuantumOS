@@ -8,6 +8,7 @@
 #include <quantum/kmode.h>
 
 #include <drivers/keyboard.h>
+#include <drivers/pci.h>
 
 #include <core/string.h>
 #include <core/print.h>
@@ -15,8 +16,27 @@
 #include <sys/acpi.h>
 #include <sys/cmos.h>
 
+#include <fs/ata.h>
+
 void kmode_initialize(void)
 {
+    printf(KMODE_PROMPT);
+
+    ata_handler(0x1F0, 0x3F6, 0x170, 0x376, 0x000);
+
+    printf("Testing ATA Read\n");
+
+    unsigned int __buffer[ATA_SECTOR_SIZE];
+
+    ata_read_sectors(0, 1, 1, __buffer);
+
+    for (int i = 0; i < ATA_SECTOR_SIZE; i++)
+    {
+        printf("0x%x ", __buffer[i]);
+    }
+
+    printf("\n");
+
     while (1)
     {
         printf(KMODE_PROMPT);

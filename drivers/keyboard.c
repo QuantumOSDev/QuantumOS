@@ -32,7 +32,7 @@ void keyboard_set_key_map(char* key_map)
     kmemcpy(keyboard_map, key_map, 128);
 }
 
-char* keyboard_get_key_map()
+char *keyboard_get_key_map()
 {
     return keyboard_map;
 }
@@ -132,6 +132,7 @@ char *keyboard_getchar_until(char __c)
             }
 
             __input = keyboard_getchar();
+
             continue;
         }
 
@@ -281,5 +282,6 @@ static void keyboard_handler(__registers_t *__regs)
 void keyboard_enable()
 {
     quantum_info(0, "Keyboard", "Initializing keyboard drivers");
+
     isr_register_interrupt_handler(IRQ_BASE + 1, keyboard_handler);
 }
