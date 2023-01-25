@@ -48,7 +48,8 @@ for s in ssources:
 print("\nLinking kernel...\n")
 
 os.system("ld -m elf_i386 -Tconfig/linker.ld -o build/iso/boot/kernel.elf " + total)
-os.system("cp config/grub.cfg build/iso/boot/grub/")
+os.system("cp -f config/grub.cfg build/iso/boot/grub/")
+os.system("grub-mkrescue -o build/quantumos.iso build/iso")
 
 print("Done!\nRunning kernel...")
 

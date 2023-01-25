@@ -9,6 +9,8 @@
 #include <sys/pio.h>
 #include <sys/pit.h>
 
+#include <drivers/debug.h>
+
 #include <quantum/init.h>
 
 #include <core/stdlib.h>
@@ -19,14 +21,6 @@ static BOOL machine_support_acpi = TRUE;
 
 static rsdp_t* rsdp = NULL;
 static rsdp_t* rsdt = NULL;
-
-static unsigned long* PM1a_CNT;
-static unsigned long* PM1b_CNT;
-
-static unsigned short SLP_TYPa;
-static unsigned short SLP_TYPb;
-static unsigned short SLP_EN;
-static unsigned short SCI_EN;
 
 /* Took from limine-bootloader/limine, it did hep me a lot, thanks */
 unsigned char acpi_checksum(void*ptr, unsigned long size)
@@ -67,6 +61,26 @@ void* acpi_get_rsdp(void)
     return NULL;
 }
 
+BOOL is_rsdp_header_validate(rsdp_t* rsdp_header)
+{
+    signed char* rsdp_header_ptr = (signed char*)rsdp_header;
+    int checksum = 0;
+
+    for (int i = 0; i < sizeof(rsdp_t); i++)
+        checksum += (int)rsdp_header_ptr[i];
+
+    if ((checksum & 0x000000ff) != 0)
+        return FALSE;
+
+    if (rsdp->revision == 0)
+        return TRUE;
+    else if (rsdp->revision != 2)
+        return FALSE;
+    
+    // TODO: check chcecksum of extended rsdp part
+    return FALSE;
+}
+
 void quantum_acpi_init()
 {
     rsdp = (rsdp_t*)acpi_get_rsdp();
@@ -77,7 +91,14 @@ void quantum_acpi_init()
         return;
     }
 
-    quantum_info(0, " ACPI   ", "Successfully initialized A CPI");
+    if (is_rsdp_header_validate(rsdp) == FALSE)
+    {
+        quantum_info(1, " ACPI   ", "RSDP Header is not validate");
+        machine_support_acpi = FALSE;
+        return;
+    }
+
+    quantum_info(0, " ACPI   ", "Successfully initialized ACPI");
 }
 
 void acpi_reboot(void)
@@ -107,13 +128,13 @@ __rescue_loop:
 void acpi_shutdown()
 {
     // If machine supports ACPI, shutdown with ACPI
-    if (machine_support_acpi == TRUE)
+    /* if (machine_support_acpi == TRUE)
     {
         // acpi_enable();
         pio_outs((unsigned int)PM1a_CNT, SLP_TYPa | SLP_EN);
         if (PM1b_CNT != 0)
             pio_outs((unsigned int)PM1b_CNT, SLP_TYPb | SLP_EN);
-    }
+    } */
 
     printf("Something gone wrong while trying to shutdown with ACPI\n");
     printf("Wait 1s to shutdown\n");

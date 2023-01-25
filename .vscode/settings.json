@@ -8,7 +8,8 @@
         "memory.h": "c",
         "print.h": "c",
         "ac97.h": "c",
-        "init.h": "c"
+        "init.h": "c",
+        "debug.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
