@@ -57,11 +57,6 @@ os.system("ld -m elf_i386 -Tconfig/linker.ld -o build/iso/boot/kernel.elf " + to
 os.system("cp -f config/grub.cfg build/iso/boot/grub/")
 os.system("grub-mkrescue -o build/quantumos.iso build/iso")
 
-os.system("grub-mkrescue -o ./build/quantumos.iso ./build/iso")
-
-os.system("grub-mkrescue -o ./build/quantumos.iso ./build/iso")
-
-os.system("grub-mkrescue -o ./build/quantumos.iso ./build/iso")
 
 print("Done!\nRunning kernel...")
 
