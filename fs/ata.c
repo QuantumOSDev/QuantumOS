@@ -724,7 +724,31 @@ int ata_read_sectors(unsigned char __drive,  unsigned char __sectors, unsigned i
 
 int ata_write_sectors(unsigned char __drive, unsigned char __sectors, unsigned int __lba, unsigned int __buffer)
 {
+    if (__drive > ATA_MAX_DEVICES || __ata_devices[__drive].__active == 0)
+    {
+        printf("ATA Error: Drive not found\n");
 
+        return -1;
+    }
+    else if (((__lba + __sectors) > __ata_devices[__drive].__size) && (__ata_devices[__drive].__type == IDE_ATA))
+    {
+        printf("ATA Error: LBA Address (0x%x) exceeds disk boundary (0x%x)\n", __lba, __ata_devices[__drive].__size);
+
+        return -2;
+    }
+    else
+    {
+        unsigned char __err;
+
+        if (__ata_devices[__drive].__type == IDE_ATA)
+        {
+            __err = ata_access_drive(ATA_WRITE, __drive, __lba, __sectors, __buffer);
+        }
+
+        return ata_print_error(__drive, __err);
+    }
+
+    return 0;
 }
 
 int ata_initialize(__pci_device_t *__dev)
