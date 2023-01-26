@@ -88,19 +88,22 @@ char* ext2_creator_os(unsigned int creator_os)
     }
 }
 
-void ext2_read_inode_metadata(__ext2_inode_t* inode, unsigned int inode_idx)
+void ext2_read_inode_metadata(__ext2_inode_t* inode__, unsigned int inode)
 {
-    /* Idk what is happening here */
-    unsigned int group = inode_idx / ext2_fs->__sb->__ginodes;
-    unsigned int inode_table_block = ext2_fs->__bgs_desc[group].__i_tables;
-    unsigned int idx_in_group = inode_idx - group * ext2_fs->__sb->__ginodes;
-    unsigned int block_offset = (idx_in_group - 1) * ext2_fs->__sb->__inode_size / (ext2_fs->__sb->__block_size == 0 ? 1 : ext2_fs->__sb->__block_size);
-    unsigned int offset_in_block = (idx_in_group - 1) - block_offset * (ext2_fs->__sb->__block_size / ext2_fs->__sb->__inode_size);
+	unsigned int group = ((inode - 1) / ext2_fs->__sb->__ginodes + 1);
+	unsigned int index = ((inode - 1) % ext2_fs->__sb->__ginodes);
+	
+	__ext2_bg_desc_t* inode_bgdesc;
+    ata_read_sectors(HARDDISK, ((group - 1) * ext2_fs->__sb->__gblocks + 1) + 3, 2, (unsigned int*)inode_bgdesc);
+	
+	unsigned int  inode_table_start = inode_bgdesc->__i_tables;
+	unsigned int  containing_block = (index * ext2_fs->__inode_size) / (1024 << ext2_fs->__sb->__block_size);
+	unsigned int* inode_tmp = (unsigned int*)kmalloc(sizeof(inode_tmp));
+	
+    ata_read_sectors(HARDDISK, ((group - 1) * ext2_fs->__sb->__gblocks + 1) + 3, 2, (unsigned int*)inode_bgdesc);
 
-    char* block_buf = (char*)kmalloc(ext2_fs->__sb->__block_size);
-    ata_read_sectors(HARDDISK, inode_table_block + block_offset, 2, block_buf);
-    kmemcpy(inode, block_buf + offset_in_block * ext2_fs->__sb->__inode_size, ext2_fs->__sb->__inode_size);
-    kfree(block_buf);
+	inode__ = (__ext2_inode_t*)((unsigned int) inode_tmp + (index % (1024 / ext2_fs->__inode_size)) * ext2_fs->__inode_size);
+	unsigned int index_in_block = inode % 4;
 }
 
 void quantum_ext2_init()
@@ -125,27 +128,9 @@ void quantum_ext2_init()
     ext2_fs->__bpg = ext2_fs->__sb->__gblocks;
     ext2_fs->__inode_size = ext2_fs->__sb->__inode_size;
 
-    ext2_fs->__total_groups = ext2_fs->__sb->__nblocks / ext2_fs->__bpg;
-    if (ext2_fs->__bpg * ext2_fs->__total_groups < ext2_fs->__total_groups)
-    {
-        ext2_fs->__total_groups++;
-    }
-
-    ext2_fs->__bgd_blocks = (ext2_fs->__total_groups * sizeof(__ext2_bg_desc_t)) / ext2_fs->__bsize;
-    if (ext2_fs->__bgd_blocks * ext2_fs->__sb->__block_size < ext2_fs->__bpg * sizeof(__ext2_bg_desc_t))
-    {
-        ext2_fs->__bgd_blocks++;
-    }
-
-    ext2_fs->__bgs_desc = (__ext2_bg_desc_t*)kcalloc(sizeof(__ext2_bg_desc_t), ext2_fs->__bgd_blocks * ext2_fs->__sb->__block_size);
-    for (int i = 0; i < ext2_fs->__bgd_blocks; i++)
-    {
-        ata_read_sectors(HARDDISK, 2, 2, (unsigned int*)(ext2_fs->__bgs_desc + i * ext2_fs->__sb->__block_size));
-    }
-
-    ext2_fs->__root_inode = (__ext2_inode_t*)kcalloc(sizeof(__ext2_inode_t), 1);
     ext2_read_inode_metadata(ext2_fs->__root_inode, 2);
 
     quantum_info(0, " Ext2   ", "Successfully initialized Ext2 filesystem");
     quantum_info(0, " Ext2   ", "File system has been created on: %s", ext2_creator_os(ext2_fs->__sb->__os_id));
+    quantum_info(0, " Ext2   ", "Root inode perms: %d", ext2_fs->__root_inode);
 }
