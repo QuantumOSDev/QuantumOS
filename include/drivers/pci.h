@@ -1,74 +1,78 @@
 #ifndef PCI_H
 #define PCI_H
 
-#define PCI_VENDOR_OFFSET         0x0
-#define PCI_DEVICE_ID_OFFSET      0x2
-#define PCI_COMMAND_OFFSET        0x4
-#define PCI_INTERRUPT_LINE_OFFSET 0x3C
-#define PCI_INTERRUPT_PIN_OFFSET  0x3E
-
-#define PCI_BAR_MEM  0x0
-#define PCI_BAR_IO   0x1
-#define PCI_BAR_NONE 0x3
-
-struct __pci_device_s;
-
-typedef struct __pci_device_s __pci_device_t;
-
-typedef int (* __pci_device_initializer_t) (__pci_device_t *__dev);
-
-struct __pci_device_s
+typedef union __pci_device
 {
-    unsigned short __bus;
-    unsigned short __device;
-    unsigned short __function;
+    unsigned int __bits;
 
-    unsigned short __vendor_id;
-    unsigned short __device_id;
-    unsigned short __command;
-    
-    unsigned char __class_code;
-    unsigned char __subclass;
-    unsigned char __prog_if;
-    unsigned char __rev_id;
-    unsigned char __header_type;
+    struct {
+        unsigned int __always_zero    : 2;
+        unsigned int __field_num      : 6;
+        unsigned int __function_num   : 3;
+        unsigned int __device_num     : 5;
+        unsigned int __bus_num        : 8;
+        unsigned int __reserved       : 7;
+        unsigned int __enable         : 1;
+    };
+} __pci_device_t;
 
-    void *__header;
+/* PIO Ports */
+#define PCI_CONFIG_ADDRESS  0xCF8
+#define PCI_CONFIG_DATA     0xCFC
 
-    __pci_device_initializer_t __driver;
+/* Config Address Register */
 
-    const char *__name;
+/* Offset */
+#define PCI_VENDOR_ID            0x00
+#define PCI_DEVICE_ID            0x02
+#define PCI_COMMAND              0x04
+#define PCI_STATUS               0x06
+#define PCI_REVISION_ID          0x08
+#define PCI_PROG_IF              0x09
+#define PCI_SUBCLASS             0x0a
+#define PCI_CLASS                0x0b
+#define PCI_CACHE_LINE_SIZE      0x0c
+#define PCI_LATENCY_TIMER        0x0d
+#define PCI_HEADER_TYPE          0x0e
+#define PCI_BIST                 0x0f
+#define PCI_BAR0                 0x10
+#define PCI_BAR1                 0x14
+#define PCI_BAR2                 0x18
+#define PCI_BAR3                 0x1C
+#define PCI_BAR4                 0x20
+#define PCI_BAR5                 0x24
+#define PCI_INTERRUPT_LINE       0x3C
+#define PCI_SECONDARY_BUS        0x09
 
-    struct __pci_device_s *__next;
-};
+/* Device Type */
+#define PCI_HEADER_TYPE_DEVICE  0
+#define PCI_HEADER_TYPE_BRIDGE  1
+#define PCI_HEADER_TYPE_CARDBUS 2
+#define PCI_TYPE_BRIDGE 0x0604
+#define PCI_TYPE_SATA   0x0106
+#define PCI_NONE 0xFFFF
 
-typedef struct
-{
-    unsigned int __BAR[6];
+#define DEVICE_PER_BUS           32
+#define FUNCTION_PER_DEVICE      32
 
-    unsigned char __interrupt_line;
-    unsigned char __interrupt_pin;
-    unsigned char __min_grant;
-    unsigned char __max_latency;
-} __pci_common_header_t;
+unsigned int pci_read(__pci_device_t __device, unsigned int __field);
+unsigned int pci_get_device_type(__pci_device_t __device);
+unsigned int pci_get_secondary_bus(__pci_device_t __device);
+unsigned int pci_reach_end(__pci_device_t __device);
 
-#define GET_COMMON_HEADER_PCI(pci_header, dev)                                 \
-    __pci_common_header_t* pci_header = (__pci_common_header_t*)dev->__header; \
+__pci_device_t pci_scan_function(unsigned short __vendor_id, unsigned short __device_id, unsigned int __device,
+                                 unsigned int __bus, unsigned int __function, int __device_type);
 
-#define GET_BAR_FROM_PCI_HEADER(pci_header, bar0, bar1)                        \
-    unsigned short bar0 = (unsigned short)pci_header->__BAR[0] & 0xFFF0;       \
-    unsigned short bar1 = (unsigned short)pci_header->__BAR[1] & 0xFFF0;       \
+__pci_device_t pci_scan_device(unsigned short __vendor_id, unsigned short __device_id, unsigned int __bus,
+                               unsigned int __device, int __device_type);
 
-void pci_write_dword(unsigned short __bus, unsigned short __slot, unsigned short __function,
-                     unsigned short __offset, unsigned int __value);
+__pci_device_t pci_scan_bus(unsigned short __vendor_id, unsigned short __device_id, unsigned int __bus,
+                            int __device_type);
 
-__pci_device_t *pci_find_by_class(int __class, int __subclass, int __prog_if);
-__pci_device_t *pci_find_by_vendor(int __vendor, int __device);
+__pci_device_t pci_get_device(unsigned short __vendor_id, unsigned short __device_id, int __device_type);
 
-unsigned int pci_get_bar_by_index(__pci_device_t *__device, unsigned int __index);
-unsigned int pci_get_bar_by_type(__pci_device_t *__device, unsigned char __type);
+void pci_write(__pci_device_t __device, unsigned int __field, unsigned int __value);
 
 int pci_initialize(void);
-int pci_initialize_devices(void);
 
 #endif
