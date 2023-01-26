@@ -47,7 +47,8 @@ void print_set_color_bg(int r, int g, int b)
     global_print_bg_b = b;
 }
 
-void set_default_pos() {
+void set_default_pos()
+{
     global_print_vec_x = 2;
     global_print_vec_y = 2;
 }
@@ -78,7 +79,8 @@ void insert_newline()
     global_print_vec_x = 2;
     global_print_vec_y += 22;
 
-    if (global_print_vec_y >= 720) {
+    if (global_print_vec_y >= 720)
+{
         vesa_clear();
         global_print_vec_y = 0;
     }

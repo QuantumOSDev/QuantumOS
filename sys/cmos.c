@@ -269,7 +269,8 @@ date_t get_date_cmos()
     date.century     = 20; // em change in 2100 ;)
 
     unsigned char register_b = get_rtc_register(RTC_REGISTER_B);
-    if  (!(register_b & 0x04)) {
+    if  (!(register_b & 0x04))
+{
         date.second = (date.second & 0x0F) + ((date.second / 16) * 10);
         date.minute = (date.minute & 0x0F) + ((date.minute / 16) * 10);
         date.hour = ( (date.hour & 0x0F) + (((date.hour & 0x70) / 16) * 10) ) | (date.hour & 0x80);

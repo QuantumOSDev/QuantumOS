@@ -62,12 +62,14 @@ void set_task_structure(task_t* task, task_main_t main, unsigned int flags, unsi
     task->next = 0;
 }
 
-void create_task(task_t* task, task_main_t main, unsigned int flags, unsigned int *pagedir) {
+void create_task(task_t* task, task_main_t main, unsigned int flags, unsigned int *pagedir)
+{
     reset_registers_task(task);
     set_task_structure(task, main, flags, pagedir);
 }
  
-void fork() {
+void fork()
+{
     task_t* last = current_task;
     current_task = current_task->next;
 

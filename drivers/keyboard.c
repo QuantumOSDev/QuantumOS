@@ -39,7 +39,8 @@ char *keyboard_get_key_map()
 
 char keyboard_alternate(char ch)
 {
-    switch(ch) {
+    switch(ch)
+{
         case '`': return '~';
         case '1': return '!';
         case '2': return '@';
@@ -138,7 +139,8 @@ char *keyboard_getchar_until(char __c)
 
         printf("%c", __input);
 
-        kstrcat(__result, (char[]) {__input, 0});
+        kstrcat(__result, (char[])
+{__input, 0});
 
         __input = keyboard_getchar();
     }

@@ -164,7 +164,8 @@ void quantum_keyboard_init(void)
     keyboard_enable();
 }
 
-void display_kernel_memory_map(KERNEL_MEMORY_MAP *kmap) {
+void display_kernel_memory_map(KERNEL_MEMORY_MAP *kmap)
+{
     printf("kernel:\n");
     printf("  kernel-start: 0x%x, kernel-end: 0x%x, TOTAL: %d bytes\n",
            kmap->__kernel.__kernel_start, kmap->__kernel.__kernel_end, kmap->__kernel.__kernel_len);

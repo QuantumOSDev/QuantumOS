@@ -441,12 +441,14 @@ void vfs_db_listdir(char *__name)
     printf("\n");
 }
 
-__vfs_node_t *vfs_get_mountpoint_recur(char **__path, __gtreenode_t *__subroot) {
+__vfs_node_t *vfs_get_mountpoint_recur(char **__path, __gtreenode_t *__subroot)
+{
     int __found = 0;
 
     char *__curr_token = strsep(__path, "/");
 
-    if (__curr_token == NULL || !strcmp(__curr_token, "")) {
+    if (__curr_token == NULL || !strcmp(__curr_token, ""))
+{
         struct __vfs_entry *__ent = (struct __vfs_entry *) __subroot->__val;
 
         return __ent->__file;
@@ -458,7 +460,8 @@ __vfs_node_t *vfs_get_mountpoint_recur(char **__path, __gtreenode_t *__subroot) 
 
         struct __vfs_entry *__ent = (struct __vfs_entry *) (__tchild->__val);
 
-        if (strcmp(__ent->__name, __curr_token) == 0) {
+        if (strcmp(__ent->__name, __curr_token) == 0)
+{
             __found = 1;
 
             __subroot = __tchild;
@@ -467,7 +470,8 @@ __vfs_node_t *vfs_get_mountpoint_recur(char **__path, __gtreenode_t *__subroot) 
         }
     }
 
-    if (!__found) {
+    if (!__found)
+{
         *__path = __curr_token;
 
         return ((struct __vfs_entry *) (__subroot->__val))->__file;

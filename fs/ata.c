@@ -191,7 +191,8 @@ void ata_handler(unsigned int __prim_channel_base_addr, unsigned int __prim_chan
         {
             quantum_info(0, " ATA    ", "Drive Detected: ");
             quantum_info(0, " ATA    ", "\t->\tModel: %s", __ata_devices[i].__model);
-            quantum_info(0, " ATA    ", "\t->\tType: %s", (const char *[]) {"ATA", "ATAPI"}[__ata_devices[i].__type]);
+            quantum_info(0, " ATA    ", "\t->\tType: %s", (const char *[])
+{"ATA", "ATAPI"}[__ata_devices[i].__type]);
             quantum_info(0, " ATA    ", "\t->\tSize: %d", __ata_devices[i].__size);
         }
     }
@@ -686,7 +687,8 @@ unsigned char ata_access_drive(unsigned char __direction, unsigned char __drive,
             __buffer += ATA_SECTOR_SIZE;
         }
 
-        ata_write_register(__channel, ATA_REG_COMMAND, (char[]) {ATA_CMD_CACHE_FLUSH, ATA_CMD_CACHE_FLUSH, ATA_CMD_CACHE_FLUSH_EXT}[__lba_mode]);
+        ata_write_register(__channel, ATA_REG_COMMAND, (char[])
+{ATA_CMD_CACHE_FLUSH, ATA_CMD_CACHE_FLUSH, ATA_CMD_CACHE_FLUSH_EXT}[__lba_mode]);
         ata_probe_drive(__channel, 0);  // Polling.
     }
 

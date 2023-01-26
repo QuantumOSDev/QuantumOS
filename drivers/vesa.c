@@ -77,9 +77,11 @@ void vesa_draw_circle(int center_x, int center_y, int radius, int r, int g, int 
     vesa_put_pixel(center_x + y, center_y - x, r, g, b);
     vesa_put_pixel(center_x - y, center_y - x, r, g, b);
 
-    while (y >= x) {
+    while (y >= x)
+{
         x++;
-        if (d > 0) {
+        if (d > 0)
+{
             y--;
             d = d + 4 * (x - y) + 10;
         } else
@@ -103,9 +105,11 @@ void vesa_draw_line(int start_x, int start_y, int end_x, int end_y, int r, int g
     int d = 2 * dy - dx;
     int y = start_y;
 
-    for (int x = start_x; x <= end_x; x++) {
+    for (int x = start_x; x <= end_x; x++)
+{
         vesa_put_pixel(x, y, r, g, b);
-        if (d > 0) {
+        if (d > 0)
+{
             y = y + 1;
             d = d - 2 * dx;
         }

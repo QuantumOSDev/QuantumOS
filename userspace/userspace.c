@@ -31,5 +31,6 @@ void userspace_initialize(void)
     vesa_clear();
     set_default_pos();
     
-    for (;;) {}
+    for (;;)
+{}
 }

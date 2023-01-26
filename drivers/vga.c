@@ -30,11 +30,13 @@ int vga_get_cursor(void)
     return __offset * 2;
 }
 
-int vga_row_from_offset(int __offset) {
+int vga_row_from_offset(int __offset)
+{
     return __offset / (2 * SCREEN_SIZE_COLS);
 }
 
-int vga_line_from_offset(int __col, int __row) {
+int vga_line_from_offset(int __col, int __row)
+{
     return 2 * (__row * SCREEN_SIZE_COLS + __col);
 }
 

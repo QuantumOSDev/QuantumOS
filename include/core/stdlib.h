@@ -17,4 +17,14 @@ int kstrlen(const char *__data);
 
 void kstrcat(char *__dest, const char *__src);
 
+int isalpha(char c);
+
+int isdigit(char c);
+
+int isspace(char c);
+
+void snprintf(char* buf, int buf_size, char* format, ...);
+
+void sprintf(char* buf, char* format, ...);
+
 #endif
