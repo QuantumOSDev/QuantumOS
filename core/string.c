@@ -1,5 +1,5 @@
 /*
- * QuantumOS Copyright (c) 2021-2022
+ * QuantumOS Copyright (c) 2022-2023
  *  - Solindek <solindeklive.biznes@gmail.com>
  *  - CodeSploit <samuelthart@pm.me>
  */
@@ -17,6 +17,25 @@ int strlen(const char* str)
     while (str[i] != '\0')
         i++;
     return i;
+}
+
+void hex_double(char* result, unsigned int value)
+{
+    strcpy(result, "0x0000000");
+
+    if (value == 0)
+        return result;
+
+    int index = 9;
+    while (value != 0)
+    {
+        if ((value % 16) < 10)
+            result[index] = '0' + (value % 16);
+        else
+            result[index] = 'a' + ((value % 16) - 10);
+        value >>= 4;
+        index--;
+    }
 }
 
 char to_uppercase(char c)

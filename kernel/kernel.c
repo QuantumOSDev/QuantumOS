@@ -1,5 +1,5 @@
 /*
- * QuantumOS Copyright (c) 2021-2022
+ * QuantumOS Copyright (c) 2022-2023
  *  - Solindek <solindeklive.biznes@gmail.com>
  *  - CodeSploit <samuelthart@pm.me>
  */
@@ -19,6 +19,7 @@
 
 #include <sys/memory.h>
 #include <sys/paging.h>
+#include <sys/ksyms.h>
 #include <sys/task.h>
 #include <sys/acpi.h>
 #include <sys/cmos.h>
@@ -37,6 +38,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_gdt_init();
     quantum_idt_init();
     quantum_pmm_init(addr);
+    quantum_ksyms_init(addr);
     quantum_memory_init();
     quantum_paging_init();
     quantum_keyboard_init();

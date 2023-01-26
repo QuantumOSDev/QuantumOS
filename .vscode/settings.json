@@ -3,6 +3,11 @@
         "ata.h": "c",
         "ext2.h": "c",
         "stdlib.h": "c",
-        "memory.h": "c"
+        "memory.h": "c",
+        "debug.h": "c",
+        "print.h": "c",
+        "string.h": "c",
+        "list.h": "c",
+        "kpanic.h": "c"
     }
 }

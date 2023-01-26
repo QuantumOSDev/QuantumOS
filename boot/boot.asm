@@ -47,5 +47,4 @@ _start:
     push eax
     
     call quantum_kernel_init
-loop:
-    jmp loop
+    jmp $

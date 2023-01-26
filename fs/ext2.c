@@ -1,5 +1,6 @@
 /*
- * QuantumOS Copyright (c) 2021-2022
+ * QuantumOS Copyright (c) 2022-2023
+ *  - Solindek <solindeklive.biznes@gmail.com>
  *  - CodeSploit <samuelthart@pm.me>
  */
 
@@ -92,6 +93,7 @@ ext2_blockgroupdesc_t* ext2_read_bgd(unsigned int bgd_index)
     int bgd_disk_sector = bgd_offset + sizeof(ext2_blockgroupdesc_t) * bgd_index;
     
     ata_read_sectors(HARDDISK, bgd_disk_sector, 2, (unsigned int*)bgd_return);
+    return bgd_return;
 }
 
 ext2_inode_t* ext2_read_inode(unsigned int inode_offset)
@@ -102,13 +104,15 @@ ext2_inode_t* ext2_read_inode(unsigned int inode_offset)
 
     ext2_blockgroupdesc_t* bgdesc = ext2_read_bgd(block_group);
 
-	unsigned int* inode_tmp = kmalloc(sizeof(unsigned int*));
-	ata_read_sectors(HARDDISK, 2 * (bgdesc->inodetable + containing_block), 2, inode_tmp);
-	
+	// ext2_inode_t* inode;
+	// unsigned int* inode_tmp = kmalloc(sizeof(unsigned int*));
+	// ata_read_sectors(HARDDISK, 2 * (bgdesc->inodetable + containing_block), 2, inode_tmp);
+	// inode = (ext2_inode_t*)((unsigned int)inode_tmp + (index % (1024 / ext2_fs->superblock->inode_size)) * ext2_fs->superblock->inode_size);
+
+    // Look at this shit
 	ext2_inode_t* inode;
-	inode = (ext2_inode_t*)((unsigned int)inode_tmp + (index % (1024 / ext2_fs->superblock->inode_size)) * ext2_fs->superblock->inode_size);
-    // int inode_disk_sector = (bgdesc->inodetable * (1024UL << ext2_fs->superblock->log2block_size) + ext2_fs->superblock->inode_size * index);
-    // ata_read_sectors(HARDDISK, inode_disk_sector, 2, (unsigned int*)inode);
+    int inode_disk_sector = (bgdesc->inodetable * (1024UL << ext2_fs->superblock->log2block_size) + ext2_fs->superblock->inode_size * index);
+    ata_read_sectors(HARDDISK, inode_disk_sector, 2, (unsigned int*)inode);
 
     quantum_info(0, " Ext2   ", "Inode Type: 0x%x, Inode UID: 0x%x, Inode Block 0: %d",
         inode->perms, inode->uid, inode->blocks[0]);
@@ -137,6 +141,4 @@ void quantum_ext2_init()
 
     quantum_info(0, " Ext2   ", "Successfully initialized Ext2 filesystem");
     quantum_info(0, " Ext2   ", "File system has been created on: %s", ext2_creator_os(ext2_fs->superblock->os_id));
-
-    // ext2_inode_t inode_first
 }

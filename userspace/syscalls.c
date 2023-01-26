@@ -1,5 +1,5 @@
 /*
- * QuantumOS Copyright (c) 2021-2022
+ * QuantumOS Copyright (c) 2022-2023
  *  - Solindek <solindeklive.biznes@gmail.com>
  */
 
