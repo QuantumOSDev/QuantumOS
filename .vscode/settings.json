@@ -1,10 +1,6 @@
 {
     "files.associations": {
-        "type_traits": "c",
-        "print.h": "c",
-        "kmode.h": "c",
-        "pci.h": "c",
+        "ata.h": "c",
         "ext2.h": "c"
-    },
-    "C_Cpp.errorSquiggles": "disabled"
+    }
 }

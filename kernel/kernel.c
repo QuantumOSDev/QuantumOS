@@ -49,6 +49,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_time_init(TIME_ZONES_UTC_PLUS_1); 
     quantum_syscalls_init();
     quantum_sound_blaster_init();
+    ata_handler(0x1F0, 0x3F6, 0x170, 0x376, 0x000);
     quantum_ext2_init();
 
     printf("KERNEL: Essential systems bootup... [DONE]\n");

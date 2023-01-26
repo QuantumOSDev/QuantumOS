@@ -22,8 +22,6 @@ void kmode_initialize(void)
 {
     printf(KMODE_PROMPT);
 
-    ata_handler(0x1F0, 0x3F6, 0x170, 0x376, 0x000);
-
     printf("Testing ATA Read\n");
 
     unsigned int __buffer[ATA_SECTOR_SIZE];

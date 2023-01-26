@@ -11,55 +11,82 @@
 #define EXT2_CREATOR_ID_FREEBSD  3
 #define EXT2_CREATOR_ID_OTHER    4
 
+#define EXT2_FILE_SYSTEM_CLEAN   1
+#define EXT2_FILE_SYSTEM_ERROR   2
+
+#pragma pack(push)
+#pragma push(1)
+
+typedef struct __ext2_optional_features_flags {
+    unsigned char preallocate_for_directories : 1;
+    unsigned char afs_server_inodes : 1;
+    unsigned char has_journaling : 1;
+    unsigned char inodes_have_extended_attributes : 1;
+    unsigned char can_be_resized : 1;
+    unsigned char directories_use_hash_index : 1;
+} __ext2_optional_features_flags;
+
+typedef struct __ext2_required_features_flags {
+    unsigned char compressed : 1;
+    unsigned char directories_has_types : 1;
+    unsigned char needs_to_replay_journal : 1;
+    unsigned char uses_journal_device : 1;
+} __ext2_required_features_flags;
+
+typedef struct __ext2_read_only_features_flags {
+    unsigned char sparse_sb_and_gdt : 1;
+    unsigned char uses_64bit_file_size : 1;
+    unsigned char directories_contents_are_binary_tree : 1;
+} __ext2_read_only_features_flags;
+
 typedef struct __ext2_superblock_t
 {
-    unsigned int __icount;
-    unsigned int __bcount;
-    unsigned int __rbcount;
-    unsigned int __fbcount;
-    unsigned int __first_db_lock;
-    unsigned int __log_bsize;
-    unsigned int __log_fsize;
-    unsigned int __bpg;
-    unsigned int __fpg;
-    unsigned int __ipg;
+    unsigned int __ninodes;
+    unsigned int __nblocks;
+    unsigned int __nrblocks;
+    unsigned int __free_blocks;
+    unsigned int __free_inodes;
+    unsigned int __dblock;
+    unsigned int __block_size;
+    unsigned int __frag_size;
+    unsigned int __gblocks;
+    unsigned int __gfrags;
+    unsigned int __ginodes;
     unsigned int __mtime;
     unsigned int __wtime;
 
-    unsigned short __mnt_count;
-    unsigned short __max_mnt_count;
-    unsigned short __magic;
-    unsigned short __state;
-    unsigned short __beh;
-    unsigned short __minrev;
+    unsigned short __times_mounted; 
+    unsigned short __allowed_times_mounted;
+    unsigned short __ext2_signature;
+    unsigned short __filesystem_state;
+    unsigned short __on_error;
+    unsigned short __minor_version;
+    unsigned int   __last_fsck;
+    unsigned int   __time_between_fsck; 
+    unsigned int   __os_id;
+    unsigned int   __major_version;
+    unsigned short __uid;
+    unsigned short __gid;
 
-    unsigned int __last_fsck;
-    unsigned int __fsckintv;
-    unsigned int __creator;
-    unsigned int __rev;
-
-    unsigned short __ruid;
-    unsigned short __rgid;
-
-    unsigned int __first_ino;
-
+    unsigned int   __first_non_reserved_inode;
     unsigned short __inode_size;
-    unsigned short __block_group_nr;
+    unsigned short __sb_block_group;
 
-    unsigned int __features_incompat;
-    unsigned int __features_rocompat;
+    __ext2_required_features_flags   __optional_features;
+    __ext2_required_features_flags   __required_features;
+    __ext2_read_only_features_flags  __read_only_features;
 
-    unsigned char __uuid[16];
-
-    char __vname[16];
-    char __fsmnt[16];
-
-    unsigned int __algo;
-
-    unsigned char __prealloc;
-    unsigned char __dir_prealloc;
-
-    unsigned short __reserved_ngbd;
+    unsigned char  __fsid[16];
+    unsigned char  __name[16];
+    unsigned char  __path_last_mounted_to[64];
+    unsigned int   __compression_algorithms;
+    unsigned char  __blocks_to_preallocate_for_files;
+    unsigned char  __blocks_to_preallocate_for_directories;
+    unsigned short ____unused__;
+    unsigned char  __jid[16];
+    unsigned int   __jinode;    
+    unsigned int   __jdevice;  
+    unsigned int   __head_of_orphan_inode_list;  
 } __ext2_superblock_t;
 
 typedef struct __ext2_bg_desc_t
@@ -135,11 +162,17 @@ typedef struct __ext2_block_buf_t
     unsigned long __block_addr;
 
     unsigned char *__buffer;
-}  __ext2_block_buf_t;
+} __ext2_block_buf_t;
 
 typedef struct __ext2_fs_t
 {
-    struct __ext2_superblock_t __sb;
+    __ext2_superblock_t* __sb;
+    __ext2_bg_desc_t* __bgs_desc;
+
+    unsigned int __bgd_blocks;
+    unsigned int __total_groups;
+
+    __ext2_inode_t* __root_inode;
 
     unsigned int __bsize;
     unsigned int __igp;
@@ -157,7 +190,9 @@ typedef struct __ext2_fs_t
     struct __ext2_block_buf_t __double_indirect_buf;
 } __ext2_fs_t;
 
-void ext2_superblock_read();
+void ext2_read_superblock(__ext2_superblock_t* ext2_superblock);
+
+char* ext2_creator_os(unsigned int creator_os);
 
 void quantum_ext2_init();
 

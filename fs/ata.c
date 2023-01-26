@@ -187,13 +187,12 @@ void ata_handler(unsigned int __prim_channel_base_addr, unsigned int __prim_chan
 
     for (i = 0; i < 4; i++)
     {
-        quantum_info(1, " ATA    ", "i: %d, active: %d", i, __ata_devices[i].__active);
         if (__ata_devices[i].__active == 1)
         {
             quantum_info(0, " ATA    ", "Drive Detected: ");
-            quantum_info(0, " ATA    ", "\t->\tModel: %s\n", __ata_devices[i].__model);
-            quantum_info(0, " ATA    ", "\t->\tType: %s\n", (const char *[]) {"ATA", "ATAPI"}[__ata_devices[i].__type]);
-            quantum_info(0, " ATA    ", "\t->\tSize: %d\n", __ata_devices[i].__size);
+            quantum_info(0, " ATA    ", "\t->\tModel: %s", __ata_devices[i].__model);
+            quantum_info(0, " ATA    ", "\t->\tType: %s", (const char *[]) {"ATA", "ATAPI"}[__ata_devices[i].__type]);
+            quantum_info(0, " ATA    ", "\t->\tSize: %d", __ata_devices[i].__size);
         }
     }
 }
@@ -535,7 +534,7 @@ unsigned char ata_print_error(unsigned int __drive, unsigned char __error)
     const char *__ps[] = {"Primary", "Secondary"};
     const char *__mc[] = {"Master", "Child"};
 
-    quantum_info(1, " ATA    ", "\n\t-> Error occured in: {%s %s} %s\n", __ps[__ata_devices[__drive].__channel], __mc[__ata_devices[__drive].__drive], __ata_devices[__drive].__model);
+    quantum_info(1, " ATA    ", "\t-> Error occured in: {%s %s} %s", __ps[__ata_devices[__drive].__channel], __mc[__ata_devices[__drive].__drive], __ata_devices[__drive].__model);
 
     return __error;
 }
