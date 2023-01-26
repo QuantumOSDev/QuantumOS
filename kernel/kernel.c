@@ -50,7 +50,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_syscalls_init();
     quantum_sound_blaster_init();
     ata_handler(0x1F0, 0x3F6, 0x170, 0x376, 0x000);
-    // quantum_ext2_init();
+    quantum_ext2_init();
 
     printf("KERNEL: Essential systems bootup... [DONE]\n");
     printf("(Press any key to continue...)\n");

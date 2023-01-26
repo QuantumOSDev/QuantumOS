@@ -2,6 +2,7 @@
     "files.associations": {
         "ata.h": "c",
         "ext2.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "memory.h": "c"
     }
 }

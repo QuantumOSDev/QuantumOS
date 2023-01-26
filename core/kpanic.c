@@ -5,8 +5,11 @@
 
 #include <core/print.h>
 
+#include <drivers/debug.h>
+
 void kpanic(const char *__message)
 {
+    debug_printf("KERNEL PANIC: [%s]\nHALTING THE SYSTEM!", __message);
     printf("KERNEL PANIC: [%s]\nHALTING THE SYSTEM!", __message);
 
     for (;;)
