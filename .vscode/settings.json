@@ -8,6 +8,8 @@
         "print.h": "c",
         "string.h": "c",
         "list.h": "c",
-        "kpanic.h": "c"
+        "kpanic.h": "c",
+        "pci.h": "c",
+        "init.h": "c"
     }
 }

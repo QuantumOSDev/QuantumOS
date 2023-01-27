@@ -56,7 +56,7 @@ void ext2_show_superblock_info(ext2_superblock_t* superblock)
     quantum_info(0, " Ext2   ", "readonly_feature    = %d", superblock->readonly_feature);
 }
 
-#define EXT2_DEBUG
+#undef EXT2_DEBUG
 
 void ext2_read_superblock(ext2_superblock_t* superblock)
 {
