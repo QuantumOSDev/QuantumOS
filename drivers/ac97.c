@@ -23,6 +23,12 @@ int ac97_initialize(__pci_device_t* dev)
     /* The following lines are commented because of PCI rewrite >:)
         - Sincerely yours Code-Sploit
     */
+    /* 
+        Hi, thanks for writing a cool looking PCI rewrite... long time no meet, anyways
+        ac97 drivers will be writted when i will have time :)
+            - Only yours handsome Solindek
+    */
+
     // GET_COMMON_HEADER_PCI(pci_header, dev);
     // GET_BAR_FROM_PCI_HEADER(pci_header, ac_bar0, ac_bar1);
     
