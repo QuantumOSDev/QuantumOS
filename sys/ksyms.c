@@ -12,7 +12,7 @@ static elf32_shdr_t* elf_shdr;
 
 void quantum_ksyms_init(unsigned long addr)
 {
-    multiboot_info_t* mbinfo = addr;
+    multiboot_info_t* mbinfo = (multiboot_info_t*)addr;
 
     mb_elf_section_header_table = &mbinfo->u.elf_sec;
     elf_shdr = (elf32_shdr_t*)mb_elf_section_header_table->addr;
@@ -24,7 +24,6 @@ elf32_sym_t* get_ksym_by_address(unsigned int addr)
     int offset = -1;
 
     for (int i = 0; i < mb_elf_section_header_table->num; i++)
-        if (elf_shdr[i].type == 2)
         {
             elf32_sym_t* sym_table = (elf32_sym_t*)elf_shdr[i].addr;
 

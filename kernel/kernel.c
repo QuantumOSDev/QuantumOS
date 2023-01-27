@@ -26,6 +26,7 @@
 #include <sys/pit.h>
 
 #include <fs/ext2.h>
+#include <fs/ata.h>
 
 #include <core/stdlib.h>
 #include <core/string.h>

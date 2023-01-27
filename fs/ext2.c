@@ -8,9 +8,14 @@
 #include <fs/ata.h>
 
 #include <core/kpanic.h>
+#include <core/stdlib.h>
 #include <core/string.h>
+#include <core/print.h>
+
+#include <drivers/debug.h>
 
 #include <quantum/init.h>
+
 #include <sys/memory.h>
 
 static ext2_t* ext2_fs;
@@ -51,7 +56,7 @@ void ext2_show_superblock_info(ext2_superblock_t* superblock)
     quantum_info(0, " Ext2   ", "readonly_feature    = %d", superblock->readonly_feature);
 }
 
-#undef EXT2_DEBUG
+#define EXT2_DEBUG
 
 void ext2_read_superblock(ext2_superblock_t* superblock)
 {
@@ -84,40 +89,55 @@ char* ext2_creator_os(unsigned int creator_os)
     }
 }
 
-ext2_blockgroupdesc_t* ext2_read_bgd(unsigned int bgd_index)
+unsigned int ext2_get_block_group(unsigned int inode_idx)
 {
-    ext2_blockgroupdesc_t* bgd_return;
-    int bgd_offset = (1024UL << ext2_fs->superblock->log2block_size) >= 2048 
-        ? (1024UL << ext2_fs->superblock->log2block_size)
-        : (1024UL << ext2_fs->superblock->log2block_size) * 2;
-    int bgd_disk_sector = bgd_offset + sizeof(ext2_blockgroupdesc_t) * bgd_index;
-    
-    ata_read_sectors(HARDDISK, bgd_disk_sector, 2, (unsigned int*)bgd_return);
-    return bgd_return;
+    return (inode_idx - 1) / ext2_fs->superblock->inodes_per_group;
 }
 
-ext2_inode_t* ext2_read_inode(unsigned int inode_offset)
+unsigned int ext2_get_inode_index(unsigned int inode_idx)
 {
-    int block_group = (inode_offset - 1) / ext2_fs->superblock->blocks_per_group;
-    int index = (inode_offset - 1) % ext2_fs->superblock->inodes_per_group;
-    int containing_block = (index * ext2_fs->superblock->inode_size) / (1024UL << ext2_fs->superblock->log2block_size);
+    return (inode_idx - 1) % ext2_fs->superblock->inodes_per_group;
+}
 
-    ext2_blockgroupdesc_t* bgdesc = ext2_read_bgd(block_group);
+// unsigned int ext2_get_containing_block(unsigned int inode_idx)
+// {
+//     // debug_printf("%d * %d / %d", inode_idx, ext2_fs->superblock->inode_size, (1024UL << ext2_fs->superblock->log2block_size));
+//     return (inode_idx * ext2_fs->superblock->inode_size) / (1024UL << ext2_fs->superblock->log2block_size);
+// }
 
-	// ext2_inode_t* inode;
-	// unsigned int* inode_tmp = kmalloc(sizeof(unsigned int*));
-	// ata_read_sectors(HARDDISK, 2 * (bgdesc->inodetable + containing_block), 2, inode_tmp);
-	// inode = (ext2_inode_t*)((unsigned int)inode_tmp + (index % (1024 / ext2_fs->superblock->inode_size)) * ext2_fs->superblock->inode_size);
+ext2_bgd_t* ext2_get_bgd(int block_group)
+{
+    ext2_bgd_t* bgd;
+    unsigned int bgd_start_offset = (block_group - 1) * ext2_fs->superblock->blocks_per_group + 1;
+    unsigned int bgd_offset = bgd_start_offset + 2;
 
-    // Look at this shit
-	ext2_inode_t* inode;
-    int inode_disk_sector = (bgdesc->inodetable * (1024UL << ext2_fs->superblock->log2block_size) + ext2_fs->superblock->inode_size * index);
-    ata_read_sectors(HARDDISK, inode_disk_sector, 2, (unsigned int*)inode);
+    ata_read_sectors(HARDDISK, 1, bgd_offset + 1, (unsigned int*)bgd);
+    return bgd;
+}
 
-    quantum_info(0, " Ext2   ", "Inode Type: 0x%x, Inode UID: 0x%x, Inode Block 0: %d",
-        inode->perms, inode->uid, inode->blocks[0]);
+ext2_inode_t* ext2_read_inode(int inode_idx) 
+{
+    unsigned int block_group_inode = ext2_get_block_group(inode_idx) + 1;
+    unsigned int inode_index       = ext2_get_inode_index(inode_idx);
+    // unsigned int containing_block  = (inode_idx * ext2_fs->superblock->inode_size) / (1024UL << ext2_fs->superblock->log2block_size); // 0
+    unsigned int containing_block = (2 * 256) / (1024);
 
-    return inode;
+    ext2_bgd_t* bgd = ext2_get_bgd(block_group_inode);
+
+    unsigned int inode_table_start = bgd->inodetable;
+    printf("containing_block: %d\n", (2 * 256) / (1024));
+    printf("containing_block_var: %d\n", containing_block);
+
+    unsigned int* inode_tmp = kmalloc(sizeof(inode_tmp));
+    ata_read_sectors(HARDDISK, 2, 2 * (inode_table_start + containing_block), inode_tmp);
+    debug_printf("ext2 please work\n");
+
+    ext2_inode_t* inode_info = (ext2_inode_t*)((unsigned int)inode_tmp + (inode_index % (1024 / ext2_fs->superblock->inode_size)) * ext2_fs->superblock->inode_size); 
+    debug_printf("perms: 0x%x, uid: %x, gid: %x, flags: 0x%x, block 1: %d",
+        inode_info->perms, inode_info->uid, inode_info->gid, inode_info->flags,
+        inode_info->blocks[0]);
+    debug_printf("ext2 please work\n");
+    return inode_info;
 }
 
 void quantum_ext2_init()
@@ -137,7 +157,10 @@ void quantum_ext2_init()
         return;
     }
 
-    ext2_fs->root_inode = ext2_read_inode(2);
+    ext2_fs->blocks_per_group = ext2_fs->superblock->blocks_per_group;
+    ext2_fs->inodes_per_group = ext2_fs->superblock->inodes_per_group;
+    
+    // ext2_fs->root_inode = ext2_read_inode(2);
 
     quantum_info(0, " Ext2   ", "Successfully initialized Ext2 filesystem");
     quantum_info(0, " Ext2   ", "File system has been created on: %s", ext2_creator_os(ext2_fs->superblock->os_id));

@@ -62,7 +62,7 @@ typedef struct ext2_superblock_t {
     unsigned int   orphan_head;
 } ext2_superblock_t;
 
-typedef struct ext2_blockgroupdesc_t {
+typedef struct ext2_bgd_t {
     unsigned int   addrblockbmp;
     unsigned int   addrinodebmp;
     unsigned int   inodetable;
@@ -70,7 +70,7 @@ typedef struct ext2_blockgroupdesc_t {
     unsigned short unalloci;
     unsigned short dircnt;
     unsigned short unused[7];
-} ext2_blockgroupdesc_t;
+} ext2_bgd_t;
 
 typedef struct ext2_inode_t {
     unsigned short perms;
@@ -90,23 +90,32 @@ typedef struct ext2_inode_t {
     unsigned int   eab;
     unsigned int   sizehi;
     unsigned int   fragaddr;
+    unsigned char  reserved[12];
 } ext2_inode_t;
 
 typedef struct ext2_direntry_t {
-    unsigned int   inodeidx;
-    unsigned short entsize;
-    unsigned char  namelen;
-    unsigned char  dirtype;
+    unsigned int inode;
+    unsigned int direntsize;
+    unsigned int namelen;
+    unsigned int type;
+    char*        name;
 } ext2_direntry_t;
 
 typedef struct ext2_t {
-    ext2_inode_t*      root_inode;
-    ext2_superblock_t* superblock;
+    ext2_inode_t*          root_inode;
+    ext2_superblock_t*     superblock;
+    ext2_bgd_t* bgds;
+
+    unsigned int blocks_per_group;
+    unsigned int inodes_per_group;
+    unsigned int total_groups;
+
+    unsigned int bgd_blocks;
 } ext2_t;
 
 void quantum_ext2_init();
 
-ext2_inode_t* ext2_read_inode(unsigned int inode_offset);
+ext2_inode_t* ext2_read_inode(int inode_idx);
 
 void ext2_read_superblock(ext2_superblock_t* superblock);
 

@@ -19,25 +19,6 @@ int strlen(const char* str)
     return i;
 }
 
-void hex_double(char* result, unsigned int value)
-{
-    strcpy(result, "0x0000000");
-
-    if (value == 0)
-        return result;
-
-    int index = 9;
-    while (value != 0)
-    {
-        if ((value % 16) < 10)
-            result[index] = '0' + (value % 16);
-        else
-            result[index] = 'a' + ((value % 16) - 10);
-        value >>= 4;
-        index--;
-    }
-}
-
 char to_uppercase(char c)
 {
     return (char)c - 0x20;
@@ -209,23 +190,23 @@ void itoa(int num, char* str, int base)
 
 void ltoa(long long value, char* buf)
 {
-//     char* p;
-//     unsigned long long v;
+    // char* p;
+    // unsigned long long v;
 
-//     v = (value < 0) ? -value: value;
-//     p = buf + 31;
-//     do{
-//         *p -- = '0' + (v%10);
-//         v /= 10;
-//     } while(v);
+    // v = (value < 0) ? -value: value;
+    // p = buf + 31;
+    // do{
+    //     *p -- = '0' + (v%10);
+    //     v /= 10;
+    // } while(v);
 
-//     if(value < 0) *p-- = '-';
-//     p++;
+    // if(value < 0) *p-- = '-';
+    // p++;
 
-//     int len = 32 - (p - buf);
-//     char *s = (char*)kmalloc(sizeof(char) * (len + 1));
-//     kmemcpy(s, p, len);
-//     s[len] = '\0';
+    // int len = 32 - (p - buf);
+    // char *s = (char*)kmalloc(sizeof(char) * (len + 1));
+    // kmemcpy(s, p, len);
+    // s[len] = '\0';
 }
 
 int strncmp(const char *__s1, const char *__s2, int __c)

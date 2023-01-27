@@ -7,6 +7,10 @@ typedef enum
     TRUE,
 } BOOL;
 
+#define OPTIONAL(type) type \
+
+#define OPTIONAL_NIL() NULL \
+
 #define __SET_REGISTER__(reg, value)                           \
     __asm__ __volatile__ ("mov %0, %%" reg : : "r" (value) : ) \
 

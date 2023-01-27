@@ -15,6 +15,7 @@
 void kpanic(const char *__message)
 {
     debug_printf("KERNEL PANIC: [%s]\nHALTING THE SYSTEM!", __message);
+    print_set_color(220, 0, 0);
     printf("KERNEL PANIC: [%s]\nHALTING THE SYSTEM!\n", __message);
 
     stack_frame_t* call_stack;
