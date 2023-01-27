@@ -11,5 +11,5 @@
 
 int ethernet_initalize(__pci_device_t* __dev)
 {
-    quantum_info(0, "Ethernet", "Initializing Ethernet driver");
+    quantum_info(__FILE__, 0, "Ethernet", "Initializing Ethernet driver");
 }

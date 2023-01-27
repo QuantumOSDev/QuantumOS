@@ -21,7 +21,7 @@ MEMORY_BLOCK *__kmem_global_head = (void *) 0;
 
 void kmem_initialize(void *__start, void *__end)
 {
-    quantum_info(0, " KMem   ", "Initialzing kernel memory");
+    quantum_info(__FILE__, 0, " KMem   ", "Initialzing kernel memory");
     if (__kmem_global_start > __kmem_global_end)
     {
         return;
@@ -244,6 +244,35 @@ void *krealloc(void *__address, int __nsize)
     /* Failed to resize memory block */
 
     return (void *)0;
+}
+
+void kmemswap(unsigned char* a, unsigned char* b, unsigned int len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        unsigned char aa = a[i];
+        // aa ^= b[i];
+        // b[i] ^= aa;
+        // aa ^= b[i];
+        // a[i] ^= aa;
+        a[i] = b[i];
+        b[i] = aa;
+    }
+}
+
+void *kmemcpys(void *__dest, char *__src, unsigned int __n)
+{
+    char *__result = __dest;
+    char *__ptr    = __dest;
+
+    char *__qtr = __src;
+
+    while (__n--)
+    {
+        *__ptr++ = *__qtr++;
+    }
+
+    return __result;
 }
 
 void *kmemcpy(void *__dest, const void *__src, unsigned int __n)

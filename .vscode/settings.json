@@ -10,6 +10,21 @@
         "list.h": "c",
         "kpanic.h": "c",
         "pci.h": "c",
-        "init.h": "c"
+        "init.h": "c",
+        "multiboot.h": "c",
+        "vesa.h": "c",
+        "tga.h": "c",
+        "font.h": "c",
+        "pit.h": "c",
+        "stdarg.h": "c",
+        "keyboard.h": "c",
+        "pio.h": "c",
+        "userspace.h": "c",
+        "mouse.h": "c",
+        "cmos.h": "c",
+        "module.h": "c",
+        "pmm.h": "c",
+        "usermode.h": "c",
+        "window.h": "c"
     }
 }

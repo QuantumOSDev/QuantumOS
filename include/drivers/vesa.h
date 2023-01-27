@@ -7,9 +7,15 @@ typedef enum __image_format_t {
     IMAGE_JPG,
 } image_format_t;
 
+void quantum_back_buffer_init();
+
 void quantum_vesa_init(unsigned long mbinfo_ptr);
 
 unsigned long get_global_mutliboot_addr();
+
+void toggle_double_framebuffer();
+
+void swap_buffers();
 
 int get_screen_x();
 
@@ -17,7 +23,11 @@ int get_screen_y();
 
 void vesa_clear();
 
+void clear_back_buffer();
+
 void vesa_put_pixel(int x, int y, int r, int g, int b);
+
+void vesa_put_pixel_double_buffering(int x, int y, int r, int g, int b);
 
 void vesa_draw_rect(int x, int y, int w, int h, int r, int g, int b);
 

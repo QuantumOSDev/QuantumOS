@@ -112,6 +112,18 @@ char keyboard_getchar()
     return __result;
 }
 
+char keyboard_getchar_no_wait()
+{
+    if (!__keyboard_current_char <= 0)
+        return;
+
+    char __result = __keyboard_current_char;
+
+    __keyboard_current_char = 0;
+
+    return __result;
+}
+
 char *keyboard_getchar_until(char __c)
 {
     char *__result = kcalloc(1, sizeof(char *));
@@ -283,7 +295,7 @@ static void keyboard_handler(__registers_t *__regs)
 
 void keyboard_enable()
 {
-    quantum_info(0, "Keyboard", "Initializing keyboard drivers");
+    quantum_info(__FILE__, 0, "Keyboard", "Initializing keyboard drivers");
 
     isr_register_interrupt_handler(IRQ_BASE + 1, keyboard_handler);
 }

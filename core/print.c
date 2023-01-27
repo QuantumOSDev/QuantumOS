@@ -65,7 +65,7 @@ void quantum_print_init()
     global_print_bg_r = 0;
     global_print_bg_g = 0;
     global_print_bg_b = 0;
-    quantum_info(0, " Print  ", "Initializing print drivers");
+    quantum_info(__FILE__, 0, " Print  ", "Initializing print drivers");
 }
 
 void insert_tab()

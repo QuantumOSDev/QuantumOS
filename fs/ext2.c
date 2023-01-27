@@ -22,38 +22,38 @@ static ext2_t* ext2_fs;
 
 void ext2_show_superblock_info(ext2_superblock_t* superblock)
 {
-    quantum_info(0, " Ext2   ", "Ext2 superblock info:");
-    quantum_info(0, " Ext2   ", "total_inodes        = %d", superblock->total_inodes);
-    quantum_info(0, " Ext2   ", "total_blocks        = %d", superblock->total_blocks);
-    quantum_info(0, " Ext2   ", "su_blocks           = %d", superblock->su_blocks);
-    quantum_info(0, " Ext2   ", "free_blocks         = %d", superblock->free_blocks);
-    quantum_info(0, " Ext2   ", "free_inodes         = %d", superblock->free_inodes);
-    quantum_info(0, " Ext2   ", "superblock_idx      = %d", superblock->superblock_idx);
-    quantum_info(0, " Ext2   ", "log2block_size      = %d", superblock->log2block_size);
-    quantum_info(0, " Ext2   ", "log2frag_size       = %d", superblock->log2frag_size);
-    quantum_info(0, " Ext2   ", "blocks_per_group    = %d", superblock->blocks_per_group);
-    quantum_info(0, " Ext2   ", "frags_per_group     = %d", superblock->frags_per_group);
-    quantum_info(0, " Ext2   ", "inodes_per_group    = %d", superblock->inodes_per_group);
-    quantum_info(0, " Ext2   ", "mtime               = %d", superblock->mtime);
-    quantum_info(0, " Ext2   ", "wtime               = %d", superblock->wtime);
-    quantum_info(0, " Ext2   ", "mount_count         = %d", superblock->mount_count);
-    quantum_info(0, " Ext2   ", "mount_allowed_count = %d", superblock->mount_allowed_count);
-    quantum_info(0, " Ext2   ", "ext2_magic          = %d", superblock->ext2_magic);
-    quantum_info(0, " Ext2   ", "fs_state            = %d", superblock->fs_state);
-    quantum_info(0, " Ext2   ", "err                 = %d", superblock->err);
-    quantum_info(0, " Ext2   ", "minor               = %d", superblock->minor);
-    quantum_info(0, " Ext2   ", "last_check          = %d", superblock->last_check);
-    quantum_info(0, " Ext2   ", "interval            = %d", superblock->interval);
-    quantum_info(0, " Ext2   ", "os_id               = %d", superblock->os_id);
-    quantum_info(0, " Ext2   ", "major               = %d", superblock->major);
-    quantum_info(0, " Ext2   ", "r_userid            = %d", superblock->r_userid);
-    quantum_info(0, " Ext2   ", "r_groupid           = %d", superblock->r_groupid);
-    quantum_info(0, " Ext2   ", "first_inode         = %d", superblock->first_inode);
-    quantum_info(0, " Ext2   ", "inode_size          = %d", superblock->inode_size);
-    quantum_info(0, " Ext2   ", "superblock_group    = %d", superblock->superblock_group);
-    quantum_info(0, " Ext2   ", "optional_feature    = %d", superblock->optional_feature);
-    quantum_info(0, " Ext2   ", "required_feature    = %d", superblock->required_feature);
-    quantum_info(0, " Ext2   ", "readonly_feature    = %d", superblock->readonly_feature);
+    quantum_info(__FILE__, 0, " Ext2   ", "Ext2 superblock info:");
+    quantum_info(__FILE__, 0, " Ext2   ", "total_inodes        = %d", superblock->total_inodes);
+    quantum_info(__FILE__, 0, " Ext2   ", "total_blocks        = %d", superblock->total_blocks);
+    quantum_info(__FILE__, 0, " Ext2   ", "su_blocks           = %d", superblock->su_blocks);
+    quantum_info(__FILE__, 0, " Ext2   ", "free_blocks         = %d", superblock->free_blocks);
+    quantum_info(__FILE__, 0, " Ext2   ", "free_inodes         = %d", superblock->free_inodes);
+    quantum_info(__FILE__, 0, " Ext2   ", "superblock_idx      = %d", superblock->superblock_idx);
+    quantum_info(__FILE__, 0, " Ext2   ", "log2block_size      = %d", superblock->log2block_size);
+    quantum_info(__FILE__, 0, " Ext2   ", "log2frag_size       = %d", superblock->log2frag_size);
+    quantum_info(__FILE__, 0, " Ext2   ", "blocks_per_group    = %d", superblock->blocks_per_group);
+    quantum_info(__FILE__, 0, " Ext2   ", "frags_per_group     = %d", superblock->frags_per_group);
+    quantum_info(__FILE__, 0, " Ext2   ", "inodes_per_group    = %d", superblock->inodes_per_group);
+    quantum_info(__FILE__, 0, " Ext2   ", "mtime               = %d", superblock->mtime);
+    quantum_info(__FILE__, 0, " Ext2   ", "wtime               = %d", superblock->wtime);
+    quantum_info(__FILE__, 0, " Ext2   ", "mount_count         = %d", superblock->mount_count);
+    quantum_info(__FILE__, 0, " Ext2   ", "mount_allowed_count = %d", superblock->mount_allowed_count);
+    quantum_info(__FILE__, 0, " Ext2   ", "ext2_magic          = %d", superblock->ext2_magic);
+    quantum_info(__FILE__, 0, " Ext2   ", "fs_state            = %d", superblock->fs_state);
+    quantum_info(__FILE__, 0, " Ext2   ", "err                 = %d", superblock->err);
+    quantum_info(__FILE__, 0, " Ext2   ", "minor               = %d", superblock->minor);
+    quantum_info(__FILE__, 0, " Ext2   ", "last_check          = %d", superblock->last_check);
+    quantum_info(__FILE__, 0, " Ext2   ", "interval            = %d", superblock->interval);
+    quantum_info(__FILE__, 0, " Ext2   ", "os_id               = %d", superblock->os_id);
+    quantum_info(__FILE__, 0, " Ext2   ", "major               = %d", superblock->major);
+    quantum_info(__FILE__, 0, " Ext2   ", "r_userid            = %d", superblock->r_userid);
+    quantum_info(__FILE__, 0, " Ext2   ", "r_groupid           = %d", superblock->r_groupid);
+    quantum_info(__FILE__, 0, " Ext2   ", "first_inode         = %d", superblock->first_inode);
+    quantum_info(__FILE__, 0, " Ext2   ", "inode_size          = %d", superblock->inode_size);
+    quantum_info(__FILE__, 0, " Ext2   ", "superblock_group    = %d", superblock->superblock_group);
+    quantum_info(__FILE__, 0, " Ext2   ", "optional_feature    = %d", superblock->optional_feature);
+    quantum_info(__FILE__, 0, " Ext2   ", "required_feature    = %d", superblock->required_feature);
+    quantum_info(__FILE__, 0, " Ext2   ", "readonly_feature    = %d", superblock->readonly_feature);
 }
 
 #undef EXT2_DEBUG
@@ -162,6 +162,6 @@ void quantum_ext2_init()
     
     // ext2_fs->root_inode = ext2_read_inode(2);
 
-    quantum_info(0, " Ext2   ", "Successfully initialized Ext2 filesystem");
-    quantum_info(0, " Ext2   ", "File system has been created on: %s", ext2_creator_os(ext2_fs->superblock->os_id));
+    quantum_info(__FILE__, 0, " Ext2   ", "Successfully initialized Ext2 filesystem");
+    quantum_info(__FILE__, 0, " Ext2   ", "File system has been created on: %s", ext2_creator_os(ext2_fs->superblock->os_id));
 }

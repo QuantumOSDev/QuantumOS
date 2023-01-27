@@ -38,7 +38,7 @@ int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot)
         return -1;
     }
 
-    quantum_info(0, " MMAP   ", "Trying to get kernel memory map");
+    quantum_info(__FILE__, 0, " MMAP   ", "Trying to get kernel memory map");
 
     __map->__kernel.__kernel_start = (unsigned int)&__kernel_section_start;
     __map->__kernel.__kernel_end = (unsigned int)&__kernel_section_end;
@@ -85,9 +85,9 @@ int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot)
     return -1;
 }
 
-//#define DEBUG
+// #define DEBUG
 
-void quantum_info(int __status, char* header, char* format, ...)
+void quantum_info(char* file, int __status, char* header, char* format, ...)
 {
 #if defined(DEBUG)
     printf("[");
@@ -106,6 +106,10 @@ void quantum_info(int __status, char* header, char* format, ...)
     printf("%s", header);
     print_set_color(255, 255, 255);
     printf("] ");
+    print_set_color(50, 168, 164);
+    printf("%s", file);
+    print_set_color(255, 255, 255);
+    printf(": ");
 
     va_list arg;
     va_start(arg, format);
@@ -129,6 +133,9 @@ void quantum_info(int __status, char* header, char* format, ...)
     }
     debug_printf("%s\x1b[0;0m", header);
     debug_printf("] ");
+    debug_printf("\x1b[1;36m%s", file);
+    debug_printf("\x1b[0;0m");
+    debug_printf(": ");
 
     va_list arg;
     va_start(arg, format);
@@ -154,7 +161,7 @@ void quantum_memory_init(void)
     void *__start = pmm_allocate_blocks(20);
     void *__end = __start + (pmm_next_free(1) * PMM_BLOCK_SIZE);
 
-    quantum_info(0, " PMM    ", "Successfully allocated 20 blocks! START: 0x%x END: 0x%x", __start, __end);
+    quantum_info(__FILE__, 0, " PMM    ", "Successfully allocated 20 blocks! START: 0x%x END: 0x%x", __start, __end);
 
     kmem_initialize(__start, __end);
 }
@@ -196,7 +203,7 @@ void quantum_pmm_init(unsigned long __addr)
     {
         /* Error */
 
-        quantum_info(1, " PMM    ", "Failed to initialize PMM!");
+        quantum_info(__FILE__, 1, " PMM    ", "Failed to initialize PMM!");
 
         return;
     }
@@ -204,14 +211,14 @@ void quantum_pmm_init(unsigned long __addr)
     pmm_initialize(__kernel_memory_map.__available.__start, __kernel_memory_map.__available.__size);
     pmm_initialize_region(__kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
 
-    quantum_info(0, " PMM    ", "Initialized PMM from address: 0x%x to 0x%x", __kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
+    quantum_info(__FILE__, 0, " PMM    ", "Initialized PMM from address: 0x%x to 0x%x", __kernel_memory_map.__available.__start, PMM_BLOCK_SIZE * 256);
 }
 
 void quantum_vfs_init(void)
 {
     vfs_init();
 
-    quantum_info(0, " VFS    ", "Initialized VFS!");
+    quantum_info(__FILE__, 0, " VFS    ", "Initialized VFS!");
 }
 
 void quantum_ata_init(void)
@@ -223,7 +230,7 @@ void quantum_devmgr_init(void)
 {
     device_init();
 
-    quantum_info(0, " Devmgr ", "Successfully initialized devmgr");
+    quantum_info(__FILE__, 0, " Devmgr ", "Successfully initialized devmgr");
 }
 
 void quantum_pci_init(void)

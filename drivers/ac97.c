@@ -16,7 +16,7 @@ void ac97_write_global_control(unsigned short bar0, unsigned short bar1, unsigne
 
 int ac97_initialize(__pci_device_t* dev)
 {
-    quantum_info(0, " AC97   ", "Initializng AC97 driver sound card");
+    quantum_info(__FILE__, 0, " AC97   ", "Initializng AC97 driver sound card");
 
     // Get the pci common header so we can get the bar0 and bar1
 

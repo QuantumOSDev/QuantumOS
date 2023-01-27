@@ -30,6 +30,8 @@ void *kcalloc(int __n, int __size);
 void *krealloc(void *__address, int __nsize);
 
 void *kmemcpy(void *__dest, const void *__src, unsigned int __n);
+void *kmemcpys(void *__dest, char *__src, unsigned int __n);
+void  kmemswap(unsigned char* a, unsigned char* b, unsigned int len);
 void *kmemset(void *__dest, char __c, unsigned int __n);
 void *memset(void *__dest, char __c, unsigned int __n);
 int   kmemcmp(char *m1, char *m2, int n);

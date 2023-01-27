@@ -30,7 +30,7 @@ void pic_init(void)
     pio_outb(PIC1_DATA, __a1);
     pio_outb(PIC2_DATA, __a2);
 
-    quantum_info(0, " PIC    ", "Successfully initialized PIC");
+    quantum_info(__FILE__, 0, " PIC    ", "Successfully initialized PIC");
 }
 
 void pic_eoi(unsigned char __irq)

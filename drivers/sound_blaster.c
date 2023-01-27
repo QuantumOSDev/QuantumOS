@@ -24,8 +24,8 @@ void quantum_sound_blaster_init()
     unsigned char dsp_status = pio_inb(DSP_READ);
     if (dsp_status == 0xAA) 
     {
-        quantum_info(0, " Sb16   ", "Successfully detected sound blaster device");
-        quantum_info(0, " Sb16   ", "DSP_READ port returned 0x%x", dsp_status);
+        quantum_info(__FILE__, 0, " Sb16   ", "Successfully detected sound blaster device");
+        quantum_info(__FILE__, 0, " Sb16   ", "DSP_READ port returned 0x%x", dsp_status);
         sound_blaster_found = TRUE;
 
         // Turn on speakers
@@ -36,8 +36,8 @@ void quantum_sound_blaster_init()
     }
     else 
     {
-        quantum_info(1, " Sb16   ", "Can't detect sound blaster device");
-        quantum_info(1, " Sb16   ", "DSP_READ port returned 0x%x", dsp_status);
+        quantum_info(__FILE__, 1, " Sb16   ", "Can't detect sound blaster device");
+        quantum_info(__FILE__, 1, " Sb16   ", "DSP_READ port returned 0x%x", dsp_status);
         sound_blaster_found = FALSE;
     }
 
@@ -104,13 +104,13 @@ void sound_blaster_irq()
     unsigned char irq_sb16 = pio_inb(DSP_MIXER_DATA_PORT);
     if (irq_sb16 == irq_set) 
     {
-        quantum_info(0, " Sb16   ", "Sound blaster is set to IRQ 5, (DSP_MIXER_DATA_PORT returned 0x%x)", irq_sb16);
-        quantum_info(0, " Sb16   ", "Setting IRQ 5 to sound blaster output");
+        quantum_info(__FILE__, 0, " Sb16   ", "Sound blaster is set to IRQ 5, (DSP_MIXER_DATA_PORT returned 0x%x)", irq_sb16);
+        quantum_info(__FILE__, 0, " Sb16   ", "Setting IRQ 5 to sound blaster output");
         isr_register_interrupt_handler(IRQ5_RESERVED, sound_blaster_irq_handler);
     }
     else 
     {
-        quantum_info(1, " Sb16   ", "Could not set sound blaster to IRQ 5");
+        quantum_info(__FILE__, 1, " Sb16   ", "Could not set sound blaster to IRQ 5");
         sound_blaster_found = FALSE;
     }
 }

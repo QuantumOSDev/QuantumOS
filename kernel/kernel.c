@@ -43,6 +43,7 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     quantum_memory_init();
     quantum_paging_init();
     quantum_keyboard_init();
+    quantum_back_buffer_init();
     quantum_mouse_init();
     quantum_devmgr_init();
     quantum_vfs_init();
@@ -59,7 +60,6 @@ void quantum_kernel_init(unsigned long magic, unsigned long addr)
     printf("(Press any key to continue...)\n");
 
     keyboard_getchar();
-
     vesa_clear();
 
     quantum_menu();

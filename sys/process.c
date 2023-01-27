@@ -12,16 +12,16 @@
 #include <sys/process.h>
 #include <sys/memory.h>
 
-static __process_t *__phead;
+static process_t *__phead;
 int __pid = 1;
 
-__process_t *process_find_by_pid(unsigned int __pid)
+process_t *process_find_by_pid(unsigned int __pid)
 {
-    __process_t *__head = __phead;
+    process_t *__head = __phead;
 
     if (!__head)
     {
-        quantum_info(1, " PROC   ", "Fatal error process head is NULL!");
+        quantum_info(__FILE__, 1, " PROC   ", "Fatal error process head is NULL!");
 
         kpanic("Fatal error occured kernel crashed");
     }
@@ -50,29 +50,29 @@ void process_initialize(void)
     __phead->__pstatus  = PROCESS_SLEEPING;
     __phead->__priority = 0;
 
-    quantum_info(0, " PROC   ", "Successfully initialized processes");
+    quantum_info(__FILE__, 0, " PROC   ", "Successfully initialized processes");
 }
 
-void process_alloc(__process_t *__p)
+void process_alloc(process_t *__p)
 {
     __p->__entry = kmalloc(__p->__memsize);
 }
 
-void process_run(__process_t *__p)
+void process_run(process_t *__p)
 {
-    quantum_info(0, " PROC   ", "Running process [%d]...", __p->__pid);
+    quantum_info(__FILE__, 0, " PROC   ", "Running process [%d]...", __p->__pid);
 
     // int __exit = ((int (*) (void)) __p->__entry)();
     create_and_run_task(__p->__task, __p->__entry);
 
-    quantum_info(0, " PROC   ", "Process [%d] finished and is now a zombie process...", __p->__pid);
+    quantum_info(__FILE__, 0, " PROC   ", "Process [%d] finished and is now a zombie process...", __p->__pid);
 
     process_kill(__p->__pid);
 }
 
 unsigned int process_spawn(void *__entry, unsigned int __mode, unsigned int __memsize, unsigned int __pstatus, unsigned int __instant_run)
 {
-    __process_t *__p = kmalloc(sizeof(*__p));
+    process_t *__p = kmalloc(sizeof(*__p));
 
     __p->__memsize = __memsize;
     __p->__pstatus = __pstatus;
@@ -86,7 +86,7 @@ unsigned int process_spawn(void *__entry, unsigned int __mode, unsigned int __me
 
     __p->__pid = process_get_pid();
 
-    __process_t *__head = __phead;
+    process_t *__head = __phead;
 
     while (__head->__next != NULL && __head->__pstatus != PROCESS_ZOMBIE)
     {
@@ -105,7 +105,7 @@ unsigned int process_spawn(void *__entry, unsigned int __mode, unsigned int __me
 
 void process_kill(unsigned int __pid)
 {
-    __process_t *__head = __phead;
+    process_t *__head = __phead;
 
     while (__head != NULL)
     {
@@ -122,7 +122,7 @@ void process_kill(unsigned int __pid)
 
 void process_set_status(unsigned int __pid, __process_status __status)
 {
-    __process_t *__head = __phead;
+    process_t *__head = __phead;
 
     while (__head != NULL)
     {

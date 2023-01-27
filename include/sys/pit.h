@@ -17,4 +17,6 @@ void pit_handler(__registers_t* regs);
 
 void pit_sleep(int ms);
 
+unsigned long pit_get_ticks();
+
 #endif

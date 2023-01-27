@@ -83,7 +83,7 @@ void idt_enable(void)
 
     load_idt((unsigned int) &__idt);
 
-    quantum_info(0, " IDT    ", "Successfully initialized IDT");
+    quantum_info(__FILE__, 0, " IDT    ", "Successfully initialized IDT");
 
     asm volatile ("sti");
 }

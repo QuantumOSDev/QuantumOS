@@ -350,10 +350,10 @@ void syscall_interrupt_handler(__registers_t* regs)
 {
     syscall_func_t syscall = SYSCALLS[regs->eax];
 
-    quantum_info(0, " Syscall", "Got %d syscall", regs->eax);
+    quantum_info(__FILE__, 0, " Syscall", "Got %d syscall", regs->eax);
     if (syscall == NULL) 
     {
-        quantum_info(1, " Syscall", "Syscall with number %d is not implemented", regs->eax);
+        quantum_info(__FILE__, 1, " Syscall", "Syscall with number %d is not implemented", regs->eax);
         return;
     }
 
@@ -364,13 +364,13 @@ void syscall_interrupt_handler(__registers_t* regs)
         regs->ebp
     );
 
-    quantum_info(0, " Syscall", "Syscall %d returned %d", regs->eax, syscall_ret);
+    quantum_info(__FILE__, 0, " Syscall", "Syscall %d returned %d", regs->eax, syscall_ret);
 }
 
 void quantum_syscalls_init() 
 {
     isr_register_interrupt_handler(0x80, syscall_interrupt_handler);
-    quantum_info(0, " Syscall", "Successfully initialized syscall handler (0x%x)", 0x80);
+    quantum_info(__FILE__, 0, " Syscall", "Successfully initialized syscall handler (0x%x)", 0x80);
 }
 
 int sys_read(int eax, int fd, int buf, int count, int esi, int edi, int ebp) 

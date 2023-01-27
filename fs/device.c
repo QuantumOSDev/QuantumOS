@@ -21,14 +21,14 @@ void device_init(void)
 
     __lastid = 0;
 
-    quantum_info(0, " Devmgr ", "Device Manager Initialized!");
+    quantum_info(__FILE__, 0, " Devmgr ", "Device Manager Initialized!");
 }
 
 void device_print(void)
 {
     for (int i = 0; i < __lastid; i++)
     {
-        quantum_info(0, " Devmgr ", "ID: %d | UNIQUE: %d, %s, %s", i, __devices[i].__unique_id, __devices[i].__dev_type == DEVICE_CHAR ? "CHAR" : "BLOCK", __devices[i].__name);
+        quantum_info(__FILE__, 0, " Devmgr ", "ID: %d | UNIQUE: %d, %s, %s", i, __devices[i].__unique_id, __devices[i].__dev_type == DEVICE_CHAR ? "CHAR" : "BLOCK", __devices[i].__name);
     }
 }
 
@@ -36,7 +36,7 @@ int device_add(__device_t *__device)
 {
     __devices[__lastid] = *__device;
 
-    quantum_info(0, " Devmgr ", "Registered Device [%s] (%d) as Device #%d\n", __device->__name, __device->__unique_id, __lastid);
+    quantum_info(__FILE__, 0, " Devmgr ", "Registered Device [%s] (%d) as Device #%d\n", __device->__name, __device->__unique_id, __lastid);
 
     __lastid++;
 

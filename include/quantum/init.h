@@ -4,11 +4,9 @@
 #include <quantum/multiboot.h>
 #include <quantum/kernel.h>
 
-//#define DEBUG
-
 int quantum_get_kernel_mmap(KERNEL_MEMORY_MAP *__map, multiboot_info_t *__mboot);
 
-void quantum_info(int __status, char* header, char* format, ...);
+void quantum_info(char* file, int __status, char* header, char* format, ...);
 
 void quantum_gdt_init(void);
 

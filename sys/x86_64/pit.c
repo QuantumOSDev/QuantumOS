@@ -41,6 +41,11 @@ void pit_handler(__registers_t* regs)
     ticks++;
 }
 
+unsigned long pit_get_ticks()
+{
+    return ticks;
+}
+
 void pit_sleep(int ms)
 {
     unsigned long eticks = ticks + ms;

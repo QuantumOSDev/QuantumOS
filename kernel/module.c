@@ -32,12 +32,12 @@ void __module_call(char *__func)
         }
     }
 
-    quantum_info(1, " KMOD\t", "Error: Kernel module: [%s] not found", __func);
+    quantum_info(__FILE__, 1, " KMOD\t", "Error: Kernel module: [%s] not found", __func);
 }
 
 void __module_add(char *__func, unsigned int __addr)
 {
-    quantum_info(0, " KMOD\t", "Initializing kernel module: [%s] Address: [0x%x]", __func, __addr);
+    quantum_info(__FILE__, 0, " KMOD\t", "Initializing kernel module: [%s] Address: [0x%x]", __func, __addr);
 
     __modules_list[__modules_r] = __func;
     __modules_addr[__modules_r] = __addr;
@@ -49,7 +49,7 @@ void __module_wakeup(void)
 {
     for (int i = 0; i < __modules_r; i++)
     {
-        quantum_info(0, " KMOD\t", "Waking up module: [%s] at address: [0x%x]", __modules_list[i], __modules_addr[i]);
+        quantum_info(__FILE__, 0, " KMOD\t", "Waking up module: [%s] at address: [0x%x]", __modules_list[i], __modules_addr[i]);
 
         asm volatile ("call *%%eax": :"a"(__modules_addr[i]));
     }

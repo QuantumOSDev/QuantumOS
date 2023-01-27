@@ -53,7 +53,7 @@ void* acpi_get_rsdp(void)
         
         if (!kmemcmp((char*)i, RSD_SIGNATURE, 8) && !acpi_checksum((void*)i, 20)) 
         {
-            quantum_info(0, " ACPI   ", "Found RSDP at 0x%x", i);
+            quantum_info(__FILE__, 0, " ACPI   ", "Found RSDP at 0x%x", i);
             return (void*)i;
         }
     }
@@ -86,19 +86,19 @@ void quantum_acpi_init()
     rsdp = (rsdp_t*)acpi_get_rsdp();
     if (rsdp == NULL)
     {
-        quantum_info(1, " ACPI   ", "Your machine don't support ACPI");
+        quantum_info(__FILE__, 1, " ACPI   ", "Your machine don't support ACPI");
         machine_support_acpi = FALSE;
         return;
     }
 
     if (is_rsdp_header_validate(rsdp) == FALSE)
     {
-        quantum_info(1, " ACPI   ", "RSDP Header is not validate");
+        quantum_info(__FILE__, 1, " ACPI   ", "RSDP Header is not validate");
         machine_support_acpi = FALSE;
         return;
     }
 
-    quantum_info(0, " ACPI   ", "Successfully initialized ACPI");
+    quantum_info(__FILE__, 0, " ACPI   ", "Successfully initialized ACPI");
 }
 
 void acpi_reboot(void)

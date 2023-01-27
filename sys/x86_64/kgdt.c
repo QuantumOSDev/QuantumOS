@@ -62,6 +62,6 @@ void gdt_enable(void)
 	load_gdt((unsigned int) &__gdt);
 	tss_flush();
 
-    quantum_info(0, " GDT    ", "Successfully initialized GDT");
-    quantum_info(0, " TSS    ", "Successfully initialized TSS");
+    quantum_info(__FILE__, 0, " GDT    ", "Successfully initialized GDT");
+    quantum_info(__FILE__, 0, " TSS    ", "Successfully initialized TSS");
 }

@@ -13,7 +13,7 @@ typedef enum
     PROCESS_ZOMBIE,
 } __process_status;
 
-typedef struct __process_t
+typedef struct process_t
 {
     unsigned int __memsize;
     unsigned int __mode;
@@ -22,17 +22,17 @@ typedef struct __process_t
     int __priority;
     int __pstatus;
 
-    struct __process_t *__next;
+    struct process_t *__next;
     
     task_t *__task;
     void *__entry;
-} __process_t;
+} process_t;
 
-__process_t *process_find_by_pid(unsigned int __pid);
+process_t *process_find_by_pid(unsigned int __pid);
 
 void process_initialize(void);
-void process_alloc(__process_t *__p);
-void process_run(__process_t *__p);
+void process_alloc(process_t *__p);
+void process_run(process_t *__p);
 
 unsigned int process_spawn(void *__entry, unsigned int __mode, unsigned int __memsize, unsigned int __pstatus, unsigned int __instant_run);
 

@@ -34,6 +34,8 @@ char* keyboard_get_key_map();
 
 char keyboard_getchar();
 
+char keyboard_getchar_no_wait();
+
 char *keyboard_getchar_until(char __c);
 
 char keyboard_getsc();
